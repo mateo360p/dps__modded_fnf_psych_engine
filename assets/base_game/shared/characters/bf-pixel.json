@@ -1,84 +1,84 @@
 {
 	"animations": [
 		{
-			"offsets": [7, 0],
 			"loop": false,
-			"anim": "idle",
+			"offsets": [0, 0],
+			"anim": "singLEFTmiss",
 			"fps": 24,
-			"name": "BF IDLE",
+			"name": "BF LEFT MISS",
 			"indices": []
 		},
 		{
-			"offsets": [0, 0],
 			"loop": false,
-			"fps": 24,
-			"anim": "singLEFTmiss",
-			"indices": [],
-			"name": "BF LEFT MISS"
-		},
-		{
 			"offsets": [0, 0],
-			"loop": false,
-			"fps": 24,
 			"anim": "singLEFT",
-			"indices": [],
-			"name": "BF LEFT NOTE"
+			"fps": 24,
+			"name": "BF LEFT NOTE",
+			"indices": []
 		},
 		{
-			"offsets": [0, 0],
 			"loop": false,
-			"fps": 24,
+			"offsets": [0, 0],
 			"anim": "singUPmiss",
-			"indices": [],
-			"name": "BF UP MISS"
+			"fps": 24,
+			"name": "BF UP MISS",
+			"indices": []
 		},
 		{
-			"offsets": [0, 0],
 			"loop": false,
-			"fps": 24,
+			"offsets": [0, 0],
 			"anim": "singUP",
-			"indices": [],
-			"name": "BF UP NOTE"
+			"fps": 24,
+			"name": "BF UP NOTE",
+			"indices": []
 		},
 		{
-			"offsets": [0, 0],
 			"loop": false,
-			"fps": 24,
+			"offsets": [0, 0],
 			"anim": "singRIGHT",
-			"indices": [],
-			"name": "BF RIGHT NOTE"
+			"fps": 24,
+			"name": "BF RIGHT NOTE",
+			"indices": []
 		},
 		{
-			"offsets": [0, 0],
 			"loop": false,
-			"fps": 24,
+			"offsets": [0, 0],
 			"anim": "singRIGHTmiss",
-			"indices": [],
-			"name": "BF RIGHT MISS"
+			"fps": 24,
+			"name": "BF RIGHT MISS",
+			"indices": []
 		},
 		{
-			"offsets": [0, 0],
 			"loop": false,
-			"fps": 24,
+			"offsets": [0, 0],
 			"anim": "singDOWN",
-			"indices": [],
-			"name": "BF DOWN NOTE"
+			"fps": 24,
+			"name": "BF DOWN NOTE",
+			"indices": []
 		},
 		{
+			"loop": false,
 			"offsets": [0, 0],
-			"loop": false,
-			"fps": 24,
 			"anim": "singDOWNmiss",
-			"indices": [],
-			"name": "BF DOWN MISS"
+			"fps": 24,
+			"name": "BF DOWN MISS",
+			"indices": []
 		},
 		{
+			"loop": false,
 			"offsets": [7, -54],
+			"anim": "hey",
+			"fps": 24,
+			"name": "BF HEY!!",
+			"indices": []
+		},
+		{
+			"offsets": [7, 0],
 			"indices": [],
 			"fps": 24,
-			"anim": "hey",
+			"anim": "idle",
 			"loop": false,
-			"name": "BF HEY!!"
+			"name": "BF Idle dance"
 		}
 	],
 	"vocals_file": "",
