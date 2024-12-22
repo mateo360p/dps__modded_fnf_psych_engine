@@ -1,24 +1,37 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TextureAtlas imagePath="noteSplashes-electric.png">
-	<!-- Created with Adobe Animate version 21.0.6.41649 -->
+	<!-- Created with Adobe Animate version 23.0.2.103 -->
 	<!-- http://www.adobe.com/products/animate.html -->
-	<SubTexture name="splash electro red 10000" x="255" y="175" width="139" height="128" frameX="-57" frameY="-53" frameWidth="253" frameHeight="235"/>
-	<SubTexture name="splash electro red 10001" x="248" y="1" width="199" height="173" frameX="-27" frameY="-31" frameWidth="253" frameHeight="235"/>
-	<SubTexture name="splash electro red 10002" x="1" y="237" width="253" height="213" frameX="0" frameY="-11" frameWidth="253" frameHeight="235"/>
-	<SubTexture name="splash electro red 10003" x="1" y="1" width="246" height="235" frameX="-3" frameY="0" frameWidth="253" frameHeight="235"/>
-	
-	<SubTexture name="splash electro blue 10000" x="255" y="175" width="139" height="128" frameX="-57" frameY="-53" frameWidth="253" frameHeight="235"/>
-	<SubTexture name="splash electro blue 10001" x="248" y="1" width="199" height="173" frameX="-27" frameY="-31" frameWidth="253" frameHeight="235"/>
-	<SubTexture name="splash electro blue 10002" x="1" y="237" width="253" height="213" frameX="0" frameY="-11" frameWidth="253" frameHeight="235"/>
-	<SubTexture name="splash electro blue 10003" x="1" y="1" width="246" height="235" frameX="-3" frameY="0" frameWidth="253" frameHeight="235"/>
-	
-	<SubTexture name="splash electro green 10000" x="255" y="175" width="139" height="128" frameX="-57" frameY="-53" frameWidth="253" frameHeight="235"/>
-	<SubTexture name="splash electro green 10001" x="248" y="1" width="199" height="173" frameX="-27" frameY="-31" frameWidth="253" frameHeight="235"/>
-	<SubTexture name="splash electro green 10002" x="1" y="237" width="253" height="213" frameX="0" frameY="-11" frameWidth="253" frameHeight="235"/>
-	<SubTexture name="splash electro green 10003" x="1" y="1" width="246" height="235" frameX="-3" frameY="0" frameWidth="253" frameHeight="235"/>
-	
-	<SubTexture name="splash electro purple 10000" x="255" y="175" width="139" height="128" frameX="-57" frameY="-53" frameWidth="253" frameHeight="235"/>
-	<SubTexture name="splash electro purple 10001" x="248" y="1" width="199" height="173" frameX="-27" frameY="-31" frameWidth="253" frameHeight="235"/>
-	<SubTexture name="splash electro purple 10002" x="1" y="237" width="253" height="213" frameX="0" frameY="-11" frameWidth="253" frameHeight="235"/>
-	<SubTexture name="splash electro purple 10003" x="1" y="1" width="246" height="235" frameX="-3" frameY="0" frameWidth="253" frameHeight="235"/>
+	<SubTexture name="note splash electric blue 10000" x="3" y="3" width="139" height="128" frameX="-80" frameY="-68" frameWidth="290" frameHeight="268"/>
+	<SubTexture name="note splash electric blue 10001" x="142" y="3" width="218" height="194" frameX="-36" frameY="-33" frameWidth="290" frameHeight="268"/>
+	<SubTexture name="note splash electric blue 10002" x="360" y="3" width="266" height="239" frameX="-17" frameY="-12" frameWidth="290" frameHeight="268"/>
+	<SubTexture name="note splash electric blue 10003" x="626" y="3" width="290" height="268"/>
+	<SubTexture name="note splash electric blue 20000" x="3" y="271" width="193" height="163" frameX="-68" frameY="-49" frameWidth="325" frameHeight="270"/>
+	<SubTexture name="note splash electric blue 20001" x="196" y="271" width="264" height="227" frameX="-22" frameY="-5" frameWidth="325" frameHeight="270"/>
+	<SubTexture name="note splash electric blue 20002" x="460" y="271" width="313" height="260" frameX="-4" frameY="-6" frameWidth="325" frameHeight="270"/>
+	<SubTexture name="note splash electric blue 20003" x="3" y="531" width="325" height="270"/>
+	<SubTexture name="note splash electric green 10000" x="3" y="3" width="139" height="128" frameX="-80" frameY="-68" frameWidth="290" frameHeight="268"/>
+	<SubTexture name="note splash electric green 10001" x="142" y="3" width="218" height="194" frameX="-36" frameY="-33" frameWidth="290" frameHeight="268"/>
+	<SubTexture name="note splash electric green 10002" x="360" y="3" width="266" height="239" frameX="-17" frameY="-12" frameWidth="290" frameHeight="268"/>
+	<SubTexture name="note splash electric green 10003" x="626" y="3" width="290" height="268"/>
+	<SubTexture name="note splash electric green 20000" x="3" y="271" width="193" height="163" frameX="-68" frameY="-49" frameWidth="325" frameHeight="270"/>
+	<SubTexture name="note splash electric green 20001" x="196" y="271" width="264" height="227" frameX="-22" frameY="-5" frameWidth="325" frameHeight="270"/>
+	<SubTexture name="note splash electric green 20002" x="460" y="271" width="313" height="260" frameX="-4" frameY="-6" frameWidth="325" frameHeight="270"/>
+	<SubTexture name="note splash electric green 20003" x="3" y="531" width="325" height="270"/>
+	<SubTexture name="note splash electric purple 10000" x="3" y="3" width="139" height="128" frameX="-80" frameY="-68" frameWidth="290" frameHeight="268"/>
+	<SubTexture name="note splash electric purple 10001" x="142" y="3" width="218" height="194" frameX="-36" frameY="-33" frameWidth="290" frameHeight="268"/>
+	<SubTexture name="note splash electric purple 10002" x="360" y="3" width="266" height="239" frameX="-17" frameY="-12" frameWidth="290" frameHeight="268"/>
+	<SubTexture name="note splash electric purple 10003" x="626" y="3" width="290" height="268"/>
+	<SubTexture name="note splash electric purple 20000" x="3" y="271" width="193" height="163" frameX="-68" frameY="-49" frameWidth="325" frameHeight="270"/>
+	<SubTexture name="note splash electric purple 20001" x="196" y="271" width="264" height="227" frameX="-22" frameY="-5" frameWidth="325" frameHeight="270"/>
+	<SubTexture name="note splash electric purple 20002" x="460" y="271" width="313" height="260" frameX="-4" frameY="-6" frameWidth="325" frameHeight="270"/>
+	<SubTexture name="note splash electric purple 20003" x="3" y="531" width="325" height="270"/>
+	<SubTexture name="note splash electric red 10000" x="3" y="3" width="139" height="128" frameX="-80" frameY="-68" frameWidth="290" frameHeight="268"/>
+	<SubTexture name="note splash electric red 10001" x="142" y="3" width="218" height="194" frameX="-36" frameY="-33" frameWidth="290" frameHeight="268"/>
+	<SubTexture name="note splash electric red 10002" x="360" y="3" width="266" height="239" frameX="-17" frameY="-12" frameWidth="290" frameHeight="268"/>
+	<SubTexture name="note splash electric red 10003" x="626" y="3" width="290" height="268"/>
+	<SubTexture name="note splash electric red 20000" x="3" y="271" width="193" height="163" frameX="-68" frameY="-49" frameWidth="325" frameHeight="270"/>
+	<SubTexture name="note splash electric red 20001" x="196" y="271" width="264" height="227" frameX="-22" frameY="-5" frameWidth="325" frameHeight="270"/>
+	<SubTexture name="note splash electric red 20002" x="460" y="271" width="313" height="260" frameX="-4" frameY="-6" frameWidth="325" frameHeight="270"/>
+	<SubTexture name="note splash electric red 20003" x="3" y="531" width="325" height="270"/>
 </TextureAtlas>

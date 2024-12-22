@@ -3079,31 +3079,41 @@ class PlayState extends MusicBeatState
 		{
 			var char:Character = dad;
 			var animToPlay:String = singAnimations[Std.int(Math.abs(Math.min(singAnimations.length-1, note.noteData)))] + note.animSuffix;
-			if(note.gfNote) char = gf;
+			var animCheck:String = 'hey';
+			if(note.gfNote)
+			{
+				char = gf;
+				animCheck = 'cheer';
+			}
 
 			if(char != null)
 			{
-				var canPlay:Bool = true;
-				if(note.isSustainNote) {
-					var holdAnim:String = animToPlay + '-hold';
-					char.playAnim(animToPlay, true);
-					if(char.animation.exists(holdAnim)) animToPlay = holdAnim;
-					if(char.getAnimationName() == holdAnim || char.getAnimationName() == holdAnim + '-loop') canPlay = false;
-				} else if (noteRows[note.mustPress?0:1][note.row].length > 1 /*&& songAllowedGhost && ClientPrefs.doubleGhostNote*/) {
+				char.holdTimer = 0;
+				if (!note.isSustainNote && noteRows[note.mustPress?0:1][note.row].length > 1 && songAllowedGhost)
+				{
 					var chord = noteRows[note.mustPress?0:1][note.row];
 					var animNote = chord[0];
 					var realAnim = singAnimations[Std.int(Math.abs(animNote.noteData))] + note.animSuffix;
 
-					if (dad.mostRecentRow != note.row) char.playAnim(realAnim, true);
-
-					dad.mostRecentRow = note.row;
-					canPlay = false; //idk
-
 					createGhost('dad', animToPlay);
+					
+					if (dad.mostRecentRow != note.row) char.playAnim(realAnim, true);
+					dad.mostRecentRow = note.row;
+				}
+				else
+				{
+					char.playAnim(animToPlay, true);
 				}
 
-				if(canPlay) char.playAnim(animToPlay, true);
-				char.holdTimer = 0;
+				if(note.noteType == 'Hey!')
+				{
+					if(char.hasAnimation(animCheck))
+					{
+						char.playAnim(animCheck, true);
+						char.specialAnim = true;
+						char.heyTimer = 0.6;
+					}
+				}
 			}
 		}
 
@@ -3157,26 +3167,22 @@ class PlayState extends MusicBeatState
 
 				if(char != null)
 				{
-					var canPlay:Bool = true;
-					if(note.isSustainNote) {
-						var holdAnim:String = animToPlay + '-hold';
-						if(char.animation.exists(holdAnim)) animToPlay = holdAnim;
-						if(char.getAnimationName() == holdAnim || char.getAnimationName() == holdAnim + '-loop') canPlay = false;
-					} else if (noteRows[note.mustPress?0:1][note.row].length > 1 /*&& songAllowedGhost && ClientPrefs.doubleGhostNote*/) {
+					char.holdTimer = 0;
+					if (!note.isSustainNote && noteRows[note.mustPress?0:1][note.row].length > 1 && songAllowedGhost /*&& ClientPrefs.doubleGhostNote*/)
+					{
 						var chord = noteRows[note.mustPress?0:1][note.row];
 						var animNote = chord[0];
 						var realAnim = singAnimations[Std.int(Math.abs(animNote.noteData))] + note.animSuffix;
 
-						if (dad.mostRecentRow != note.row) char.playAnim(realAnim, true);
-
-						dad.mostRecentRow = note.row;
-						canPlay = false; //idk
-
 						createGhost('bf', animToPlay);
+						
+						if (boyfriend.mostRecentRow != note.row) char.playAnim(realAnim, true);
+						boyfriend.mostRecentRow = note.row;
 					}
-
-					if(canPlay) char.playAnim(animToPlay, true);
-					char.holdTimer = 0;
+					else
+					{
+						char.playAnim(animToPlay, true);
+					}
 
 					if(note.noteType == 'Hey!')
 					{

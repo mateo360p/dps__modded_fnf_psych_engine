@@ -1,114 +1,114 @@
 {
 	"animations": {
-		"blue2": {
-			"noteData": 5,
-			"offsets": [
-				99,
-				82
-			],
-			"fps": [
-				22,
-				26
-			],
-			"prefix": "note splash electric blue 20",
-			"name": "blue2",
-			"indices": []
-		},
 		"purple": {
 			"noteData": 0,
 			"offsets": [
-				92,
-				75
+				64,
+				76
 			],
 			"fps": [
 				22,
 				26
 			],
-			"prefix": "note splash electric purple 10",
+			"prefix": "note splash sussy purple 10",
 			"name": "purple",
+			"indices": []
+		},
+		"blue2": {
+			"noteData": 5,
+			"offsets": [
+				68,
+				121
+			],
+			"fps": [
+				22,
+				26
+			],
+			"prefix": "note splash sussy blue 20",
+			"name": "blue2",
 			"indices": []
 		},
 		"red2": {
 			"noteData": 7,
 			"offsets": [
-				99,
-				82
+				68,
+				121
 			],
 			"fps": [
 				22,
 				26
 			],
-			"prefix": "note splash electric red 20",
+			"prefix": "note splash sussy red 20",
 			"name": "red2",
 			"indices": []
 		},
 		"red": {
 			"noteData": 3,
 			"offsets": [
-				92,
-				75
+				64,
+				76
 			],
 			"fps": [
 				22,
 				26
 			],
-			"prefix": "note splash electric red 10",
+			"prefix": "note splash sussy red 10",
 			"name": "red",
 			"indices": []
 		},
 		"purple2": {
 			"noteData": 4,
 			"offsets": [
-				99,
-				82
+				68,
+				121
 			],
 			"fps": [
 				22,
 				26
 			],
-			"prefix": "note splash electric purple 20",
+			"prefix": "note splash sussy purple 20",
 			"name": "purple2",
 			"indices": []
 		},
 		"blue": {
 			"noteData": 1,
 			"offsets": [
-				92,
-				75
+				64,
+				76
 			],
 			"fps": [
 				22,
 				26
 			],
-			"prefix": "note splash electric blue 10",
+			"prefix": "note splash sussy blue 10",
 			"name": "blue",
 			"indices": []
 		},
 		"green2": {
 			"noteData": 6,
 			"offsets": [
-				99,
-				82
+				68,
+				121
 			],
 			"fps": [
 				22,
 				26
 			],
-			"prefix": "note splash electric green 20",
+			"prefix": "note splash sussy green 20",
 			"name": "green2",
 			"indices": []
 		},
 		"green": {
 			"noteData": 2,
 			"offsets": [
-				92,
-				75
+				64,
+				76
 			],
 			"fps": [
 				22,
 				26
 			],
-			"prefix": "note splash electric green 10",
+			"prefix": "note splash sussy green 10",
 			"name": "green",
 			"indices": []
 		}

@@ -1,24 +1,37 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TextureAtlas imagePath="noteSplashes-sparkles.png">
-	<!-- Created with Adobe Animate version 21.0.6.41649 -->
+	<!-- Created with Adobe Animate version 23.0.2.103 -->
 	<!-- http://www.adobe.com/products/animate.html -->
-	<SubTexture name="splash sparkles red 10000" x="255" y="232" width="142" height="133" frameX="-52" frameY="-54" frameWidth="253" frameHeight="247"/>
-	<SubTexture name="splash sparkles red 10001" x="255" y="1" width="221" height="230" frameX="-17" frameY="0" frameWidth="253" frameHeight="247"/>
-	<SubTexture name="splash sparkles red 10002" x="1" y="1" width="253" height="232" frameX="0" frameY="-3" frameWidth="253" frameHeight="247"/>
-	<SubTexture name="splash sparkles red 10003" x="1" y="234" width="248" height="218" frameX="-2" frameY="-29" frameWidth="253" frameHeight="247"/>
-	
-	<SubTexture name="splash sparkles green 10000" x="255" y="232" width="142" height="133" frameX="-52" frameY="-54" frameWidth="253" frameHeight="247"/>
-	<SubTexture name="splash sparkles green 10001" x="255" y="1" width="221" height="230" frameX="-17" frameY="0" frameWidth="253" frameHeight="247"/>
-	<SubTexture name="splash sparkles green 10002" x="1" y="1" width="253" height="232" frameX="0" frameY="-3" frameWidth="253" frameHeight="247"/>
-	<SubTexture name="splash sparkles green 10003" x="1" y="234" width="248" height="218" frameX="-2" frameY="-29" frameWidth="253" frameHeight="247"/>
-	
-	<SubTexture name="splash sparkles purple 10000" x="255" y="232" width="142" height="133" frameX="-52" frameY="-54" frameWidth="253" frameHeight="247"/>
-	<SubTexture name="splash sparkles purple 10001" x="255" y="1" width="221" height="230" frameX="-17" frameY="0" frameWidth="253" frameHeight="247"/>
-	<SubTexture name="splash sparkles purple 10002" x="1" y="1" width="253" height="232" frameX="0" frameY="-3" frameWidth="253" frameHeight="247"/>
-	<SubTexture name="splash sparkles purple 10003" x="1" y="234" width="248" height="218" frameX="-2" frameY="-29" frameWidth="253" frameHeight="247"/>
-	
-	<SubTexture name="splash sparkles blue 10000" x="255" y="232" width="142" height="133" frameX="-52" frameY="-54" frameWidth="253" frameHeight="247"/>
-	<SubTexture name="splash sparkles blue 10001" x="255" y="1" width="221" height="230" frameX="-17" frameY="0" frameWidth="253" frameHeight="247"/>
-	<SubTexture name="splash sparkles blue 10002" x="1" y="1" width="253" height="232" frameX="0" frameY="-3" frameWidth="253" frameHeight="247"/>
-	<SubTexture name="splash sparkles blue 10003" x="1" y="234" width="248" height="218" frameX="-2" frameY="-29" frameWidth="253" frameHeight="247"/>
+	<SubTexture name="note splash sparkles blue 10000" x="3" y="3" width="142" height="133" frameX="-57" frameY="-54" frameWidth="258" frameHeight="240"/>
+	<SubTexture name="note splash sparkles blue 10001" x="145" y="3" width="221" height="230" frameX="-22" frameY="0" frameWidth="258" frameHeight="240"/>
+	<SubTexture name="note splash sparkles blue 10002" x="366" y="3" width="253" height="232" frameX="-1" frameY="-3" frameWidth="258" frameHeight="240"/>
+	<SubTexture name="note splash sparkles blue 10003" x="619" y="3" width="258" height="230" frameX="0" frameY="-10" frameWidth="258" frameHeight="240"/>
+	<SubTexture name="note splash sparkles blue 20000" x="877" y="3" width="127" height="133" frameX="-83" frameY="-62" frameWidth="279" frameHeight="254"/>
+	<SubTexture name="note splash sparkles blue 20001" x="3" y="235" width="223" height="205" frameX="-29" frameY="-24" frameWidth="279" frameHeight="254"/>
+	<SubTexture name="note splash sparkles blue 20002" x="226" y="235" width="268" height="246" frameX="-11" frameY="-6" frameWidth="279" frameHeight="254"/>
+	<SubTexture name="note splash sparkles blue 20003" x="494" y="235" width="279" height="254"/>
+	<SubTexture name="note splash sparkles green 10000" x="3" y="3" width="142" height="133" frameX="-57" frameY="-54" frameWidth="258" frameHeight="240"/>
+	<SubTexture name="note splash sparkles green 10001" x="145" y="3" width="221" height="230" frameX="-22" frameY="0" frameWidth="258" frameHeight="240"/>
+	<SubTexture name="note splash sparkles green 10002" x="366" y="3" width="253" height="232" frameX="-1" frameY="-3" frameWidth="258" frameHeight="240"/>
+	<SubTexture name="note splash sparkles green 10003" x="619" y="3" width="258" height="230" frameX="0" frameY="-10" frameWidth="258" frameHeight="240"/>
+	<SubTexture name="note splash sparkles green 20000" x="877" y="3" width="127" height="133" frameX="-83" frameY="-62" frameWidth="279" frameHeight="254"/>
+	<SubTexture name="note splash sparkles green 20001" x="3" y="235" width="223" height="205" frameX="-29" frameY="-24" frameWidth="279" frameHeight="254"/>
+	<SubTexture name="note splash sparkles green 20002" x="226" y="235" width="268" height="246" frameX="-11" frameY="-6" frameWidth="279" frameHeight="254"/>
+	<SubTexture name="note splash sparkles green 20003" x="494" y="235" width="279" height="254"/>
+	<SubTexture name="note splash sparkles purple 10000" x="3" y="3" width="142" height="133" frameX="-57" frameY="-54" frameWidth="258" frameHeight="240"/>
+	<SubTexture name="note splash sparkles purple 10001" x="145" y="3" width="221" height="230" frameX="-22" frameY="0" frameWidth="258" frameHeight="240"/>
+	<SubTexture name="note splash sparkles purple 10002" x="366" y="3" width="253" height="232" frameX="-1" frameY="-3" frameWidth="258" frameHeight="240"/>
+	<SubTexture name="note splash sparkles purple 10003" x="619" y="3" width="258" height="230" frameX="0" frameY="-10" frameWidth="258" frameHeight="240"/>
+	<SubTexture name="note splash sparkles purple 20000" x="877" y="3" width="127" height="133" frameX="-83" frameY="-62" frameWidth="279" frameHeight="254"/>
+	<SubTexture name="note splash sparkles purple 20001" x="3" y="235" width="223" height="205" frameX="-29" frameY="-24" frameWidth="279" frameHeight="254"/>
+	<SubTexture name="note splash sparkles purple 20002" x="226" y="235" width="268" height="246" frameX="-11" frameY="-6" frameWidth="279" frameHeight="254"/>
+	<SubTexture name="note splash sparkles purple 20003" x="494" y="235" width="279" height="254"/>
+	<SubTexture name="note splash sparkles red 10000" x="3" y="3" width="142" height="133" frameX="-57" frameY="-54" frameWidth="258" frameHeight="240"/>
+	<SubTexture name="note splash sparkles red 10001" x="145" y="3" width="221" height="230" frameX="-22" frameY="0" frameWidth="258" frameHeight="240"/>
+	<SubTexture name="note splash sparkles red 10002" x="366" y="3" width="253" height="232" frameX="-1" frameY="-3" frameWidth="258" frameHeight="240"/>
+	<SubTexture name="note splash sparkles red 10003" x="619" y="3" width="258" height="230" frameX="0" frameY="-10" frameWidth="258" frameHeight="240"/>
+	<SubTexture name="note splash sparkles red 20000" x="877" y="3" width="127" height="133" frameX="-83" frameY="-62" frameWidth="279" frameHeight="254"/>
+	<SubTexture name="note splash sparkles red 20001" x="3" y="235" width="223" height="205" frameX="-29" frameY="-24" frameWidth="279" frameHeight="254"/>
+	<SubTexture name="note splash sparkles red 20002" x="226" y="235" width="268" height="246" frameX="-11" frameY="-6" frameWidth="279" frameHeight="254"/>
+	<SubTexture name="note splash sparkles red 20003" x="494" y="235" width="279" height="254"/>
 </TextureAtlas>
