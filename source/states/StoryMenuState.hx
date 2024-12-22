@@ -43,6 +43,12 @@ class StoryMenuState extends MusicBeatState
 
 	var loadedWeeks:Array<WeekData> = [];
 
+	/* 
+		Well i always wanted to say this XD
+		TODO: make the characters play idle on beat (including gf)
+		idk it eels so good :'D
+	*/
+
 	override function create()
 	{
 		Paths.clearStoredMemory();
@@ -128,10 +134,9 @@ class StoryMenuState extends MusicBeatState
 
 		WeekData.setDirectoryFromWeek(loadedWeeks[0]);
 		var charArray:Array<String> = loadedWeeks[0].weekCharacters;
-		for (char in 0...3)
+		for (i in 0...3)
 		{
-			var weekCharacterThing:MenuCharacter = new MenuCharacter((FlxG.width * 0.25) * (1 + char) - 150, charArray[char]);
-			weekCharacterThing.y += 70;
+			var weekCharacterThing:MenuCharacter = new MenuCharacter(0, 0, charArray[i], i);
 			grpWeekCharacters.add(weekCharacterThing);
 		}
 
@@ -339,6 +344,7 @@ class StoryMenuState extends MusicBeatState
 					if (char.character != '' && char.hasConfirmAnimation)
 					{
 						char.animation.play('confirm');
+						if (char.confirmOffsets != null) char.offset.set(char.confirmOffsets[0], char.confirmOffsets[1]);
 					}
 				}
 				stopspamming = true;
@@ -458,7 +464,7 @@ class StoryMenuState extends MusicBeatState
 	{
 		var weekArray:Array<String> = loadedWeeks[curWeek].weekCharacters;
 		for (i in 0...grpWeekCharacters.length) {
-			grpWeekCharacters.members[i].changeCharacter(weekArray[i]);
+			grpWeekCharacters.members[i].changeMenuCharacter(weekArray[i], i);
 		}
 
 		var leWeek:WeekData = loadedWeeks[curWeek];

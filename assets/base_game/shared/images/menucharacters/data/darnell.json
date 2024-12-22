@@ -2,11 +2,12 @@
 	"confirm_anim": "idle",
 	"antialiasing": true,
 	"idle_anim": "idle",
-	"position": [
-		-30,
-		-10
+	"confirm_offsets": [
+		0,
+		0
 	],
+	"position": [-10, 80],
 	"scale": 1,
-	"image": "nene",
+	"image": "darnell",
 	"flipX": false
 }

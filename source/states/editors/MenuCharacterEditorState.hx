@@ -13,6 +13,10 @@ import states.editors.content.PsychJsonPrinter;
 
 class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHandler.PsychUIEvent
 {
+	var char:MenuCharacter;
+	var curAnimation:Int = 0; //0 = idle, 1 = confirm ONLY WORKS FOR THE PLAYER
+	var txtPosition:FlxText;
+
 	var grpWeekCharacters:FlxTypedGroup<MenuCharacter>;
 	var characterFile:MenuCharacterFile = null;
 	var txtOffsets:FlxText;
@@ -27,6 +31,7 @@ class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHan
 			position: [0, 0],
 			idle_anim: 'M Dad Idle',
 			confirm_anim: 'M Dad Idle',
+			confirm_offsets: [0, 0],
 			flipX: false,
 			antialiasing: true
 		};
@@ -37,10 +42,10 @@ class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHan
 		#end
 
 		grpWeekCharacters = new FlxTypedGroup<MenuCharacter>();
-		for (char in 0...3)
+		for (i in 0...3)
 		{
-			var weekCharacterThing:MenuCharacter = new MenuCharacter((FlxG.width * 0.25) * (1 + char) - 150, defaultCharacters[char]);
-			weekCharacterThing.y += 70;
+			var weekCharacterThing:MenuCharacter = new MenuCharacter(0, 0, defaultCharacters[i], i);
+			//weekCharacterThing.y += 70;
 			weekCharacterThing.alpha = 0.2;
 			grpWeekCharacters.add(weekCharacterThing);
 		}
@@ -48,13 +53,20 @@ class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHan
 		add(new FlxSprite(0, 56).makeGraphic(FlxG.width, 386, 0xFFF9CF51));
 		add(grpWeekCharacters);
 
-		txtOffsets = new FlxText(20, 10, 0, "[0, 0]", 32);
+		txtPosition = new FlxText(20, 10, 0, "Pos: [0, 0]", 32);
+		txtPosition.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER);
+		txtPosition.alpha = 0.7;
+		add(txtPosition);
+
+		txtOffsets = new FlxText(320, 10, 0, "Offsets: [0, 0]", 32);
 		txtOffsets.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER);
 		txtOffsets.alpha = 0.7;
 		add(txtOffsets);
 
 		var tipText:FlxText = new FlxText(0, 540, FlxG.width,
-			"Arrow Keys - Change Offset (Hold shift for 10x speed)
+			"Arrow Keys - Change Offset (Start Press Animation)
+			\nWASD - Change the Character Position
+			\n(Hold shift for 10x speed)
 			\nSpace - Play \"Start Press\" animation (Boyfriend Character Type)", 16);
 		tipText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER);
 		tipText.scrollFactor.set();
@@ -156,17 +168,16 @@ class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHan
 
 	function updateCharacters() {
 		for (i in 0...3) {
-			var char:MenuCharacter = grpWeekCharacters.members[i];
+			char = grpWeekCharacters.members[i];
 			char.alpha = 0.2;
 			char.character = '';
-			char.changeCharacter(defaultCharacters[i]);
+			char.changeMenuCharacter(defaultCharacters[i], i);
 		}
 		reloadSelectedCharacter();
 	}
 	
 	function reloadSelectedCharacter() {
-		var char:MenuCharacter = grpWeekCharacters.members[characterTypeRadio.checked];
-
+		char = grpWeekCharacters.members[characterTypeRadio.checked];
 		char.alpha = 1;
 		char.frames = Paths.getSparrowAtlas('menucharacters/' + characterFile.image);
 		char.animation.addByPrefix('idle', characterFile.idle_anim, 24);
@@ -176,6 +187,7 @@ class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHan
 		char.scale.set(characterFile.scale, characterFile.scale);
 		char.updateHitbox();
 		char.animation.play('idle');
+		updatePosition();
 		updateOffset();
 		
 		#if DISCORD_ALLOWED
@@ -224,41 +236,89 @@ class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHan
 			var shiftMult:Int = 1;
 			if(FlxG.keys.pressed.SHIFT) shiftMult = 10;
 
-			if(FlxG.keys.justPressed.LEFT) {
+			if(FlxG.keys.justPressed.D) {
 				characterFile.position[0] += shiftMult;
-				updateOffset();
+				updatePosition();
 			}
-			if(FlxG.keys.justPressed.RIGHT) {
+			if(FlxG.keys.justPressed.A) {
 				characterFile.position[0] -= shiftMult;
-				updateOffset();
+				updatePosition();
 			}
-			if(FlxG.keys.justPressed.UP) {
+			if(FlxG.keys.justPressed.S) {
 				characterFile.position[1] += shiftMult;
-				updateOffset();
+				updatePosition();
 			}
-			if(FlxG.keys.justPressed.DOWN) {
+			if(FlxG.keys.justPressed.W) {
 				characterFile.position[1] -= shiftMult;
-				updateOffset();
+				updatePosition();
 			}
 
 			if(FlxG.keys.justPressed.SPACE && characterTypeRadio.checked == 1) {
-				grpWeekCharacters.members[characterTypeRadio.checked].animation.play('confirm', true);
+				var disChar = grpWeekCharacters.members[1];
+				if (curAnimation == 0) {
+					disChar.playAnim('confirm', true);
+					curAnimation = 1;
+					updateOffset();
+				} else if (curAnimation == 1) {
+					disChar.playAnim('idle', true);
+					curAnimation = 0;
+					updateOffset();
+				}
+			}
+
+			var controlArray:Array<Bool> = [FlxG.keys.justPressed.LEFT, FlxG.keys.justPressed.RIGHT, FlxG.keys.justPressed.UP, FlxG.keys.justPressed.DOWN];
+			for (i in 0...controlArray.length) {
+				if(controlArray[i] && characterTypeRadio.checked == 1 && curAnimation == 1) {
+					var arrayVal = 0;
+					if(i > 1) arrayVal = 1;
+					var negaMult:Int = 1;
+					if(i % 2 == 1) negaMult = -1;
+					if (characterFile != null) characterFile.confirm_offsets[arrayVal] += negaMult * shiftMult;
+					updateOffset();
+				}
 			}
 		}
 		else ClientPrefs.toggleVolumeKeys(false);
 
-		var char:MenuCharacter = grpWeekCharacters.members[1];
-		if(char.animation.curAnim != null && char.animation.curAnim.name == 'confirm' && char.animation.curAnim.finished)
-			char.animation.play('idle', true);
-
 		super.update(elapsed);
 	}
 
-	function updateOffset()
-	{
-		var char:MenuCharacter = grpWeekCharacters.members[characterTypeRadio.checked];
-		char.offset.set(characterFile.position[0], characterFile.position[1]);
-		txtOffsets.text = '' + characterFile.position;
+	override function beatHit(){
+		if (curAnimation == 0 && characterTypeRadio.checked == 1)
+			grpWeekCharacters.members[1].playAnim('idle', true);
+	}
+
+	function updatePosition() {
+		char = grpWeekCharacters.members[characterTypeRadio.checked];
+		char.setPosition(characterFile.position[0] + (FlxG.width * 0.25) * (1 + characterTypeRadio.checked) - 150, characterFile.position[1] + 70);
+		txtPosition.text = 'Pos: ' + characterFile.position;
+	}
+
+	function updateOffset() {
+		//var xdxdxd = characterFile.confirm_offsets;
+		if (characterFile.confirm_offsets == null) characterFile.confirm_offsets = [0, 0];
+		txtOffsets.text = 'Offsets: ' + characterFile.confirm_offsets;
+
+		if (characterTypeRadio.checked != 1) {
+			txtOffsets.visible = false;
+			char.offset.set(0, 0);
+		} else {
+			txtOffsets.visible = true;
+			if (curAnimation == 1) {
+				char = grpWeekCharacters.members[1];
+				if (char.confirmOffsets != null) char.offset.set(characterFile.confirm_offsets[0], characterFile.confirm_offsets[1]);
+			} else {
+				char.offset.set(0, 0);
+			}
+		}
+
+		/*
+		if (curAnimation == 1 && characterTypeRadio.checked == 1){	
+			char = grpWeekCharacters.members[1];
+			if (char.confirmOffsets != null) char.offset.set(characterFile.confirm_offsets[0], characterFile.confirm_offsets[1]);
+		} else {
+			char.offset.set(0, 0);
+		}*/
 	}
 
 	var _file:FileReference = null;
@@ -296,6 +356,7 @@ class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHan
 					idleInputText.text = characterFile.image;
 					confirmInputText.text = characterFile.image;
 					scaleStepper.value = characterFile.scale;
+					updatePosition();
 					updateOffset();
 					_file = null;
 					return;

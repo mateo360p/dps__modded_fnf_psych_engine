@@ -1,0 +1,13 @@
+{
+	"idle_anim": "idle",
+	"antialiasing": true,
+	"confirm_anim": "confirm",
+	"confirm_offsets": [
+		27,
+		2
+	],
+	"position": [-20, 0],
+	"scale": 1,
+	"flipX": false,
+	"image": "pico-player"
+}
