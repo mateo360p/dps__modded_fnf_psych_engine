@@ -91,6 +91,23 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 			'hideHud',
 			BOOL);
 		addOption(option);
+
+		var uiSets:Array<String> = Mods.mergeAllTextsNamed('data/uiSetsList.txt');
+		if(uiSets.length > 0)
+		{
+			if(!uiSets.contains(ClientPrefs.data.uiSet))
+				ClientPrefs.data.uiSet = ClientPrefs.defaultData.uiSet; //Reset to default if saved set couldnt be found
+
+			uiSets.insert(0, ClientPrefs.defaultData.uiSet); //Default set always comes first
+			var option:Option = new Option('UI Sets:',
+				"Select your prefered UI Set",
+				'uiSet',
+				STRING,
+				uiSets);
+			addOption(option);
+			//option.onChange = onChangeNoteSkin;
+			//noteOptionID = optionsArray.length - 1;
+		}
 		
 		var option:Option = new Option('Time Bar:',
 			"What should the Time Bar display?",

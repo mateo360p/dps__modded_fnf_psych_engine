@@ -8,6 +8,7 @@ import states.TitleState;
 
 // Add a variable here and it will get automatically saved
 @:structInit class SaveVariables {
+	public var uiSet:String = 'default';
 	public var downScroll:Bool = false;
 	public var middleScroll:Bool = false;
 	public var opponentStrums:Bool = true;
@@ -121,11 +122,13 @@ class ClientPrefs {
 		'ui_left'		=> [DPAD_LEFT, LEFT_STICK_DIGITAL_LEFT],
 		'ui_down'		=> [DPAD_DOWN, LEFT_STICK_DIGITAL_DOWN],
 		'ui_right'		=> [DPAD_RIGHT, LEFT_STICK_DIGITAL_RIGHT],
+
+		'hey'			=> [RIGHT_TRIGGER_BUTTON],
+		'dodge'			=> [BACK],
 		
 		'accept'		=> [A, START],
 		'back'			=> [B],
 		'pause'			=> [START],
-		'reset'			=> [BACK]
 	];
 	public static var defaultKeys:Map<String, Array<FlxKey>> = null;
 	public static var defaultButtons:Map<String, Array<FlxGamepadInputID>> = null;

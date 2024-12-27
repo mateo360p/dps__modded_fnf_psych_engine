@@ -944,11 +944,17 @@ class PlayState extends MusicBeatState
 	function cacheCountdown()
 	{
 		var introAssets:Map<String, Array<String>> = new Map<String, Array<String>>();
+		/*
 		var introImagesArray:Array<String> = switch(stageUI) {
 			case "pixel": ['pixelUI/ready-pixel', 'pixelUI/set-pixel', 'pixelUI/go-pixel'];
 			case "normal": ["ready", "set" ,"go"];
 			default: ['${uiPrefix}UI/ready${uiPostfix}', '${uiPrefix}UI/set${uiPostfix}', '${uiPrefix}UI/go${uiPostfix}'];
-		}
+		}*/
+		var introImagesArray:Array<String> =
+		[uiPrefix + "UI/" + ClientPrefs.data.uiSet + "/countdown/ready" + uiPostfix,
+		uiPrefix + "UI/" + ClientPrefs.data.uiSet + "/countdown/set" + uiPostfix,
+		uiPrefix + "UI/" + ClientPrefs.data.uiSet + "/countdown/go" + uiPostfix];
+
 		introAssets.set(stageUI, introImagesArray);
 		var introAlts:Array<String> = introAssets.get(stageUI);
 		for (asset in introAlts) Paths.image(asset);
@@ -1008,11 +1014,11 @@ class PlayState extends MusicBeatState
 				characterBopper(tmr.loopsLeft);
 
 				var introAssets:Map<String, Array<String>> = new Map<String, Array<String>>();
-				var introImagesArray:Array<String> = switch(stageUI) {
-					case "pixel": ['pixelUI/ready-pixel', 'pixelUI/set-pixel', 'pixelUI/go-pixel'];
-					case "normal": ["ready", "set" ,"go"];
-					default: ['${uiPrefix}UI/ready${uiPostfix}', '${uiPrefix}UI/set${uiPostfix}', '${uiPrefix}UI/go${uiPostfix}'];
-				}
+				var introImagesArray:Array<String> =
+				[uiPrefix + "UI/" + ClientPrefs.data.uiSet + "/countdown/ready" + uiPostfix,
+				uiPrefix + "UI/" + ClientPrefs.data.uiSet + "/countdown/set" + uiPostfix,
+				uiPrefix + "UI/" + ClientPrefs.data.uiSet + "/countdown/go" + uiPostfix];
+
 				introAssets.set(stageUI, introImagesArray);
 
 				var introAlts:Array<String> = introAssets.get(stageUI);
@@ -2527,14 +2533,10 @@ class PlayState extends MusicBeatState
 
 	private function cachePopUpScore()
 	{
-		var uiFolder:String = "";
-		if (stageUI != "normal")
-			uiFolder = uiPrefix + "UI/";
-
 		for (rating in ratingsData)
-			Paths.image(uiFolder + rating.image + uiPostfix);
+			Paths.image(uiPrefix + "UI/" + ClientPrefs.data.uiSet + '/rating/' + rating.image + uiPostfix);
 		for (i in 0...10)
-			Paths.image(uiFolder + 'num' + i + uiPostfix);
+			Paths.image(uiPrefix + "UI/" + ClientPrefs.data.uiSet + '/num/num' + i + uiPostfix);
 	}
 
 	private function popUpScore(note:Note = null):Void
@@ -2579,16 +2581,12 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		var uiFolder:String = "";
-		var antialias:Bool = ClientPrefs.data.antialiasing;
-		if (stageUI != "normal")
-		{
-			uiFolder = uiPrefix + "UI/";
-			antialias = !isPixelStage;
-		}
+		//var uiFolder:String = uiPrefix + "UI/";
+		var antialias:Bool = ClientPrefs.data.antialiasing && !isPixelStage;
 
-		rating.loadGraphic(Paths.image(uiFolder + daRating.image + uiPostfix));
+		rating.loadGraphic(Paths.image(uiPrefix + "UI/" + ClientPrefs.data.uiSet + "/rating/" + daRating.image + uiPostfix));
 		rating.screenCenter();
+		rating.centerOrigin();
 		rating.x = placement - 40;
 		rating.y -= 60;
 		rating.acceleration.y = 550 * playbackRate * playbackRate;
@@ -2599,8 +2597,9 @@ class PlayState extends MusicBeatState
 		rating.y -= ClientPrefs.data.comboOffset[1];
 		rating.antialiasing = antialias;
 
-		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(uiFolder + 'combo' + uiPostfix));
+		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(uiPrefix + "UI/" + ClientPrefs.data.uiSet + '/rating/combo' + uiPostfix));
 		comboSpr.screenCenter();
+		comboSpr.centerOrigin();
 		comboSpr.x = placement;
 		comboSpr.acceleration.y = FlxG.random.int(200, 300) * playbackRate * playbackRate;
 		comboSpr.velocity.y -= FlxG.random.int(140, 160) * playbackRate;
@@ -2634,7 +2633,7 @@ class PlayState extends MusicBeatState
 		var separatedScore:String = Std.string(combo).lpad('0', 3);
 		for (i in 0...separatedScore.length)
 		{
-			var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image(uiFolder + 'num' + Std.parseInt(separatedScore.charAt(i)) + uiPostfix));
+			var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image(uiPrefix + "UI/" + ClientPrefs.data.uiSet + '/num/num' + Std.parseInt(separatedScore.charAt(i)) + uiPostfix));
 			numScore.screenCenter();
 			numScore.x = placement + (43 * daLoop) - 90 + ClientPrefs.data.comboOffset[2];
 			numScore.y += 80 - ClientPrefs.data.comboOffset[3];

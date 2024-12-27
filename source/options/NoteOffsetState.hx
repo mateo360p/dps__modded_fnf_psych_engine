@@ -77,9 +77,10 @@ class NoteOffsetState extends MusicBeatState
 		coolText.screenCenter();
 		coolText.x = FlxG.width * 0.35;
 
-		rating = new FlxSprite().loadGraphic(Paths.image('sick'));
+		rating = new FlxSprite().loadGraphic(Paths.image('UI/' + ClientPrefs.data.uiSet + '/rating/sick'));
 		rating.cameras = [camHUD];
 		rating.antialiasing = ClientPrefs.data.antialiasing;
+
 		rating.setGraphicSize(Std.int(rating.width * 0.7));
 		rating.updateHitbox();
 		
@@ -98,7 +99,7 @@ class NoteOffsetState extends MusicBeatState
 		var daLoop:Int = 0;
 		for (i in seperatedScore)
 		{
-			var numScore:FlxSprite = new FlxSprite(43 * daLoop).loadGraphic(Paths.image('num' + i));
+			var numScore:FlxSprite = new FlxSprite(43 * daLoop).loadGraphic(Paths.image('UI/' + ClientPrefs.data.uiSet + '/num/num' + i));
 			numScore.cameras = [camHUD];
 			numScore.antialiasing = ClientPrefs.data.antialiasing;
 			numScore.setGraphicSize(Std.int(numScore.width * 0.5));
