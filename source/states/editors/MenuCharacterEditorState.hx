@@ -1,5 +1,6 @@
 package states.editors;
 
+import backend.WeekData;
 import openfl.net.FileReference;
 import openfl.events.Event;
 import openfl.events.IOErrorEvent;
@@ -50,8 +51,13 @@ class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHan
 			grpWeekCharacters.add(weekCharacterThing);
 		}
 
-		add(new FlxSprite(0, 56).makeGraphic(FlxG.width, 386, 0xFFF9CF51));
+		add(new FlxSprite(0, 56).makeGraphic(FlxG.width, 386, FlxColor.WHITE)); //White chit 
 		add(grpWeekCharacters);
+
+		var c = WeekData.defWeekColor; //initialization is overrated
+		var hielo = new FlxSprite(0, 56).makeGraphic(FlxG.width, 386, FlxColor.fromRGB(c[0], c[1], c[2]));
+		hielo.blend = MULTIPLY;
+		add(hielo); //the color
 
 		txtPosition = new FlxText(20, 10, 0, "Pos: [0, 0]", 32);
 		txtPosition.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER);

@@ -944,12 +944,6 @@ class PlayState extends MusicBeatState
 	function cacheCountdown()
 	{
 		var introAssets:Map<String, Array<String>> = new Map<String, Array<String>>();
-		/*
-		var introImagesArray:Array<String> = switch(stageUI) {
-			case "pixel": ['pixelUI/ready-pixel', 'pixelUI/set-pixel', 'pixelUI/go-pixel'];
-			case "normal": ["ready", "set" ,"go"];
-			default: ['${uiPrefix}UI/ready${uiPostfix}', '${uiPrefix}UI/set${uiPostfix}', '${uiPrefix}UI/go${uiPostfix}'];
-		}*/
 		var introImagesArray:Array<String> =
 		[uiPrefix + "UI/" + ClientPrefs.data.uiSet + "/countdown/ready" + uiPostfix,
 		uiPrefix + "UI/" + ClientPrefs.data.uiSet + "/countdown/set" + uiPostfix,

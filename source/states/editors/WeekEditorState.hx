@@ -19,6 +19,7 @@ import states.editors.content.Prompt;
 
 class WeekEditorState extends MusicBeatState implements PsychUIEventHandler.PsychUIEvent
 {
+	var solidColor:FlxSprite;
 	var txtWeekTitle:FlxText;
 	var bgSprite:FlxSprite;
 	var lock:FlxSprite;
@@ -44,11 +45,15 @@ class WeekEditorState extends MusicBeatState implements PsychUIEventHandler.Psyc
 		txtWeekTitle.alpha = 0.7;
 		
 		var ui_tex = Paths.getSparrowAtlas('campaign_menu_UI_assets');
-		var bgYellow:FlxSprite = new FlxSprite(0, 56).makeGraphic(FlxG.width, 386, 0xFFF9CF51);
+		solidColor = new FlxSprite(0, 56).makeGraphic(FlxG.width, 386);
+		solidColor.blend = MULTIPLY;
+
+		solidColor.color = FlxColor.fromRGB(weekFile.weekColor[0], weekFile.weekColor[1], weekFile.weekColor[2]);
+
 		bgSprite = new FlxSprite(0, 56);
 		bgSprite.antialiasing = ClientPrefs.data.antialiasing;
 
-		weekThing = new MenuItem(0, bgSprite.y + 396, weekFileName);
+		weekThing = new MenuItem(0, bgSprite.y + 350, weekFileName);
 		weekThing.y += weekThing.height + 20;
 		weekThing.antialiasing = ClientPrefs.data.antialiasing;
 		add(weekThing);
@@ -78,9 +83,9 @@ class WeekEditorState extends MusicBeatState implements PsychUIEventHandler.Psyc
 			grpWeekCharacters.add(weekCharacterThing);
 		}
 
-		add(bgYellow);
 		add(bgSprite);
 		add(grpWeekCharacters);
+		add(solidColor);
 
 		var tracksSprite:FlxSprite = new FlxSprite(FlxG.width * 0.07, bgSprite.y + 435).loadGraphic(Paths.image('Menu_Tracks'));
 		tracksSprite.antialiasing = ClientPrefs.data.antialiasing;
@@ -188,6 +193,10 @@ class WeekEditorState extends MusicBeatState implements PsychUIEventHandler.Psyc
 	var difficultiesInputText:PsychUIInputText;
 	var lockedCheckbox:PsychUICheckBox;
 	var hiddenUntilUnlockCheckbox:PsychUICheckBox;
+	var bgColorStepperR:PsychUINumericStepper;
+	var bgColorStepperG:PsychUINumericStepper;
+	var bgColorStepperB:PsychUINumericStepper;
+	var tweenTimeStepper:PsychUINumericStepper;
 
 	function addOtherUI() {
 		var tab_group = UI_box.getTab('Other').menu;
@@ -195,30 +204,43 @@ class WeekEditorState extends MusicBeatState implements PsychUIEventHandler.Psyc
 		lockedCheckbox = new PsychUICheckBox(10, 30, "Week starts Locked", 100);
 		lockedCheckbox.onClick = function()
 		{
+			weekThing.alpha = 1;
 			weekFile.startUnlocked = !lockedCheckbox.checked;
 			lock.visible = lockedCheckbox.checked;
-			hiddenUntilUnlockCheckbox.alpha = 0.4 + 0.6 * (lockedCheckbox.checked ? 1 : 0);
+			hiddenUntilUnlockCheckbox.checked = false;
 			unsavedProgress = true;
 		};
 
 		hiddenUntilUnlockCheckbox = new PsychUICheckBox(10, lockedCheckbox.y + 25, "Hidden until Unlocked", 110);
+		hiddenUntilUnlockCheckbox.alpha = 0.85;
 		hiddenUntilUnlockCheckbox.onClick = function()
 		{
-			weekFile.hiddenUntilUnlocked = hiddenUntilUnlockCheckbox.checked;
+			weekThing.alpha = 0.4 + 0.6 * (hiddenUntilUnlockCheckbox.checked ? 0 : 1);
 			unsavedProgress = true;
-		};
-		hiddenUntilUnlockCheckbox.alpha = 0.4;
+		}
 
 		weekBeforeInputText = new PsychUIInputText(10, hiddenUntilUnlockCheckbox.y + 55, 100, '', 8);
 		difficultiesInputText = new PsychUIInputText(10, weekBeforeInputText.y + 60, 200, '', 8);
+
+		bgColorStepperR = new PsychUINumericStepper(10, difficultiesInputText.y + 70, 20, 249, 0, 255, 0);
+		bgColorStepperG = new PsychUINumericStepper(80, difficultiesInputText.y + 70, 20, 207, 0, 255, 0);
+		bgColorStepperB = new PsychUINumericStepper(150, difficultiesInputText.y + 70, 20, 81, 0, 255, 0);
+
+		tweenTimeStepper = new PsychUINumericStepper(10, difficultiesInputText.y + 110, 0.1, 0.5, 0, 999, 2);
 		
 		tab_group.add(new FlxText(weekBeforeInputText.x, weekBeforeInputText.y - 28, 0, 'Week File name of the Week you have\nto finish for Unlocking:'));
 		tab_group.add(new FlxText(difficultiesInputText.x, difficultiesInputText.y - 20, 0, 'Difficulties:'));
 		tab_group.add(new FlxText(difficultiesInputText.x, difficultiesInputText.y + 20, 0, 'Default difficulties are "Easy, Normal, Hard"\nwithout quotes.'));
+		tab_group.add(new FlxText(difficultiesInputText.x, difficultiesInputText.y + 50, 0, 'Week Color:'));
+		tab_group.add(new FlxText(difficultiesInputText.x, difficultiesInputText.y + 95, 0, 'Color Tween Time:'));
 		tab_group.add(weekBeforeInputText);
 		tab_group.add(difficultiesInputText);
 		tab_group.add(hiddenUntilUnlockCheckbox);
 		tab_group.add(lockedCheckbox);
+		tab_group.add(bgColorStepperR);
+		tab_group.add(bgColorStepperG);
+		tab_group.add(bgColorStepperB);
+		tab_group.add(tweenTimeStepper);
 	}
 
 	//Used on onCreate and when you load a week
@@ -247,10 +269,20 @@ class WeekEditorState extends MusicBeatState implements PsychUIEventHandler.Psyc
 		lockedCheckbox.checked = !weekFile.startUnlocked;
 		lock.visible = lockedCheckbox.checked;
 		
-		hiddenUntilUnlockCheckbox.checked = weekFile.hiddenUntilUnlocked;
-		hiddenUntilUnlockCheckbox.alpha = 0.4 + 0.6 * (lockedCheckbox.checked ? 1 : 0);
+		hiddenUntilUnlockCheckbox.checked = false;
+		weekThing.alpha = 1;
+		if (lockedCheckbox.checked) {
+			hiddenUntilUnlockCheckbox.checked = weekFile.hiddenUntilUnlocked;
+		}
+
+		bgColorStepperR.value = weekFile.weekColor[0];
+		bgColorStepperG.value = weekFile.weekColor[1];
+		bgColorStepperB.value = weekFile.weekColor[2];
+
+		tweenTimeStepper.value = weekFile.tweenTime;
 
 		reloadBG();
+		updateBG();
 		reloadWeekThing();
 		updateText();
 	}
@@ -383,6 +415,18 @@ class WeekEditorState extends MusicBeatState implements PsychUIEventHandler.Psyc
 				unsavedProgress = true;
 			}
 		}
+		else if(id == PsychUINumericStepper.CHANGE_EVENT && (sender is PsychUINumericStepper))
+		{
+			if(sender == bgColorStepperR || sender == bgColorStepperG || sender == bgColorStepperB)
+				updateBG();
+		}
+	}
+
+	function updateBG() {
+		weekFile.weekColor[0] = Math.round(bgColorStepperR.value);
+		weekFile.weekColor[1] = Math.round(bgColorStepperG.value);
+		weekFile.weekColor[2] = Math.round(bgColorStepperB.value);
+		solidColor.color = FlxColor.fromRGB(weekFile.weekColor[0], weekFile.weekColor[1], weekFile.weekColor[2]);
 	}
 	
 	override function update(elapsed:Float)
@@ -393,6 +437,10 @@ class WeekEditorState extends MusicBeatState implements PsychUIEventHandler.Psyc
 
 			reloadAllShit();
 		}
+		weekFile.hiddenUntilUnlocked = hiddenUntilUnlockCheckbox.checked;
+
+		if (!weekFile.startUnlocked) hiddenUntilUnlockCheckbox.y = lockedCheckbox.y + 25;
+		else hiddenUntilUnlockCheckbox.y = 1000; //bruh
 
 		if(PsychUIInputText.focusOn == null)
 		{
@@ -651,7 +699,7 @@ class WeekEditorFreeplayState extends MusicBeatState implements PsychUIEventHand
 	var iconInputText:PsychUIInputText;
 	function addFreeplayUI() {
 		var tab_group = UI_box.getTab('Freeplay').menu;
-
+//
 		bgColorStepperR = new PsychUINumericStepper(10, 40, 20, 255, 0, 255, 0);
 		bgColorStepperG = new PsychUINumericStepper(80, 40, 20, 255, 0, 255, 0);
 		bgColorStepperB = new PsychUINumericStepper(150, 40, 20, 255, 0, 255, 0);

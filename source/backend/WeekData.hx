@@ -18,9 +18,15 @@ typedef WeekFile =
 	var hideStoryMode:Bool;
 	var hideFreeplay:Bool;
 	var difficulties:String;
+	var weekColor:Array<Int>;
+	var tweenTime:Float;
 }
 
 class WeekData {
+	// Default values
+	public static var defWeekColor:Array<Int> = [249, 207, 81]; //0xFFF9CF51
+	public static var defTweenTime:Float = 0.5;
+
 	public static var weeksLoaded:Map<String, WeekData> = new Map<String, WeekData>();
 	public static var weeksList:Array<String> = [];
 	public var folder:String = '';
@@ -37,6 +43,8 @@ class WeekData {
 	public var hideStoryMode:Bool;
 	public var hideFreeplay:Bool;
 	public var difficulties:String;
+	public var weekColor:Array<Int>;
+	public var tweenTime:Float;
 
 	public var fileName:String;
 
@@ -56,7 +64,9 @@ class WeekData {
 			hiddenUntilUnlocked: false,
 			hideStoryMode: false,
 			hideFreeplay: false,
-			difficulties: ''
+			difficulties: '',
+			weekColor: defWeekColor,
+			tweenTime: defTweenTime
 		};
 		return weekFile;
 	}

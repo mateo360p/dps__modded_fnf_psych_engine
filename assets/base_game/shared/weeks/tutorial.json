@@ -1,20 +1,32 @@
 {
-	"songs": [
-		["Tutorial", "gf", [165, 0, 77]]
-	],
-
+	"tweenTime": 0.5,
+	"storyName": "",
+	"hideFreeplay": false,
+	"weekBackground": "stage",
+	"weekBefore": "tutorial",
+	"startUnlocked": true,
 	"weekCharacters": [
 		"",
 		"bf",
 		"gf"
 	],
-	"weekBackground": "stage",
-
-	"storyName": "",
-	"weekBefore": "tutorial",
-	"weekName": "Tutorial",
-	"startUnlocked": true,
-
+	"songs": [
+		[
+			"Tutorial",
+			"gf",
+			[
+				165,
+				0,
+				77
+			]
+		]
+	],
 	"hideStoryMode": false,
-	"hideFreeplay": false
+	"hiddenUntilUnlocked": false,
+	"weekColor": [
+		249,
+		207,
+		81
+	],
+	"weekName": "Tutorial"
 }

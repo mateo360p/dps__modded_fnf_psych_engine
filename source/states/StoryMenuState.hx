@@ -19,6 +19,8 @@ class StoryMenuState extends MusicBeatState
 {
 	public static var weekCompleted:Map<String, Bool> = new Map<String, Bool>();
 
+	var colTween:FlxTween;
+
 	var scoreText:FlxText;
 
 	private static var lastDifficultyName:String = '';
@@ -26,6 +28,7 @@ class StoryMenuState extends MusicBeatState
 
 	var txtWeekTitle:FlxText;
 	var bgSprite:FlxSprite;
+	var solidColor:FlxSprite;
 
 	private static var curWeek:Int = 0;
 
@@ -83,8 +86,11 @@ class StoryMenuState extends MusicBeatState
 		txtWeekTitle.alpha = 0.7;
 
 		var ui_tex = Paths.getSparrowAtlas('campaign_menu_UI_assets');
-		var bgYellow:FlxSprite = new FlxSprite(0, 56).makeGraphic(FlxG.width, 386, 0xFFF9CF51);
+
 		bgSprite = new FlxSprite(0, 56);
+
+		solidColor = new FlxSprite(0, 56).makeGraphic(FlxG.width, 386);
+		solidColor.blend = MULTIPLY;
 
 		grpWeekText = new FlxTypedGroup<MenuItem>();
 		add(grpWeekText);
@@ -103,6 +109,12 @@ class StoryMenuState extends MusicBeatState
 		{
 			var weekFile:WeekData = WeekData.weeksLoaded.get(WeekData.weeksList[i]);
 			var isLocked:Bool = weekIsLocked(WeekData.weeksList[i]);
+
+			//Cache the images
+			Paths.image('menubackgrounds/menu_' + weekFile.weekBackground);
+
+			if (i == curWeek) solidColor.color = FlxColor.fromRGB(weekFile.weekColor[0], weekFile.weekColor[1], weekFile.weekColor[2]);
+
 			if(!isLocked || !weekFile.hiddenUntilUnlocked)
 			{
 				loadedWeeks.push(weekFile);
@@ -170,9 +182,9 @@ class StoryMenuState extends MusicBeatState
 		rightArrow.animation.play('idle');
 		difficultySelectors.add(rightArrow);
 
-		add(bgYellow);
 		add(bgSprite);
 		add(grpWeekCharacters);
+		add(solidColor);
 
 		var tracksSprite:FlxSprite = new FlxSprite(FlxG.width * 0.07 + 100, bgSprite.y + 425).loadGraphic(Paths.image('Menu_Tracks'));
 		tracksSprite.antialiasing = ClientPrefs.data.antialiasing;
@@ -430,12 +442,22 @@ class StoryMenuState extends MusicBeatState
 		}
 
 		bgSprite.visible = true;
+
 		var assetName:String = leWeek.weekBackground;
+		var col:Array<Int> = leWeek.weekColor;
 		if(assetName == null || assetName.length < 1) {
 			bgSprite.visible = false;
 		} else {
 			bgSprite.loadGraphic(Paths.image('menubackgrounds/menu_' + assetName));
+			if (colTween != null) colTween.cancel();
+			colTween = FlxTween.color(solidColor, leWeek.tweenTime, solidColor.color, FlxColor.fromRGB(col[0], col[1], col[2]), {
+				onComplete: function(a:FlxTween) {
+					colTween = null;
+				}
+			});
 		}
+		//trace(solidColor.color);
+
 		PlayState.storyWeek = curWeek;
 
 		Difficulty.loadFromWeek();
