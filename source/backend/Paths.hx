@@ -18,7 +18,6 @@ import flash.media.Sound;
 
 import haxe.Json;
 
-
 #if MODS_ALLOWED
 import backend.Mods;
 #end
@@ -156,14 +155,20 @@ class Paths
 	inline static public function music(key:String, ?modsAllowed:Bool = true):Sound
 		return returnSound('music/$key', modsAllowed);
 
-	inline static public function inst(song:String, ?modsAllowed:Bool = true):Sound
-		return returnSound('${formatToSongPath(song)}/Inst', 'songs', modsAllowed);
-
-	inline static public function voices(song:String, postfix:String = null, ?modsAllowed:Bool = true):Sound
-	{
-		var songKey:String = '${formatToSongPath(song)}/Voices';
-		if(postfix != null) songKey += '-' + postfix;
+	inline static public function inst(song:String, name:String = null, ?modsAllowed:Bool = true):Sound {
+		var songKey:String = '${formatToSongPath(song)}/$name';
 		//trace('songKey test: $songKey');
+		if (name == null || name.length < 1) songKey = '${formatToSongPath('Test')}/Inst';
+		trace(songKey);
+		return returnSound(songKey, 'songs', modsAllowed, false);
+	}
+
+	inline static public function voices(song:String, name:String = null, ?modsAllowed:Bool = true):Sound
+	{
+		var songKey:String = '${formatToSongPath(song)}/$name';
+		//trace('songKey test: $songKey');
+		if (name == null || name.length < 1) songKey = '${formatToSongPath('test')}/Voices-Player';
+		trace(songKey);
 		return returnSound(songKey, 'songs', modsAllowed, false);
 	}
 
@@ -310,6 +315,19 @@ class Paths
 			}
 		}
 		return parentFrames;
+	}
+
+	static public function getMultiEvents(keys:Array<String>):Array<String>
+	{
+		var allEventsFile:Array<String> = [keys[0].trim()];
+		if(keys.length > 1)
+		{
+			for (i in 1...keys.length)
+			{
+				allEventsFile.push(keys[i].trim());
+			}
+		}
+		return allEventsFile;
 	}
 
 	inline static public function getSparrowAtlas(key:String, ?parentFolder:String = null, ?allowGPU:Bool = true):FlxAtlasFrames

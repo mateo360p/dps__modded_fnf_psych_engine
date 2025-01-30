@@ -14,6 +14,8 @@ typedef SwagSong =
 	var needsVoices:Bool;
 	var speed:Float;
 	var offset:Float;
+	var eventsFile:String;
+	var audiosSuffix:Array<String>;	//INST, PLAYER, OPPONENT
 
 	var player1:String;
 	var player2:String;
@@ -45,6 +47,8 @@ typedef SwagSection =
 
 class Song
 {
+	public var audiosSuffix:Array<String> = ['', '', ''];
+	public var eventsFile:String = '';
 	public var song:String;
 	public var notes:Array<SwagSection>;
 	public var events:Array<Dynamic>;

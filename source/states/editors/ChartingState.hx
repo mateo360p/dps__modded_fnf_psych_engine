@@ -215,6 +215,10 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 	var waveformEnabled:Bool = false;
 	var waveformTarget:WaveformTarget = INST;
 
+	var eventsInputText:PsychUIInputText;
+	var instSuffInputText:PsychUIInputText;
+	var oppntSuffInputText:PsychUIInputText;
+	var playerSuffInputText:PsychUIInputText;
 	override function create()
 	{
 		if(Difficulty.list.length < 1) Difficulty.resetList();
@@ -290,7 +294,51 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		timeLine.screenCenter(Y);
 		timeLine.scrollFactor.set();
 		add(timeLine);
-		
+
+		eventsInputText = new PsychUIInputText(10, FlxG.height - 25, 200, '', 8);
+		eventsInputText.onChange = function(old:String, cur:String)
+		{
+			PlayState.SONG.eventsFile = cur;
+		}
+		eventsInputText.cameras = [camUI];
+		add(eventsInputText);
+		var texti:FlxText = new FlxText(eventsInputText.x, eventsInputText.y - 15, 120, 'Folder Events to Load:');
+		texti.cameras = [camUI];
+		add(texti);
+
+		instSuffInputText = new PsychUIInputText(10, FlxG.height - 50, 200, '', 8);
+		instSuffInputText.onChange = function(old:String, cur:String)
+		{
+			PlayState.SONG.audiosSuffix[0] = cur;
+		}
+		instSuffInputText.cameras = [camUI];
+		add(instSuffInputText);
+		var texti2:FlxText = new FlxText(eventsInputText.x, eventsInputText.y - 65, 120, 'Instrumental Audio Suffix:');
+		texti2.cameras = [camUI];
+		add(texti2);
+
+		playerSuffInputText = new PsychUIInputText(10, FlxG.height - 75, 200, '', 8);
+		playerSuffInputText.onChange = function(old:String, cur:String)
+		{
+			PlayState.SONG.audiosSuffix[1] = cur;
+		}
+		playerSuffInputText.cameras = [camUI];
+		add(playerSuffInputText);
+		var texti1:FlxText = new FlxText(eventsInputText.x, eventsInputText.y - 90, 120, 'Player Vocals Suffix:');
+		texti1.cameras = [camUI];
+		add(texti1);
+
+		oppntSuffInputText = new PsychUIInputText(10, FlxG.height - 100, 200, '', 8);
+		oppntSuffInputText.onChange = function(old:String, cur:String)
+		{
+			PlayState.SONG.audiosSuffix[2] = cur;
+		}
+		oppntSuffInputText.cameras = [camUI];
+		add(oppntSuffInputText);
+		var texti0:FlxText = new FlxText(eventsInputText.x, eventsInputText.y - 115, 120, 'Opponent Vocals Suffix}:');
+		texti0.cameras = [camUI];
+		add(texti0);
+
 		var startX:Float = gridBg.x;
 		var startY:Float = FlxG.height/2;
 		vortexIndicator.visible = strumLineNotes.visible = strumLineNotes.active = vortexEnabled;
@@ -587,6 +635,8 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 			needsVoices: true,
 			speed: 1,
 			offset: 0,
+			eventsFile: '',
+			audiosSuffix: ['Inst', 'Voices-Player', 'Voices-Opponent'],
 
 			player1: 'bf',
 			player2: 'dad',
@@ -631,6 +681,16 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		opponentDropDown.selectedLabel = PlayState.SONG.player2;
 		girlfriendDropDown.selectedLabel = PlayState.SONG.gfVersion;
 		stageDropDown.selectedLabel = PlayState.SONG.stage;
+		eventsInputText.text = PlayState.SONG.eventsFile;
+
+		instSuffInputText.text = 'Inst';
+		playerSuffInputText.text = 'Voices-Player';
+		oppntSuffInputText.text = 'Voices-Opponent';
+		if (Reflect.hasField(PlayState.SONG, 'audiosSuffix')){
+			instSuffInputText.text = PlayState.SONG.audiosSuffix[0];
+			playerSuffInputText.text = PlayState.SONG.audiosSuffix[1];
+			oppntSuffInputText.text = PlayState.SONG.audiosSuffix[2];
+		}
 		StageData.loadDirectory(PlayState.SONG);
 
 		// DATA TAB
@@ -1785,7 +1845,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 
 		try
 		{
-			FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song), 0);
+			FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song, PlayState.SONG.audiosSuffix[0]), 0);
 			FlxG.sound.music.pause();
 			FlxG.sound.music.time = time;
 			FlxG.sound.music.onComplete = (function() songFinished = true);
@@ -1802,14 +1862,14 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		{
 			try
 			{
-				var playerVocals:Sound = Paths.voices(PlayState.SONG.song, (characterData.vocalsP1 == null || characterData.vocalsP1.length < 1) ? 'Player' : characterData.vocalsP1);
-				vocals.loadEmbedded(playerVocals != null ? playerVocals : Paths.voices(PlayState.SONG.song));
+				var playerVocals:Sound = Paths.voices(PlayState.SONG.song, PlayState.SONG.audiosSuffix[1]);
+				vocals.loadEmbedded(playerVocals);
 				vocals.volume = 0;
 				vocals.play();
 				vocals.pause();
 				vocals.time = time;
 				
-				var oppVocals:Sound = Paths.voices(PlayState.SONG.song, (characterData.vocalsP2 == null || characterData.vocalsP2.length < 1) ? 'Opponent' : characterData.vocalsP2);
+				var oppVocals:Sound = Paths.voices(PlayState.SONG.song, PlayState.SONG.audiosSuffix[2]);
 				if(oppVocals != null && oppVocals.length > 0)
 				{
 					opponentVocals.loadEmbedded(oppVocals);
@@ -3409,14 +3469,14 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 					try
 					{
 						var filePath:String = fileDialog.path.replace('\\', '/');
-						var eventsFile:SwagSong = Song.parseJSON(fileDialog.data, filePath.substr(filePath.lastIndexOf('/')));
-						if(eventsFile == null || Reflect.hasField(eventsFile, 'scrollSpeed') || eventsFile.events == null)
+						var eventsThing:SwagSong = Song.parseJSON(fileDialog.data, filePath.substr(filePath.lastIndexOf('/')));
+						if(eventsThing == null || Reflect.hasField(eventsThing, 'scrollSpeed') || eventsThing.events == null)
 						{
 							showOutput('Error: File loaded is not a Psych Engine chart/events file.', true);
 							return;
 						}
 	
-						var loadedEvents:Array<Dynamic> = eventsFile.events;
+						var loadedEvents:Array<Dynamic> = eventsThing.events;
 						if(loadedEvents.length < 1)
 						{
 							showOutput('Events file loaded is empty.', true);

@@ -1301,11 +1301,13 @@ class PlayState extends MusicBeatState
 		{
 			if (songData.needsVoices)
 			{
-				var playerVocals = Paths.voices(songData.song, (boyfriend.vocalsFile == null || boyfriend.vocalsFile.length < 1) ? 'Player' : boyfriend.vocalsFile);
+				var playerVocals = Paths.voices(songData.song, SONG.audiosSuffix[1]);
 				vocals.loadEmbedded(playerVocals != null ? playerVocals : Paths.voices(songData.song));
+				trace('PLAYER VOICES:' + SONG.audiosSuffix[1]);
 				
-				var oppVocals = Paths.voices(songData.song, (dad.vocalsFile == null || dad.vocalsFile.length < 1) ? 'Opponent' : dad.vocalsFile);
+				var oppVocals = Paths.voices(songData.song, songData.audiosSuffix[2]);
 				if(oppVocals != null && oppVocals.length > 0) opponentVocals.loadEmbedded(oppVocals);
+				trace('OPPONENT VOICES:' + SONG.audiosSuffix[2]);
 			}
 		}
 		catch (e:Dynamic) {}
@@ -1320,7 +1322,7 @@ class PlayState extends MusicBeatState
 		inst = new FlxSound();
 		try
 		{
-			inst.loadEmbedded(Paths.inst(songData.song));
+			inst.loadEmbedded(Paths.inst(songData.song, songData.audiosSuffix[0]));
 		}
 		catch (e:Dynamic) {}
 		FlxG.sound.list.add(inst);
@@ -1330,11 +1332,24 @@ class PlayState extends MusicBeatState
 
 		try
 		{
-			var eventsChart:SwagSong = Song.getChart('events', songName);
-			if(eventsChart != null)
-				for (event in eventsChart.events) //Event Notes
-					for (i in 0...event[1].length)
-						makeEvent(event, i);
+			var multiEvents = Paths.getMultiEvents(SONG.eventsFile.split(','));
+			for (i in multiEvents) {
+				if(i != null && i != '') {
+					trace('EVENTS:' + i);
+					var eventsChart:SwagSong = Song.getChart(i, songName);
+					if(eventsChart != null) {
+						trace('Loaded events from file: ' + '$i.json');
+						for (event in eventsChart.events){ //Event Notes
+							for (a in 0...event[1].length)
+								makeEvent(event, a);
+						}
+					} else {
+						trace('Failed to load events:' + i);
+					}
+				} else {
+					trace('null events file founded!');
+				}
+			}
 		}
 		catch(e:Dynamic) {}
 
