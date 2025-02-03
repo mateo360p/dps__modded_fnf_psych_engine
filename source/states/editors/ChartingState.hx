@@ -219,6 +219,11 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 	var instSuffInputText:PsychUIInputText;
 	var oppntSuffInputText:PsychUIInputText;
 	var playerSuffInputText:PsychUIInputText;
+
+	var texti:FlxText;
+	var texti2:FlxText;
+	var texti1:FlxText;
+	var texti0:FlxText;
 	override function create()
 	{
 		if(Difficulty.list.length < 1) Difficulty.resetList();
@@ -295,6 +300,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		timeLine.scrollFactor.set();
 		add(timeLine);
 
+		//MODIFIERS START---------------------------------
 		eventsInputText = new PsychUIInputText(10, FlxG.height - 25, 200, '', 8);
 		eventsInputText.onChange = function(old:String, cur:String)
 		{
@@ -302,42 +308,51 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		}
 		eventsInputText.cameras = [camUI];
 		add(eventsInputText);
-		var texti:FlxText = new FlxText(eventsInputText.x, eventsInputText.y - 15, 120, 'Folder Events to Load:');
+		texti = new FlxText(eventsInputText.x, eventsInputText.y - 15, 200, 'Folder Events to Load:');
 		texti.cameras = [camUI];
 		add(texti);
 
-		instSuffInputText = new PsychUIInputText(10, FlxG.height - 50, 200, '', 8);
+		instSuffInputText = new PsychUIInputText(10, eventsInputText.y - 40, 200, '', 8);
 		instSuffInputText.onChange = function(old:String, cur:String)
 		{
-			PlayState.SONG.audiosSuffix[0] = cur;
+			PlayState.SONG.audiosNames[0] = cur;
+			if (cur.toLowerCase().trim() == 'none') //Inst shouldn't be none
+				instSuffInputText.behindText.color = FlxColor.RED;
+			else
+				instSuffInputText.behindText.color = FlxColor.WHITE;
 		}
 		instSuffInputText.cameras = [camUI];
 		add(instSuffInputText);
-		var texti2:FlxText = new FlxText(eventsInputText.x, eventsInputText.y - 65, 120, 'Instrumental Audio Suffix:');
+		texti2 = new FlxText(eventsInputText.x, instSuffInputText.y - 15, 200, 'Instrumental Audio:');
 		texti2.cameras = [camUI];
 		add(texti2);
 
-		playerSuffInputText = new PsychUIInputText(10, FlxG.height - 75, 200, '', 8);
+		playerSuffInputText = new PsychUIInputText(10, instSuffInputText.y - 40, 200, '', 8);
 		playerSuffInputText.onChange = function(old:String, cur:String)
 		{
-			PlayState.SONG.audiosSuffix[1] = cur;
+			PlayState.SONG.audiosNames[1] = cur;
+			if (cur.toLowerCase().trim() == 'none') playerSuffInputText.alpha = 0.5;
+			else playerSuffInputText.alpha = 1;
 		}
 		playerSuffInputText.cameras = [camUI];
 		add(playerSuffInputText);
-		var texti1:FlxText = new FlxText(eventsInputText.x, eventsInputText.y - 90, 120, 'Player Vocals Suffix:');
+		texti1 = new FlxText(eventsInputText.x, playerSuffInputText.y - 15, 200, 'Player Vocals:');
 		texti1.cameras = [camUI];
 		add(texti1);
 
-		oppntSuffInputText = new PsychUIInputText(10, FlxG.height - 100, 200, '', 8);
+		oppntSuffInputText = new PsychUIInputText(10, playerSuffInputText.y - 40, 200, '', 8);
 		oppntSuffInputText.onChange = function(old:String, cur:String)
 		{
-			PlayState.SONG.audiosSuffix[2] = cur;
+			PlayState.SONG.audiosNames[2] = cur;
+			if (cur.toLowerCase().trim() == 'none') oppntSuffInputText.alpha = 0.5;
+			else playerSuffInputText.alpha = 1;
 		}
 		oppntSuffInputText.cameras = [camUI];
 		add(oppntSuffInputText);
-		var texti0:FlxText = new FlxText(eventsInputText.x, eventsInputText.y - 115, 120, 'Opponent Vocals Suffix}:');
+		texti0 = new FlxText(eventsInputText.x, oppntSuffInputText.y - 15, 200, 'Opponent Vocals:');
 		texti0.cameras = [camUI];
 		add(texti0);
+		//MODIFIERS END------------------
 
 		var startX:Float = gridBg.x;
 		var startY:Float = FlxG.height/2;
@@ -636,7 +651,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 			speed: 1,
 			offset: 0,
 			eventsFile: '',
-			audiosSuffix: ['Inst', 'Voices-Player', 'Voices-Opponent'],
+			audiosNames: ['Inst', 'Voices-Player', 'Voices-Opponent'],
 
 			player1: 'bf',
 			player2: 'dad',
@@ -683,13 +698,28 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		stageDropDown.selectedLabel = PlayState.SONG.stage;
 		eventsInputText.text = PlayState.SONG.eventsFile;
 
-		instSuffInputText.text = 'Inst';
-		playerSuffInputText.text = 'Voices-Player';
-		oppntSuffInputText.text = 'Voices-Opponent';
-		if (Reflect.hasField(PlayState.SONG, 'audiosSuffix')){
-			instSuffInputText.text = PlayState.SONG.audiosSuffix[0];
-			playerSuffInputText.text = PlayState.SONG.audiosSuffix[1];
-			oppntSuffInputText.text = PlayState.SONG.audiosSuffix[2];
+		//There must be another way to make this-, Idk if this is better than before, sooo
+		if (PlayState.SONG.audiosNames != null) {
+			for (i in 0...PlayState.SONG.audiosNames.length) {
+				if (PlayState.SONG.audiosNames[i] != null && PlayState.SONG.audiosNames[i].length > 0) {
+					switch (i) {
+						case 0: instSuffInputText.text = PlayState.SONG.audiosNames[i];
+						case 1: playerSuffInputText.text = PlayState.SONG.audiosNames[i];
+						case 2: oppntSuffInputText.text = PlayState.SONG.audiosNames[i];
+						//default: instSuffInputText.text = PlayState.SONG.audiosNames[i]; uhhh
+					}
+				} else {
+					switch (i) {
+						case 0: instSuffInputText.text = PlayState.SONG.audiosNames[i] = 'Inst';
+						case 1: playerSuffInputText.text = PlayState.SONG.audiosNames[i] = 'Voices-Player';
+						case 2: oppntSuffInputText.text = PlayState.SONG.audiosNames[i] = 'Voices-Opponent';
+					}
+				}
+			}
+		} else {
+			instSuffInputText.text = PlayState.SONG.audiosNames[0] = 'Inst';
+			playerSuffInputText.text = PlayState.SONG.audiosNames[1] = 'Voices-Player';
+			oppntSuffInputText.text = PlayState.SONG.audiosNames[2] = 'Voices-Opponent';
 		}
 		StageData.loadDirectory(PlayState.SONG);
 
@@ -712,6 +742,17 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 	var lastBeatHit:Int = 0;
 	override function update(elapsed:Float)
 	{
+		if (playerSuffInputText.text.toLowerCase().trim() == 'none') playerSuffInputText.alpha = 0.5;
+		else playerSuffInputText.alpha = 1;
+
+		if (oppntSuffInputText.text.toLowerCase().trim() == 'none') oppntSuffInputText.alpha = 0.5;
+		else oppntSuffInputText.alpha = 1;
+
+		if (instSuffInputText.text.toLowerCase().trim() == 'none') //Inst shouldn't be none
+			instSuffInputText.behindText.color = FlxColor.RED;
+		else
+			instSuffInputText.behindText.color = FlxColor.WHITE;
+
 		if(!fileDialog.completed)
 		{
 			lastFocus = PsychUIInputText.focusOn;
@@ -1819,6 +1860,9 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 
 	function loadMusic(?killAudio:Bool = false)
 	{
+		if (instSuffInputText.text.toLowerCase().trim() == 'none') return;
+		if (Paths.inst(PlayState.SONG.song, PlayState.SONG.audiosNames[0]) == null) return;
+
 		setSongPlaying(false);
 		var time:Float = Conductor.songPosition;
 
@@ -1845,7 +1889,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 
 		try
 		{
-			FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song, PlayState.SONG.audiosSuffix[0]), 0);
+			FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song, PlayState.SONG.audiosNames[0]), 0);
 			FlxG.sound.music.pause();
 			FlxG.sound.music.time = time;
 			FlxG.sound.music.onComplete = (function() songFinished = true);
@@ -1862,14 +1906,14 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		{
 			try
 			{
-				var playerVocals:Sound = Paths.voices(PlayState.SONG.song, PlayState.SONG.audiosSuffix[1]);
+				var playerVocals:Sound = Paths.voices(PlayState.SONG.song, PlayState.SONG.audiosNames[1]);
 				vocals.loadEmbedded(playerVocals);
 				vocals.volume = 0;
 				vocals.play();
 				vocals.pause();
 				vocals.time = time;
 				
-				var oppVocals:Sound = Paths.voices(PlayState.SONG.song, PlayState.SONG.audiosSuffix[2]);
+				var oppVocals:Sound = Paths.voices(PlayState.SONG.song, PlayState.SONG.audiosNames[2]);
 				if(oppVocals != null && oppVocals.length > 0)
 				{
 					opponentVocals.loadEmbedded(oppVocals);

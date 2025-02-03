@@ -1,10 +1,11 @@
 {
-	"tweenTime": 0.5,
 	"storyName": "RED SNOW",
+	"tweenTime": 0.5,
 	"hideFreeplay": false,
 	"weekBackground": "christmas",
 	"weekBefore": "week4",
 	"startUnlocked": true,
+	"hideStoryMode": false,
 	"weekCharacters": [
 		"parents-christmas",
 		"bf",
@@ -39,12 +40,11 @@
 			]
 		]
 	],
-	"hideStoryMode": false,
-	"hiddenUntilUnlocked": false,
+	"weekName": "Week 5",
 	"weekColor": [
 		249,
 		207,
 		81
 	],
-	"weekName": "Week 5"
+	"hiddenUntilUnlocked": false
 }

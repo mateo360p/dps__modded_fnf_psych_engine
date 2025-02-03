@@ -1,10 +1,11 @@
 {
-	"tweenTime": 0.5,
 	"storyName": "hating simulator ft. moawling",
+	"tweenTime": 0.5,
 	"hideFreeplay": false,
 	"weekBackground": "school",
 	"weekBefore": "week5",
 	"startUnlocked": true,
+	"hideStoryMode": false,
 	"weekCharacters": [
 		"senpai",
 		"bf",
@@ -39,12 +40,11 @@
 			]
 		]
 	],
-	"hideStoryMode": false,
-	"hiddenUntilUnlocked": false,
+	"weekName": "Week 6",
 	"weekColor": [
 		249,
 		207,
 		81
 	],
-	"weekName": "Week 6"
+	"hiddenUntilUnlocked": false
 }

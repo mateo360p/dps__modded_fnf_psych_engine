@@ -158,7 +158,7 @@ class Paths
 	inline static public function inst(song:String, name:String = null, ?modsAllowed:Bool = true):Sound {
 		var songKey:String = '${formatToSongPath(song)}/$name';
 		//trace('songKey test: $songKey');
-		if (name == null || name.length < 1) songKey = '${formatToSongPath('Test')}/Inst';
+		if (name == null || name.length < 1) songKey = '${formatToSongPath('test')}/Inst';
 		trace(songKey);
 		return returnSound(songKey, 'songs', modsAllowed, false);
 	}

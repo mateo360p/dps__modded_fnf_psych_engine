@@ -1,10 +1,11 @@
 {
-	"tweenTime": 0.5,
 	"storyName": "MOMMY MUST MURDER",
+	"tweenTime": 0.5,
 	"hideFreeplay": false,
 	"weekBackground": "limo",
 	"weekBefore": "week3",
 	"startUnlocked": true,
+	"hideStoryMode": false,
 	"weekCharacters": [
 		"mom",
 		"bf",
@@ -39,12 +40,11 @@
 			]
 		]
 	],
-	"hideStoryMode": false,
-	"hiddenUntilUnlocked": false,
+	"weekName": "Week 4",
 	"weekColor": [
 		249,
 		207,
 		81
 	],
-	"weekName": "Week 4"
+	"hiddenUntilUnlocked": false
 }

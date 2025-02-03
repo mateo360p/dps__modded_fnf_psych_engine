@@ -515,6 +515,10 @@ class PlayState extends MusicBeatState
 			timeTxt.y += 3;
 		}
 
+		if (SONG.audiosNames == null) {
+			SONG.audiosNames = ['Inst', 'Voices-Player', 'Voices-Opponent'];
+		}
+
 		generateSong();
 
 		noteGroup.add(grpNoteSplashes);
@@ -1297,18 +1301,25 @@ class PlayState extends MusicBeatState
 
 		vocals = new FlxSound();
 		opponentVocals = new FlxSound();
+		
 		try
 		{
 			if (songData.needsVoices)
 			{
-				var playerVocals = Paths.voices(songData.song, SONG.audiosSuffix[1]);
-				vocals.loadEmbedded(playerVocals != null ? playerVocals : Paths.voices(songData.song));
-				trace('PLAYER VOICES:' + SONG.audiosSuffix[1]);
-				
-				var oppVocals = Paths.voices(songData.song, songData.audiosSuffix[2]);
-				if(oppVocals != null && oppVocals.length > 0) opponentVocals.loadEmbedded(oppVocals);
-				trace('OPPONENT VOICES:' + SONG.audiosSuffix[2]);
+				if (SONG.audiosNames[1].toLowerCase().trim() != 'none'){
+					var playerVocals = Paths.voices(songData.song, SONG.audiosNames[1]);
+					trace('PLAYER VOICES---1:' + playerVocals);
+					vocals.loadEmbedded(playerVocals != null ? playerVocals : Paths.voices(songData.song));
+					trace('PLAYER VOICES---2!!!:' + SONG.audiosNames[1]);
+				}
+				if (SONG.audiosNames[2].toLowerCase().trim() != 'none'){
+					var oppVocals = Paths.voices(songData.song, SONG.audiosNames[2]);
+					trace('OPPONENT VOICES---1:' + oppVocals);
+					opponentVocals.loadEmbedded(oppVocals != null ? oppVocals : Paths.voices(songData.song));
+					trace('OPPONENT VOICES---2!!!:' + SONG.audiosNames[2]);
+				}
 			}
+			
 		}
 		catch (e:Dynamic) {}
 
@@ -1322,7 +1333,7 @@ class PlayState extends MusicBeatState
 		inst = new FlxSound();
 		try
 		{
-			inst.loadEmbedded(Paths.inst(songData.song, songData.audiosSuffix[0]));
+			inst.loadEmbedded(Paths.inst(songData.song, songData.audiosNames[0]));
 		}
 		catch (e:Dynamic) {}
 		FlxG.sound.list.add(inst);

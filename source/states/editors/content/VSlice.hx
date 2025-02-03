@@ -255,7 +255,7 @@ class VSlice
 				speed: scrollSpeed,
 				offset: 0,
 				eventsFile: '',
-				audiosSuffix: ['', '', ''],
+				audiosNames: ['', '', ''],
 			
 				player1: metadata.playData.characters.player,
 				player2: metadata.playData.characters.opponent,

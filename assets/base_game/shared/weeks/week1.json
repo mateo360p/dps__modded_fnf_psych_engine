@@ -1,17 +1,11 @@
 {
-	"tweenTime": 0.5,
 	"storyName": "Daddy Dearest",
-	"difficulties": "Normal, Hard, Night",
-	"hideFreeplay": false,
+	"tweenTime": 0.5,
+	"difficulties": "Easy, Normal, Hard, Night",
 	"weekBackground": "stage",
+	"hideFreeplay": false,
 	"weekBefore": "tutorial",
 	"startUnlocked": true,
-	"hideStoryMode": false,
-	"weekCharacters": [
-		"dad",
-		"bf",
-		"gf"
-	],
 	"songs": [
 		[
 			"Bopeebo",
@@ -41,11 +35,17 @@
 			]
 		]
 	],
+	"weekCharacters": [
+		"dad",
+		"bf",
+		"gf"
+	],
+	"hideStoryMode": false,
+	"hiddenUntilUnlocked": false,
+	"weekName": "Week 1",
 	"weekColor": [
 		249,
 		207,
 		81
-	],
-	"weekName": "Week 1",
-	"hiddenUntilUnlocked": false
+	]
 }

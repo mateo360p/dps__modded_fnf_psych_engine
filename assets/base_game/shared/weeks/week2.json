@@ -1,10 +1,12 @@
 {
-	"tweenTime": 0.5,
 	"storyName": "Spooky Month",
+	"tweenTime": 0.5,
+	"difficulties": "",
 	"hideFreeplay": false,
 	"weekBackground": "halloween",
 	"weekBefore": "week1",
 	"startUnlocked": true,
+	"hideStoryMode": false,
 	"weekCharacters": [
 		"spooky",
 		"bf",
@@ -39,12 +41,11 @@
 			]
 		]
 	],
-	"hideStoryMode": false,
-	"hiddenUntilUnlocked": false,
+	"weekName": "Week 2",
 	"weekColor": [
 		249,
 		207,
 		81
 	],
-	"weekName": "Week 2"
+	"hiddenUntilUnlocked": false
 }

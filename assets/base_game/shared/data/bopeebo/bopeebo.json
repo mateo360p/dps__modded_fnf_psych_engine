@@ -1,45 +1,43 @@
 {
 	"player1": "bf",
-	"player2": "dad",
 	"notes": [
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[0, 6, 75],
 				[600, 5, 525],
 				[1200, 5, 525]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": false
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[2400, 2, 75],
 				[3000, 3, 450],
 				[3600, 3, 600]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": true
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[4800, 5, 375],
 				[5400, 4, 525],
 				[6000, 7, 525]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": false
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[7200, 2, 450],
 				[7800, 3, 450],
 				[8400, 1, 600]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": true
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[9600, 5, 225],
 				[10200, 7, 0],
@@ -47,10 +45,10 @@
 				[10500, 4, 225],
 				[10800, 5, 525]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": false
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[12000, 1, 300],
 				[12600, 2, 0],
@@ -58,75 +56,75 @@
 				[12900, 3, 0],
 				[13200, 1, 525]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": true
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[14400, 4, 0],
 				[14700, 7, 150],
 				[15300, 5, 0],
 				[15600, 6, 525]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": false
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[16800, 3, 0],
 				[17100, 0, 225],
 				[17700, 1, 0],
 				[18000, 2, 525]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": true
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[19200, 4, 0],
 				[19500, 7, 150],
 				[19800, 5, 825]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": false
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[21600, 3, 150],
 				[21900, 0, 150],
 				[22200, 1, 825]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": true
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[24000, 5, 0],
 				[24300, 4, 0],
 				[24600, 7, 825]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": false
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[26400, 1, 0],
 				[26700, 3, 0],
 				[27000, 0, 825]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": true
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[28800, 6, 0],
 				[29100, 4, 0],
 				[29400, 5, 1125]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": false
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[31200, 2, 0],
 				[31500, 3, 0],
@@ -134,10 +132,10 @@
 				[31800, 0, 1125],
 				[33300, 6, 0]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": true
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[33600, 4, 0],
 				[33675, 7, 0],
@@ -147,10 +145,10 @@
 				[34800, 5, 600],
 				[35700, 2, 0]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": false
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[36000, 3, 75],
 				[36300, 1, 0],
@@ -159,28 +157,28 @@
 				[36950, 0, 0],
 				[37200, 1, 675]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": true
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[38400, 6, 450],
 				[39000, 7, 375],
 				[39600, 5, 525]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": false
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[40800, 2, 450],
 				[41400, 0, 375],
 				[42000, 1, 525]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": true
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[43200, 5, 150],
 				[43200, 4, 0],
@@ -191,10 +189,10 @@
 				[45000, 6, 150],
 				[45000, 7, 0]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": false
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[45600, 1, 0],
 				[45600, 3, 150],
@@ -205,51 +203,51 @@
 				[47400, 2, 0, "Hey!"],
 				[47400, 0, 0, "Hey!"]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": true
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[48000, 6, 450],
 				[48600, 7, 375],
 				[49200, 5, 525]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": false
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[50400, 2, 450],
 				[51000, 0, 375],
 				[51600, 1, 525]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": true
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[52800, 4, 1875]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": false
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[55200, 3, 1875]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": true
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[57600, 6, 0],
 				[57900, 4, 0],
 				[58200, 5, 1125]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": false
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[60000, 2, 0],
 				[60300, 3, 0],
@@ -257,10 +255,10 @@
 				[60600, 0, 1125],
 				[62100, 6, 0]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": true
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[62400, 4, 0],
 				[62550, 7, 0],
@@ -270,10 +268,10 @@
 				[63600, 5, 600],
 				[64500, 2, 0]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": false
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[64800, 3, 75],
 				[65100, 1, 0],
@@ -282,10 +280,10 @@
 				[65750, 0, 0],
 				[66000, 1, 675]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": true
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[67200, 6, 75],
 				[67500, 4, 75],
@@ -294,10 +292,10 @@
 				[68400, 5, 525],
 				[68400, 7, 0]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": false
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[69600, 2, 75],
 				[69900, 3, 75],
@@ -307,10 +305,10 @@
 				[70800, 0, 0],
 				[71700, 6, 0]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": true
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[72000, 4, 0],
 				[72150, 7, 0],
@@ -320,10 +318,10 @@
 				[73200, 5, 600],
 				[74100, 2, 0]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": false
 		},
 		{
-			"sectionBeats": 4,
 			"sectionNotes": [
 				[74400, 3, 75],
 				[74700, 1, 0],
@@ -332,957 +330,27 @@
 				[75350, 0, 0],
 				[75600, 1, 675]
 			],
+			"sectionBeats": 4,
 			"mustHitSection": true
 		}
 	],
-	"gfVersion": "gf",
-	"events": [
-		[
-			600,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			1800,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			3000,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			4200,
-			[
-				["Add Camera Zoom", "0.015", ""],
-				["Hey!", "a", ""]
-			],
-			null,
-			""
-		],
-		[
-			5400,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			6600,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			7800,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			9000,
-			[
-				["Add Camera Zoom", "0.015", ""],
-				["Hey!", "a", ""]
-			],
-			null,
-			""
-		],
-		[
-			9600,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			10050,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			10500,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			11100,
-			[
-				["Add Camera Zoom", "0.015", ""]
-			],
-			null,
-			""
-		],
-		[
-			11550,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			12000,
-			[
-				["Add Camera Zoom", "0.015", ""]
-			]
-		],
-		[
-			12450,
-			[
-				["Add Camera Zoom", "0.015", ""]
-			]
-		],
-		[
-			12900,
-			[
-				["Add Camera Zoom", "0.015", ""]
-			]
-		],
-		[
-			13500,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			13875,
-			[
-				["Hey!", "a", ""]
-			]
-		],
-		[
-			13950,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			14400,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			14850,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			15900,
-			[
-				["Add Camera Zoom", "0.015", ""]
-			]
-		],
-		[
-			16350,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			],
-			null,
-			""
-		],
-		[
-			16800,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			17250,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			18300,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			],
-			null,
-			""
-		],
-		[
-			18450,
-			[
-				["Add Camera Zoom", "0.015", ""]
-			]
-		],
-		[
-			18675,
-			[
-				["Add Camera Zoom", "0.03", ""],
-				["Hey!", "a", ""]
-			],
-			null,
-			""
-		],
-		[
-			18975,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			19200,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			19650,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			20100,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			20700,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			21150,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			21600,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			22050,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			22500,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			23100,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			23400,
-			[
-				["Hey!", "a", ""]
-			]
-		],
-		[
-			23550,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			24000,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			24450,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			24900,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			25500,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			25950,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			26400,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			26850,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			27300,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			27900,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			28200,
-			[
-				["Hey!", "a", ""]
-			]
-		],
-		[
-			28350,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			28500,
-			[
-				["Play Animation", "hey", "bf"]
-			]
-		],
-		[
-			28800,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			29250,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			29700,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			30300,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			30750,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			31200,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			31650,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			32100,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			32700,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			33000,
-			[
-				["Hey!", "a", ""]
-			]
-		],
-		[
-			33150,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			33600,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			34050,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			34500,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			35100,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			35550,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			36000,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			36450,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			36900,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			37500,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			37650,
-			[
-				["Add Camera Zoom", "0.015", ""]
-			]
-		],
-		[
-			37875,
-			[
-				["Add Camera Zoom", "0.03", ""],
-				["Hey!", "a", ""]
-			],
-			null,
-			""
-		],
-		[
-			38175,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			],
-			null,
-			""
-		],
-		[
-			39000,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			40200,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			41400,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			42600,
-			[
-				["Add Camera Zoom", "0.015", ""],
-				["Hey!", "a", ""]
-			],
-			null,
-			""
-		],
-		[
-			43800,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			45000,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			46200,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			47400,
-			[
-				["Add Camera Zoom", "0.015", ""],
-				["Hey!", "gf", ""]
-			],
-			null,
-			""
-		],
-		[
-			48000,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			48450,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			48900,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			49500,
-			[
-				["Add Camera Zoom", "0.015", ""]
-			]
-		],
-		[
-			49950,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			50400,
-			[
-				["Add Camera Zoom", "0.015", ""]
-			]
-		],
-		[
-			50850,
-			[
-				["Add Camera Zoom", "0.015", ""]
-			]
-		],
-		[
-			51300,
-			[
-				["Add Camera Zoom", "0.015", ""]
-			]
-		],
-		[
-			51900,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			],
-			null,
-			""
-		],
-		[
-			52200,
-			[
-				["Hey!", "a", ""]
-			]
-		],
-		[
-			52350,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			52800,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			53250,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			54300,
-			[
-				["Add Camera Zoom", "0.015", ""]
-			]
-		],
-		[
-			54750,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			55200,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			55650,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			56700,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			56850,
-			[
-				["Add Camera Zoom", "0.015", ""]
-			]
-		],
-		[
-			57000,
-			[
-				["Hey!", "gf", ""]
-			]
-		],
-		[
-			57375,
-			[
-				["Add Camera Zoom", "0.01", ""]
-			]
-		],
-		[
-			57600,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			58050,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			58500,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			59100,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			59550,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			60000,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			60450,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			60900,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			61500,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			61800,
-			[
-				["Hey!", "a", ""]
-			]
-		],
-		[
-			61950,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			62400,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			62850,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			63300,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			63900,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			64350,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			64800,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			65250,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			65700,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			66300,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			66600,
-			[
-				["Hey!", "gf", ""]
-			],
-			null,
-			""
-		],
-		[
-			66750,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			66900,
-			[
-				["Play Animation", "hey", "bf"]
-			],
-			null,
-			""
-		],
-		[
-			67200,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			67650,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			68100,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			68700,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			69150,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			69600,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			70050,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			70500,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			71100,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			71400,
-			[
-				["Hey!", "a", ""]
-			]
-		],
-		[
-			71550,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			72000,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			72450,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			72900,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			73500,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			73950,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			74400,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			74850,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			75300,
-			[
-				["Add Camera Zoom", "0.02", ""]
-			]
-		],
-		[
-			75900,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			],
-			null,
-			""
-		],
-		[
-			76050,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		],
-		[
-			76275,
-			[
-				["Add Camera Zoom", "0.04", ""],
-				["Hey!", "a", ""]
-			],
-			null,
-			""
-		],
-		[
-			76500,
-			[
-				["Add Camera Zoom", "0.025", ""]
-			]
-		]
-	],
+	"player2": "dad",
 	"player3": null,
+	"eventsFile": "events",
 	"song": "Bopeebo",
+	"arrowSkin": "",
 	"validScore": true,
+	"speed": 1.5,
+	"format": "psych_v1_convert",
+	"gfVersion": "gf",
+	"events": [],
+	"audiosNames": [
+		"Inst",
+		"Voices",
+		"none"
+	],
 	"needsVoices": true,
 	"stage": "stage",
-	"arrowSkin": "",
-	"format": "psych_v1_convert",
 	"album": "fnf1",
-	"speed": 1.5,
 	"bpm": 100
 }

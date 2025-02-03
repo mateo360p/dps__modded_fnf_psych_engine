@@ -1,10 +1,11 @@
 {
-	"tweenTime": 0.5,
 	"storyName": "PICO",
+	"tweenTime": 0.5,
 	"hideFreeplay": false,
 	"weekBackground": "philly",
 	"weekBefore": "week2",
 	"startUnlocked": true,
+	"hideStoryMode": false,
 	"weekCharacters": [
 		"pico",
 		"bf",
@@ -39,12 +40,11 @@
 			]
 		]
 	],
-	"hideStoryMode": false,
-	"hiddenUntilUnlocked": false,
+	"weekName": "Week 3",
 	"weekColor": [
 		249,
 		207,
 		81
 	],
-	"weekName": "Week 3"
+	"hiddenUntilUnlocked": false
 }
