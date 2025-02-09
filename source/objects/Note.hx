@@ -26,6 +26,10 @@ typedef NoteSplashData = {
 	useGlobalShader:Bool, //breaks r/g/b but makes it copy default colors for your custom note
 	useRGBShader:Bool,
 	antialiasing:Bool,
+	darkSet:Bool,
+	r:FlxColor,
+	g:FlxColor,
+	b:FlxColor,
 	a:Float
 }
 
@@ -106,6 +110,10 @@ class Note extends FlxSprite
 		useNoteTypeShader: false,
 		useGlobalShader: false,
 		useRGBShader: (PlayState.SONG != null) ? !(PlayState.SONG.disableNoteRGB == true) : true,
+		darkSet: true,
+		r: -1,
+		g: -1,
+		b: -1,
 		a: ClientPrefs.data.splashAlpha
 	};
 
@@ -133,11 +141,9 @@ class Note extends FlxSprite
 	public var hitCausesMiss:Bool = false;
 	public var distance:Float = 2000; //plan on doing scroll directions soon -bb
 
-	public static var hurtnote_arrowRGB:Array<Array<FlxColor>> = [
-		[0xFF101010, 0xFFFF0000, 0xFF990022],
-	];
-	public static var hurtnote_arrowRGBPixel:Array<Array<FlxColor>> = [
-		[0xFF161515, 0xFFF22222, 0xFF610519],
+	//for noteSplash, [0] -> Normal UI; [1] -> Pixel
+	public static var dark_sets:Array<FlxColor> = [
+		0xFF000000, 0xFF00FF22,
 	];
 
 	public var hitsoundDisabled:Bool = false;
@@ -197,27 +203,23 @@ class Note extends FlxSprite
 	}
 
 	private function set_noteType(value:String):String {
-		noteSplashData.texture = PlayState.SONG != null ? PlayState.SONG.splashSkin : 'noteSplashes';
+		noteSplashData.texture = PlayState.SONG != null ? PlayState.SONG.splashSkin : 'noteSplashes/noteSplashes';
 		defaultRGB();
 
+		var pixel = !PlayState.isPixelStage;
 		if(noteData > -1 && noteType != value) {
 			switch(value) {
 				case 'Hurt Note':
 					ignoreNote = mustPress;
-					//reloadNote('HURTNOTE_assets');
-					//this used to change the note texture to HURTNOTE_assets.png,
-					//but i've changed it to something more optimized with the implementation of RGBPalette:
+					noteSplashData.darkSet = false;
 
-					// note colors
-					rgbShader.r = 0xFF101010;
-					rgbShader.g = 0xFFFF0000;
-					rgbShader.b = 0xFF990022;
-
-					// splash data and colors
-					//noteSplashData.r = 0xFFFF0000;
-					//noteSplashData.g = 0xFF101010;
-					noteSplashData.texture = 'noteSplashes/noteSplashes-electric';
 					noteSplashData.useNoteTypeShader = true;
+					noteSplashData.texture = 'noteSplashes/noteSplashes-electric'; //haha I fixed it first ;D (i think)
+
+					// Note Colors	pixel? true : false --> color
+					rgbShader.r = noteSplashData.r = pixel ? 0xFFFF0000 : 0xFFE43636;
+					rgbShader.g = noteSplashData.g = pixel ? 0xFF000000 : 0xFF171717;
+					rgbShader.b = noteSplashData.b = 0xFF990022; //not used XD
 
 					// gameplay data
 					lowPriority = true;
@@ -356,40 +358,6 @@ class Note extends FlxSprite
 			globalRgbShaders[noteData] = newRGB;
 		}
 		return globalRgbShaders[noteData];
-	}
-
-	public static function initializeNoteTypeRGBShader(noteType:String, noteData:Int)
-	{
-		if(noteTypeRgbShaders[noteData] == null)
-		{
-			var rgbArray:Array<Array<FlxColor>> = (!PlayState.isPixelStage) ? ClientPrefs.data.arrowRGB : ClientPrefs.data.arrowRGBPixel;
-			if (!PlayState.isPixelStage) rgbArray = hurtnote_arrowRGB;
-			else rgbArray = hurtnote_arrowRGB; //for noww, the only colors will be the hurt note colors
-
-			if (rgbArray.length < colArray.length) { //there's only one palette for all the noteDatas
-				for (i in 0...colArray.length ) {
-					rgbArray[i] = rgbArray[0];
-				}
-			}
-			var arr:Array<FlxColor> = rgbArray[noteData];
-			var newRGB:RGBPalette = new RGBPalette();
-
-			if (arr != null && noteData > -1 && noteData <= arr.length)
-			{
-				newRGB.r = arr[0];
-				newRGB.g = arr[1];
-				newRGB.b = arr[2];
-			}
-			else
-			{
-				newRGB.r = 0xFFFF0000;
-				newRGB.g = 0xFF00FF00;
-				newRGB.b = 0xFF0000FF;
-			}
-
-			noteTypeRgbShaders[noteData] = newRGB;
-		}
-		return noteTypeRgbShaders[noteData];
 	}
 
 	var _lastNoteOffX:Float = 0;

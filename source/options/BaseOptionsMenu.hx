@@ -138,6 +138,10 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		{
 			changeSelection(1);
 		}
+		if (FlxG.keys.justPressed.SPACE)
+		{
+			onSpaceAction();
+		}
 
 		if (controls.BACK) {
 			close();
@@ -503,4 +507,8 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	function reloadCheckboxes()
 		for (checkbox in checkboxGroup)
 			checkbox.daValue = Std.string(optionsArray[checkbox.ID].getValue()) == 'true'; //Do not take off the Std.string() from this, it will break a thing in Mod Settings Menu
+
+	function onSpaceAction() {
+		optionsArray[curSelected].space();
+	}
 }

@@ -41,6 +41,8 @@ class Option
 	public var defaultKeys:Keybind = null; //Only used in keybind type
 	public var keys:Keybind = null; //Only used in keybind type
 
+	public var onSpace:Void->Void = null;
+
 	public function new(name:String, description:String = '', variable:String, type:OptionType = BOOL, ?options:Array<String> = null, ?translation:String = null)
 	{
 		_name = name;
@@ -100,6 +102,13 @@ class Option
 		//nothing lol
 		if(onChange != null)
 			onChange();
+	}
+
+	public function space()
+	{
+		//nothing again lmao
+		if(onSpace != null)
+			onSpace();
 	}
 
 	dynamic public function getValue():Dynamic

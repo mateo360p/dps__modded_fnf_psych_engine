@@ -3,112 +3,112 @@
 		"purple": {
 			"noteData": 0,
 			"offsets": [
-				-60,
-				-58
+				-36,
+				-68
 			],
 			"fps": [
 				22,
 				26
 			],
-			"prefix": "note splash psych purple 10",
+			"prefix": "note splash indie purple 10",
 			"name": "purple",
 			"indices": []
 		},
 		"blue2": {
 			"noteData": 5,
 			"offsets": [
-				-45,
-				-37
+				-40,
+				-59
 			],
 			"fps": [
 				22,
 				26
 			],
-			"prefix": "note splash psych blue 20",
+			"prefix": "note splash indie blue 20",
 			"name": "blue2",
 			"indices": []
 		},
 		"red2": {
 			"noteData": 7,
 			"offsets": [
-				-45,
-				-37
+				-40,
+				-59
 			],
 			"fps": [
 				22,
 				26
 			],
-			"prefix": "note splash psych red 20",
+			"prefix": "note splash indie red 20",
 			"name": "red2",
 			"indices": []
 		},
 		"red": {
 			"noteData": 3,
 			"offsets": [
-				-60,
-				-58
+				-36,
+				-68
 			],
 			"fps": [
 				22,
 				26
 			],
-			"prefix": "note splash psych red 10",
+			"prefix": "note splash indie red 10",
 			"name": "red",
 			"indices": []
 		},
 		"purple2": {
 			"noteData": 4,
 			"offsets": [
-				-45,
-				-37
+				-40,
+				-59
 			],
 			"fps": [
 				22,
 				26
 			],
-			"prefix": "note splash psych purple 20",
+			"prefix": "note splash indie purple 20",
 			"name": "purple2",
 			"indices": []
 		},
 		"blue": {
 			"noteData": 1,
 			"offsets": [
-				-60,
-				-58
+				-36,
+				-68
 			],
 			"fps": [
 				22,
 				26
 			],
-			"prefix": "note splash psych blue 10",
+			"prefix": "note splash indie blue 10",
 			"name": "blue",
 			"indices": []
 		},
 		"green2": {
 			"noteData": 6,
 			"offsets": [
-				-45,
-				-37
+				-40,
+				-59
 			],
 			"fps": [
 				22,
 				26
 			],
-			"prefix": "note splash psych green 20",
+			"prefix": "note splash indie green 20",
 			"name": "green2",
 			"indices": []
 		},
 		"green": {
 			"noteData": 2,
 			"offsets": [
-				-60,
-				-58
+				-36,
+				-68
 			],
 			"fps": [
 				22,
 				26
 			],
-			"prefix": "note splash psych green 10",
+			"prefix": "note splash indie green 10",
 			"name": "green",
 			"indices": []
 		}

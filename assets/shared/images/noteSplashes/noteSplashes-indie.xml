@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="noteSplashes-indie.png">
+	<!-- Created with Adobe Animate version 23.0.2.103 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="note splash indie blue 10000" x="3" y="3" width="196" height="221" frameX="-57" frameY="-15" frameWidth="258" frameHeight="236"/>
+	<SubTexture name="note splash indie blue 10001" x="201" y="3" width="166" height="162" frameX="-47" frameY="-26" frameWidth="258" frameHeight="236"/>
+	<SubTexture name="note splash indie blue 10002" x="369" y="3" width="209" height="204" frameX="-25" frameY="-5" frameWidth="258" frameHeight="236"/>
+	<SubTexture name="note splash indie blue 10003" x="580" y="3" width="258" height="214" frameX="0" frameY="0" frameWidth="258" frameHeight="236"/>
+	<SubTexture name="note splash indie blue 20000" x="3" y="226" width="208" height="249" frameX="-21" frameY="0" frameWidth="275" frameHeight="249"/>
+	<SubTexture name="note splash indie blue 20001" x="213" y="226" width="168" height="163" frameX="-45" frameY="-30" frameWidth="275" frameHeight="249"/>
+	<SubTexture name="note splash indie blue 20002" x="383" y="226" width="251" height="204" frameX="-9" frameY="-9" frameWidth="275" frameHeight="249"/>
+	<SubTexture name="note splash indie blue 20003" x="636" y="226" width="275" height="218" frameX="0" frameY="0" frameWidth="275" frameHeight="249"/>
+	<SubTexture name="note splash indie green 10000" x="3" y="3" width="196" height="221" frameX="-57" frameY="-15" frameWidth="258" frameHeight="236"/>
+	<SubTexture name="note splash indie green 10001" x="201" y="3" width="166" height="162" frameX="-47" frameY="-26" frameWidth="258" frameHeight="236"/>
+	<SubTexture name="note splash indie green 10002" x="369" y="3" width="209" height="204" frameX="-25" frameY="-5" frameWidth="258" frameHeight="236"/>
+	<SubTexture name="note splash indie green 10003" x="580" y="3" width="258" height="214" frameX="0" frameY="0" frameWidth="258" frameHeight="236"/>
+	<SubTexture name="note splash indie green 20000" x="3" y="226" width="208" height="249" frameX="-21" frameY="0" frameWidth="275" frameHeight="249"/>
+	<SubTexture name="note splash indie green 20001" x="213" y="226" width="168" height="163" frameX="-45" frameY="-30" frameWidth="275" frameHeight="249"/>
+	<SubTexture name="note splash indie green 20002" x="383" y="226" width="251" height="204" frameX="-9" frameY="-9" frameWidth="275" frameHeight="249"/>
+	<SubTexture name="note splash indie green 20003" x="636" y="226" width="275" height="218" frameX="0" frameY="0" frameWidth="275" frameHeight="249"/>
+	<SubTexture name="note splash indie purple 10000" x="3" y="3" width="196" height="221" frameX="-57" frameY="-15" frameWidth="258" frameHeight="236"/>
+	<SubTexture name="note splash indie purple 10001" x="201" y="3" width="166" height="162" frameX="-47" frameY="-26" frameWidth="258" frameHeight="236"/>
+	<SubTexture name="note splash indie purple 10002" x="369" y="3" width="209" height="204" frameX="-25" frameY="-5" frameWidth="258" frameHeight="236"/>
+	<SubTexture name="note splash indie purple 10003" x="580" y="3" width="258" height="214" frameX="0" frameY="0" frameWidth="258" frameHeight="236"/>
+	<SubTexture name="note splash indie purple 20000" x="3" y="226" width="208" height="249" frameX="-21" frameY="0" frameWidth="275" frameHeight="249"/>
+	<SubTexture name="note splash indie purple 20001" x="213" y="226" width="168" height="163" frameX="-45" frameY="-30" frameWidth="275" frameHeight="249"/>
+	<SubTexture name="note splash indie purple 20002" x="383" y="226" width="251" height="204" frameX="-9" frameY="-9" frameWidth="275" frameHeight="249"/>
+	<SubTexture name="note splash indie purple 20003" x="636" y="226" width="275" height="218" frameX="0" frameY="0" frameWidth="275" frameHeight="249"/>
+	<SubTexture name="note splash indie red 10000" x="3" y="3" width="196" height="221" frameX="-57" frameY="-15" frameWidth="258" frameHeight="236"/>
+	<SubTexture name="note splash indie red 10001" x="201" y="3" width="166" height="162" frameX="-47" frameY="-26" frameWidth="258" frameHeight="236"/>
+	<SubTexture name="note splash indie red 10002" x="369" y="3" width="209" height="204" frameX="-25" frameY="-5" frameWidth="258" frameHeight="236"/>
+	<SubTexture name="note splash indie red 10003" x="580" y="3" width="258" height="214" frameX="0" frameY="0" frameWidth="258" frameHeight="236"/>
+	<SubTexture name="note splash indie red 20000" x="3" y="226" width="208" height="249" frameX="-21" frameY="0" frameWidth="275" frameHeight="249"/>
+	<SubTexture name="note splash indie red 20001" x="213" y="226" width="168" height="163" frameX="-45" frameY="-30" frameWidth="275" frameHeight="249"/>
+	<SubTexture name="note splash indie red 20002" x="383" y="226" width="251" height="204" frameX="-9" frameY="-9" frameWidth="275" frameHeight="249"/>
+	<SubTexture name="note splash indie red 20003" x="636" y="226" width="275" height="218" frameX="0" frameY="0" frameWidth="275" frameHeight="249"/>
+</TextureAtlas>
