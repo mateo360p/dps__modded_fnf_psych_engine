@@ -48,6 +48,30 @@ class Difficulty
 		else resetList();
 	}
 
+	inline public static function load(diffs:String, extraDiffs:String):Array<String>
+	{
+		// diffs(Easy, Normal, Hard) + extraDiffs(Erect, Night) = Easy, Normal, HardErect, Night
+		if(diffs != null && diffs.length > 0)
+		{
+			if(extraDiffs != null && extraDiffs.length > 0) diffs = '$diffs, $extraDiffs'; // pretty 
+			var difficulties:Array<String> = diffs.trim().split(',');
+			var i:Int = difficulties.length - 1;
+			while (i > 0)
+			{
+				if(difficulties[i] != null)
+				{
+					difficulties[i] = difficulties[i].trim();
+					if(difficulties[i].length < 1) difficulties.remove(difficulties[i]);
+				}
+				--i;
+			}
+			return difficulties;
+		} else {
+			if(extraDiffs != null && extraDiffs.length > 0) diffs = '$diffs, $extraDiffs'; // pretty 
+			return defaultList.copy();
+		}
+	}
+
 	inline public static function resetList()
 	{
 		list = defaultList.copy();

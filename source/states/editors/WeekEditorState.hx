@@ -265,7 +265,6 @@ class WeekEditorState extends MusicBeatState implements PsychUIEventHandler.Psyc
 
 		difficultiesInputText.text = '';
 		if(weekFile.difficulties != null) difficultiesInputText.text = weekFile.difficulties;
-
 		lockedCheckbox.checked = !weekFile.startUnlocked;
 		lock.visible = lockedCheckbox.checked;
 		
@@ -643,7 +642,7 @@ class WeekEditorFreeplayState extends MusicBeatState implements PsychUIEventHand
 		var tabs = [
 			{name: 'Freeplay', label: 'Freeplay'},
 		];
-		UI_box = new PsychUIBox(FlxG.width, FlxG.height, 250, 200, ['Freeplay']);
+		UI_box = new PsychUIBox(FlxG.width, FlxG.height, 250, 320, ['Freeplay']);
 		UI_box.x -= UI_box.width + 100;
 		UI_box.y -= UI_box.height + 60;
 		UI_box.scrollFactor.set();
@@ -685,6 +684,7 @@ class WeekEditorFreeplayState extends MusicBeatState implements PsychUIEventHand
 		{
 			weekFile.songs[curSelected][1] = iconInputText.text;
 			iconArray[curSelected].changeIcon(iconInputText.text);
+			weekFile.songs[curSelected][3] = extraDiffsInputText.text.trim();
 		}
 		else if(id == PsychUINumericStepper.CHANGE_EVENT && (sender is PsychUINumericStepper))
 		{
@@ -697,6 +697,7 @@ class WeekEditorFreeplayState extends MusicBeatState implements PsychUIEventHand
 	var bgColorStepperG:PsychUINumericStepper;
 	var bgColorStepperB:PsychUINumericStepper;
 	var iconInputText:PsychUIInputText;
+	var extraDiffsInputText:PsychUIInputText;
 	function addFreeplayUI() {
 		var tab_group = UI_box.getTab('Freeplay').menu;
 //
@@ -742,9 +743,12 @@ class WeekEditorFreeplayState extends MusicBeatState implements PsychUIEventHand
 			weekFile.hideFreeplay = hideFreeplayCheckbox.checked;
 			WeekEditorState.unsavedProgress = true;
 		};
+
+		extraDiffsInputText = new PsychUIInputText(10, hideFreeplayCheckbox.y + 70, 100, '', 8);
 		
 		tab_group.add(new FlxText(10, bgColorStepperR.y - 18, 0, 'Selected background Color R/G/B:'));
 		tab_group.add(new FlxText(10, iconInputText.y - 18, 0, 'Selected icon:'));
+		tab_group.add(new FlxText(10, extraDiffsInputText.y - 18, 0, 'Extra Difficulties:'));
 		tab_group.add(bgColorStepperR);
 		tab_group.add(bgColorStepperG);
 		tab_group.add(bgColorStepperB);
@@ -752,6 +756,7 @@ class WeekEditorFreeplayState extends MusicBeatState implements PsychUIEventHand
 		tab_group.add(pasteColor);
 		tab_group.add(iconInputText);
 		tab_group.add(hideFreeplayCheckbox);
+		tab_group.add(extraDiffsInputText);
 	}
 
 	function updateBG() {
@@ -759,6 +764,10 @@ class WeekEditorFreeplayState extends MusicBeatState implements PsychUIEventHand
 		weekFile.songs[curSelected][2][1] = Math.round(bgColorStepperG.value);
 		weekFile.songs[curSelected][2][2] = Math.round(bgColorStepperB.value);
 		bg.color = FlxColor.fromRGB(weekFile.songs[curSelected][2][0], weekFile.songs[curSelected][2][1], weekFile.songs[curSelected][2][2]);
+	}
+
+	function updateDiffs() {
+
 	}
 
 	function changeSelection(change:Int = 0) {
@@ -777,8 +786,8 @@ class WeekEditorFreeplayState extends MusicBeatState implements PsychUIEventHand
 				icon.alpha = 1;
 			}
 		}
-		//trace(weekFile.songs[curSelected]);
 		iconInputText.text = weekFile.songs[curSelected][1];
+		extraDiffsInputText.text = weekFile.songs[curSelected][3];
 
 		var colors = weekFile.songs[curSelected][2];
 		bgColorStepperR.value = Math.round(colors[0]);

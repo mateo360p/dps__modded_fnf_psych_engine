@@ -98,7 +98,7 @@ class FreeplayState extends MusicBeatState
 				{
 					colors = [146, 113, 253];
 				}
-				addSong(song[0], i, song[1], FlxColor.fromRGB(colors[0], colors[1], colors[2]));
+				addSong(song[0], i, song[3], song[1], FlxColor.fromRGB(colors[0], colors[1], colors[2]));
 			}
 		}
 		Mods.loadTopMod();
@@ -198,9 +198,9 @@ class FreeplayState extends MusicBeatState
 		super.closeSubState();
 	}
 
-	public function addSong(songName:String, weekNum:Int, songCharacter:String, color:Int)
+	public function addSong(songName:String, weekNum:Int, extraDifficulties:String, songCharacter:String, color:Int)
 	{
-		songs.push(new SongMetadata(songName, weekNum, songCharacter, color));
+		songs.push(new SongMetadata(songName, weekNum, extraDifficulties, songCharacter, color));
 	}
 
 	function weekIsLocked(name:String):Bool
@@ -338,15 +338,28 @@ class FreeplayState extends MusicBeatState
 				Mods.currentModDirectory = songs[curSelected].folder;
 				var poop:String = Highscore.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty);
 				Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase());
+				if (PlayState.SONG.audiosNames != null) {
+					for (i in 0...PlayState.SONG.audiosNames.length) {
+						if (PlayState.SONG.audiosNames[i] == null || PlayState.SONG.audiosNames[i].length < 0) {
+							switch (i) {
+								case 0: PlayState.SONG.audiosNames[i] = 'Inst';
+								case 1: PlayState.SONG.audiosNames[i] = 'Voices-Player';
+								case 2: PlayState.SONG.audiosNames[i] = 'Voices-Opponent';
+							}
+						}
+					}
+				} else {
+					PlayState.SONG.audiosNames[0] = 'Inst';
+					PlayState.SONG.audiosNames[1] = 'Voices-Player';
+					PlayState.SONG.audiosNames[2] = 'Voices-Opponent';
+				}
 				if (PlayState.SONG.needsVoices)
 				{
 					vocals = new FlxSound();
 					try
 					{
-						var playerVocals:String = getVocalFromCharacter(PlayState.SONG.player1);
-						var loadedVocals = Paths.voices(PlayState.SONG.song, (playerVocals != null && playerVocals.length > 0) ? playerVocals : 'Player');
-						if(loadedVocals == null) loadedVocals = Paths.voices(PlayState.SONG.song);
-						
+						var loadedVocals = Paths.voices(PlayState.SONG.song, PlayState.SONG.audiosNames[1]);
+						if (PlayState.SONG.audiosNames[1] == 'none') loadedVocals == null;
 						if(loadedVocals != null && loadedVocals.length > 0)
 						{
 							vocals.loadEmbedded(loadedVocals);
@@ -366,10 +379,8 @@ class FreeplayState extends MusicBeatState
 					opponentVocals = new FlxSound();
 					try
 					{
-						//trace('please work...');
-						var oppVocals:String = getVocalFromCharacter(PlayState.SONG.player2);
-						var loadedVocals = Paths.voices(PlayState.SONG.song, (oppVocals != null && oppVocals.length > 0) ? oppVocals : 'Opponent');
-						
+						var loadedVocals = Paths.voices(PlayState.SONG.song, PlayState.SONG.audiosNames[2]);
+						if (PlayState.SONG.audiosNames[2] == 'none') loadedVocals == null;
 						if(loadedVocals != null && loadedVocals.length > 0)
 						{
 							opponentVocals.loadEmbedded(loadedVocals);
@@ -389,7 +400,7 @@ class FreeplayState extends MusicBeatState
 					}
 				}
 
-				FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song), 0.8);
+				FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song, PlayState.SONG.audiosNames[0]), 0.8);
 				FlxG.sound.music.pause();
 				instPlaying = curSelected;
 
@@ -462,22 +473,6 @@ class FreeplayState extends MusicBeatState
 		updateTexts(elapsed);
 		super.update(elapsed);
 	}
-	
-	function getVocalFromCharacter(char:String)
-	{
-		try
-		{
-			var path:String = Paths.getPath('characters/$char.json', TEXT);
-			#if MODS_ALLOWED
-			var character:Dynamic = Json.parse(File.getContent(path));
-			#else
-			var character:Dynamic = Json.parse(Assets.getText(path));
-			#end
-			return character.vocals_file;
-		}
-		catch (e:Dynamic) {}
-		return null;
-	}
 
 	public static function destroyFreeplayVocals() {
 		if(vocals != null) vocals.stop();
@@ -505,6 +500,15 @@ class FreeplayState extends MusicBeatState
 		else
 			diffText.text = displayDiff.toUpperCase();
 
+		//idk what im doing lol
+		for (i in songs) {
+			var daWeek:WeekData = WeekData.weeksLoaded.get(WeekData.weeksList[i.week]);
+			var songDiffs:Array<String> = Difficulty.load(daWeek.difficulties, i.extraDiffs);
+
+			if (!songDiffs.contains(Difficulty.getString(curDifficulty, false))) grpSongs.members[songs.indexOf(i)].color = FlxColor.GRAY;
+			else grpSongs.members[songs.indexOf(i)].color = FlxColor.WHITE;
+		}
+
 		positionHighscore();
 		missingText.visible = false;
 		missingTextBG.visible = false;
@@ -516,6 +520,15 @@ class FreeplayState extends MusicBeatState
 			return;
 
 		curSelected = FlxMath.wrap(curSelected + change, 0, songs.length-1);
+
+		for (item in grpSongs.members)
+		{
+			if (item.targetY == curSelected && item.color == FlxColor.GRAY)
+			{
+				changeSelection(change == 0 ? 1 : change);
+				return;
+			}
+		}
 		_updateSongLastDifficulty();
 		if(playSound) FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 
@@ -542,10 +555,12 @@ class FreeplayState extends MusicBeatState
 		Mods.currentModDirectory = songs[curSelected].folder;
 		PlayState.storyWeek = songs[curSelected].week;
 		Difficulty.loadFromWeek();
+		Difficulty.list = Difficulty.load(WeekData.weeksLoaded.get(WeekData.weeksList[songs[curSelected].week]).difficulties, songs[curSelected].extraDiffs); //ughHhHhhHh
+		//trace(Difficulty.list);
 		
 		var savedDiff:String = songs[curSelected].lastDifficulty;
 		var lastDiff:Int = Difficulty.list.indexOf(lastDifficultyName);
-		if(savedDiff != null && !Difficulty.list.contains(savedDiff) && Difficulty.list.contains(savedDiff))
+		if(savedDiff != null && !Difficulty.list.contains(savedDiff) && Difficulty.list.contains(savedDiff)) //whathaheck
 			curDifficulty = Math.round(Math.max(0, Difficulty.list.indexOf(savedDiff)));
 		else if(lastDiff > -1)
 			curDifficulty = lastDiff;
@@ -615,14 +630,16 @@ class SongMetadata
 	public var color:Int = -7179779;
 	public var folder:String = "";
 	public var lastDifficulty:String = null;
+	public var extraDiffs:String = "";
 
-	public function new(song:String, week:Int, songCharacter:String, color:Int)
+	public function new(song:String, week:Int, extraDiffs:String, songCharacter:String, color:Int)
 	{
 		this.songName = song;
 		this.week = week;
 		this.songCharacter = songCharacter;
 		this.color = color;
 		this.folder = Mods.currentModDirectory;
+		this.extraDiffs = extraDiffs;
 		if(this.folder == null) this.folder = '';
 	}
 }

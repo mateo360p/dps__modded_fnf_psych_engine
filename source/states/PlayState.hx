@@ -77,6 +77,8 @@ class PlayState extends MusicBeatState
 
 	public static var songAllowedHey:Bool = true;
 	public static var heyVolume:Float = 1;
+	public static var DEF_HEY_SOUND:String = 'hehe/eh';
+	public static var DEF_HEY_ANIM:String = 'hey';
 
 	public static var STRUM_X = 42;
 	public static var STRUM_X_MIDDLESCROLL = -278;
@@ -2738,11 +2740,14 @@ class PlayState extends MusicBeatState
 		});
 	}
 
-	function doCustomhey(?animToPlay:String = 'hey' , ?customSound:String = 'eh', ?volume:Float = 0.5)
-	{
-		boyfriend.playAnim(animToPlay, true);
-		boyfriend.specialAnim = true;
-		FlxG.sound.play(Paths.sound('hehe/' + customSound), heyVolume * volume);
+	function doCustomHey() {
+		//Animation
+		if (boyfriend.hey_anim != 'none') {
+			boyfriend.playAnim((boyfriend.hey_anim != null && boyfriend.hey_anim.length > 0) ? boyfriend.hey_anim : DEF_HEY_ANIM, true);
+			boyfriend.specialAnim = true;
+		}
+		//Sound
+		if (boyfriend.hey_sound != 'none') FlxG.sound.play(Paths.sound(((boyfriend.hey_sound != null && boyfriend.hey_sound.length > 0) ? 'hehe/' + boyfriend.hey_sound : DEF_HEY_SOUND)), heyVolume);
 	}
 
 	public var strumsBlocked:Array<Bool> = [];
@@ -2894,17 +2899,8 @@ class PlayState extends MusicBeatState
 
 		if (startedCountdown && !inCutscene && !boyfriend.stunned && generatedMusic)
 		{
-			//Hey anims shit
-			if(controls.justPressed('hey') && songAllowedHey == true && boyfriend.specialAnim == false && !holdArray.contains(true)) {
-				var bfTexted:String = boyfriend.curCharacter;
-				if (
-					bfTexted.startsWith('pico')){ doCustomhey('yeah', 'pico-eh');
-				} else if (
-					bfTexted.startsWith('tankman')){ doCustomhey( 'ugh', 'ugh');
-				} else { 
-					doCustomhey();
-				}
-			}
+			// Hey animation shit
+			if(controls.justPressed('hey') && songAllowedHey == true && boyfriend.specialAnim == false && !holdArray.contains(true)) doCustomHey();
 
 			if (notes.length > 0) {
 				for (n in notes) { // I can't do a filter here, that's kinda awesome

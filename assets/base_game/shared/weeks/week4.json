@@ -1,16 +1,11 @@
 {
-	"storyName": "MOMMY MUST MURDER",
 	"tweenTime": 0.5,
+	"storyName": "MOMMY MUST MURDER",
+	"difficulties": "Easy, Normal, Hard",
 	"hideFreeplay": false,
 	"weekBackground": "limo",
 	"weekBefore": "week3",
 	"startUnlocked": true,
-	"hideStoryMode": false,
-	"weekCharacters": [
-		"mom",
-		"bf",
-		"gf"
-	],
 	"songs": [
 		[
 			"Satin Panties",
@@ -19,7 +14,8 @@
 				252,
 				150,
 				215
-			]
+			],
+			"Night"
 		],
 		[
 			"High",
@@ -28,7 +24,8 @@
 				252,
 				150,
 				215
-			]
+			],
+			"Night"
 		],
 		[
 			"Milf",
@@ -40,11 +37,17 @@
 			]
 		]
 	],
-	"weekName": "Week 4",
+	"hideStoryMode": false,
+	"weekCharacters": [
+		"mom",
+		"bf",
+		"gf"
+	],
+	"hiddenUntilUnlocked": false,
 	"weekColor": [
 		249,
 		207,
 		81
 	],
-	"hiddenUntilUnlocked": false
+	"weekName": "Week 4"
 }

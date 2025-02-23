@@ -313,7 +313,6 @@ class LoadingState extends MusicBeatState
 	}
 
 	static var initialThreadCompleted:Bool = true;
-	static var dontPreloadDefaultVoices:Bool = false;
 	public static function prepareToSong()
 	{
 		threadPool = new FixedThreadPool(#if MULTITHREADED_LOADING 8 #else 1 #end); // 10 threads are enough
@@ -435,32 +434,30 @@ class LoadingState extends MusicBeatState
 				prepare(imgs, snds, mscs);
 			}
 
-			songsToPrepare.push('$folder/Inst');
-
 			var player1:String = song.player1;
 			var player2:String = song.player2;
 			var gfVersion:String = song.gfVersion;
-			var prefixVocals:String = song.needsVoices ? '$folder/Voices' : null;
+			var audios:Array<String> = song.audiosNames;
 			if (gfVersion == null) gfVersion = 'gf';
 
-			dontPreloadDefaultVoices = false;
-			preloadCharacter(player1, prefixVocals);
-			if (!dontPreloadDefaultVoices && prefixVocals != null)
-			{
-				if(Paths.fileExists('$prefixVocals-Player.${Paths.SOUND_EXT}', SOUND, false, 'songs') && Paths.fileExists('$prefixVocals-Opponent.${Paths.SOUND_EXT}', SOUND, false, 'songs'))
-				{
-					songsToPrepare.push('$prefixVocals-Player');
-					songsToPrepare.push('$prefixVocals-Opponent');
+			preloadCharacter(player1);
+
+			// There's no time to organize!
+			for (i in 0...2) {
+				var defs:Array<String> = ['Inst', 'Voices-Player', 'Voices-Opponent'];
+				if (audios == null) audios = defs.copy();
+				if (audios[i] == null || audios[i] == '') audios[i] = defs[i];
+				if(Paths.fileExists('$folder/' + audios[i] + '.${Paths.SOUND_EXT}', SOUND, false, 'songs')) {
+					songsToPrepare.push('$folder/' + audios[i]);
+					trace('$folder/' + audios[i]);
 				}
-				else if(Paths.fileExists('$prefixVocals.${Paths.SOUND_EXT}', SOUND, false, 'songs'))
-					songsToPrepare.push(prefixVocals);
 			}
 
 			if (player2 != player1)
 			{
 				threadsMax++;
 				threadPool.run(() -> {
-					try { preloadCharacter(player2, prefixVocals); } catch (e:Dynamic) {}
+					try { preloadCharacter(player2); } catch (e:Dynamic) {}
 					completedThread();
 				});
 			}
@@ -582,7 +579,7 @@ class LoadingState extends MusicBeatState
 		});
 	}
 
-	inline private static function preloadCharacter(char:String, ?prefixVocals:String)
+	inline private static function preloadCharacter(char:String)
 	{
 		try
 		{
@@ -627,12 +624,7 @@ class LoadingState extends MusicBeatState
 				}
 			}
 			#end
-	
-			if (prefixVocals != null && character.vocals_file != null && character.vocals_file.length > 0)
-			{
-				songsToPrepare.push(prefixVocals + "-" + character.vocals_file);
-				if(char == PlayState.SONG.player1) dontPreloadDefaultVoices = true;
-			}
+			//preloadSound('sounds/' + ((character.hey_sound != null && character.hey_sound.length > 0) ? 'hehe/' + character.hey_sound : PlayState.DEF_HEY_SOUND));
 		}
 		catch(e:haxe.Exception)
 		{

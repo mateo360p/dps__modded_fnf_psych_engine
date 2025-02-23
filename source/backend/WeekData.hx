@@ -7,6 +7,9 @@ import haxe.Json;
 typedef WeekFile =
 {
 	// JSON variables
+		/**
+	 * [ songName , icon , color[ ] , songExtraDiffs[ ] ]
+	 */
 	var songs:Array<Dynamic>;
 	var weekCharacters:Array<String>;
 	var weekBackground:String;
@@ -32,6 +35,9 @@ class WeekData {
 	public var folder:String = '';
 
 	// JSON variables
+	/**
+	 * [ songName , icon , color[ ] , songExtraDiffs ]
+	 */
 	public var songs:Array<Dynamic>;
 	public var weekCharacters:Array<String>;
 	public var weekBackground:String;
@@ -50,7 +56,7 @@ class WeekData {
 
 	public static function createWeekFile():WeekFile {
 		var weekFile:WeekFile = {
-			songs: [["Bopeebo", "face", [146, 113, 253]], ["Fresh", "face", [146, 113, 253]], ["Dad Battle", "face", [146, 113, 253]]],
+			songs: [["Bopeebo", "face", [146, 113, 253], ""], ["Fresh", "face", [146, 113, 253], ""], ["Dad Battle", "face", [146, 113, 253], ""]],
 			#if BASE_GAME_FILES
 			weekCharacters: ['dad', 'bf', 'gf'],
 			#else

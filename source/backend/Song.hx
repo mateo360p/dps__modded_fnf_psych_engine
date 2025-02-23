@@ -15,6 +15,9 @@ typedef SwagSong =
 	var speed:Float;
 	var offset:Float;
 	var eventsFile:String;
+	/**
+	 * 0 = Inst; 1 = Player; 2 = Oppnt
+	 */
 	var audiosNames:Array<String>;	//INST, PLAYER, OPPONENT
 
 	var player1:String;

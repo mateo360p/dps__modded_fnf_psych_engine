@@ -414,7 +414,8 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 				healthbar_colors: [161, 161, 161],
 				camera_position: [0, 0],
 				position: [0, 0],
-				vocals_file: null
+				hey_sound: null,
+				hey_anim: null
 			};
 
 			character.loadCharacterFile(_template);
@@ -597,7 +598,8 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 
 	var imageInputText:PsychUIInputText;
 	var healthIconInputText:PsychUIInputText;
-	var vocalsInputText:PsychUIInputText;
+	var heyInputText:PsychUIInputText;
+	var heyAnimInputText:PsychUIInputText;
 
 	var singDurationStepper:PsychUINumericStepper;
 	var scaleStepper:PsychUINumericStepper;
@@ -638,9 +640,11 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 
 		healthIconInputText = new PsychUIInputText(15, imageInputText.y + 35, 75, healthIcon.getCharacter(), 8);
 
-		vocalsInputText = new PsychUIInputText(15, healthIconInputText.y + 35, 75, character.vocalsFile != null ? character.vocalsFile : '', 8);
+		heyInputText = new PsychUIInputText(15, healthIconInputText.y + 35, 75, character.hey_sound != null ? character.hey_sound : '', 8);
 
-		singDurationStepper = new PsychUINumericStepper(15, vocalsInputText.y + 45, 0.1, 4, 0, 999, 1);
+		heyAnimInputText = new PsychUIInputText(heyInputText.x + 90, heyInputText.y, 75, character.hey_anim != null ? character.hey_anim : '', 8);
+
+		singDurationStepper = new PsychUINumericStepper(15, heyInputText.y + 45, 0.1, 4, 0, 999, 1);
 
 		scaleStepper = new PsychUINumericStepper(15, singDurationStepper.y + 40, 0.1, 1, 0.05, 10, 2);
 
@@ -678,7 +682,8 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 
 		tab_group.add(new FlxText(15, imageInputText.y - 18, 100, 'Image file name:'));
 		tab_group.add(new FlxText(15, healthIconInputText.y - 18, 100, 'Health icon name:'));
-		tab_group.add(new FlxText(15, vocalsInputText.y - 18, 100, 'Vocals File Postfix:'));
+		tab_group.add(new FlxText(15, heyInputText.y - 18, 100, 'Hey! Sound:'));
+		tab_group.add(new FlxText(heyAnimInputText.x, heyAnimInputText.y - 18, 100, 'Hey! Animation:'));
 		tab_group.add(new FlxText(15, singDurationStepper.y - 18, 120, 'Sing Animation length:'));
 		tab_group.add(new FlxText(15, scaleStepper.y - 18, 100, 'Scale:'));
 		tab_group.add(new FlxText(positionXStepper.x, positionXStepper.y - 18, 100, 'Character X/Y:'));
@@ -688,7 +693,8 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		tab_group.add(reloadImage);
 		tab_group.add(decideIconColor);
 		tab_group.add(healthIconInputText);
-		tab_group.add(vocalsInputText);
+		tab_group.add(heyInputText);
+		tab_group.add(heyAnimInputText);
 		tab_group.add(singDurationStepper);
 		tab_group.add(scaleStepper);
 		tab_group.add(flipXCheckBox);
@@ -717,9 +723,14 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 				if(lastIcon != healthIcon.getCharacter()) updatePresence();
 				unsavedProgress = true;
 			}
-			else if(sender == vocalsInputText)
+			else if(sender == heyInputText)
 			{
-				character.vocalsFile = vocalsInputText.text;
+				character.hey_sound = heyInputText.text;
+				unsavedProgress = true;
+			}
+			else if(sender == heyAnimInputText)
+			{
+				character.hey_anim = heyAnimInputText.text;
 				unsavedProgress = true;
 			}
 			else if(sender == imageInputText)
@@ -840,7 +851,8 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		check_player.checked = character.isPlayer;
 		imageInputText.text = character.imageFile;
 		healthIconInputText.text = character.healthIcon;
-		vocalsInputText.text = character.vocalsFile != null ? character.vocalsFile : '';
+		heyInputText.text = character.hey_sound != null ? character.hey_sound : '';
+		heyAnimInputText.text = character.hey_anim != null ? character.hey_anim : '';
 		singDurationStepper.value = character.singDuration;
 		scaleStepper.value = character.jsonScale;
 		flipXCheckBox.checked = character.originalFlipX;
@@ -1296,7 +1308,8 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 			"flip_x": character.originalFlipX,
 			"no_antialiasing": character.noAntialiasing,
 			"healthbar_colors": character.healthColorArray,
-			"vocals_file": character.vocalsFile,
+			"hey_sound": character.hey_sound,
+			"hey_anim": character.hey_anim,
 			"_editor_isPlayer": character.isPlayer
 		};
 

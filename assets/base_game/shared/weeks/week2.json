@@ -1,7 +1,7 @@
 {
 	"storyName": "Spooky Month",
 	"tweenTime": 0.5,
-	"difficulties": "",
+	"difficulties": "Easy, Normal, Hard",
 	"hideFreeplay": false,
 	"weekBackground": "halloween",
 	"weekBefore": "week1",
@@ -20,7 +20,8 @@
 				34,
 				51,
 				68
-			]
+			],
+			"Night"
 		],
 		[
 			"South",
@@ -29,7 +30,8 @@
 				34,
 				51,
 				68
-			]
+			],
+			"Night"
 		],
 		[
 			"Monster",
