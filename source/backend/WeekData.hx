@@ -1,5 +1,6 @@
 package backend;
 
+import backend.LevelData.LevelFile;
 import lime.utils.Assets;
 import openfl.utils.Assets as OpenFlAssets;
 import haxe.Json;
@@ -7,10 +8,8 @@ import haxe.Json;
 typedef WeekFile =
 {
 	// JSON variables
-		/**
-	 * [ songName , icon , color[ ] , songExtraDiffs[ ] ]
-	 */
-	var songs:Array<Dynamic>;
+	var player:String;
+	var levels:Array<Array<String>>;
 	var weekCharacters:Array<String>;
 	var weekBackground:String;
 	var weekBefore:String;
@@ -36,9 +35,10 @@ class WeekData {
 
 	// JSON variables
 	/**
-	 * [ songName , icon , color[ ] , songExtraDiffs ]
+	 * [ songName , player]
 	 */
-	public var songs:Array<Dynamic>;
+	public var levels:Array<Array<String>>;
+	public var player:String;
 	public var weekCharacters:Array<String>;
 	public var weekBackground:String;
 	public var weekBefore:String;
@@ -56,7 +56,12 @@ class WeekData {
 
 	public static function createWeekFile():WeekFile {
 		var weekFile:WeekFile = {
-			songs: [["Bopeebo", "face", [146, 113, 253], ""], ["Fresh", "face", [146, 113, 253], ""], ["Dad Battle", "face", [146, 113, 253], ""]],
+			levels: [
+				["Bopeebo", "bf"],
+				["Fresh", "bf"],
+				["Dad Battle", "bf"]
+			],
+			player: "bf",
 			#if BASE_GAME_FILES
 			weekCharacters: ['dad', 'bf', 'gf'],
 			#else
@@ -87,7 +92,7 @@ class WeekData {
 		this.fileName = fileName;
 	}
 
-	public static function reloadWeekFiles(isStoryMode:Null<Bool> = false)
+	public static function reloadWeekFiles(isStoryMode:Null<Bool> = false, ?player:String = null)
 	{
 		weeksList = [];
 		weeksLoaded.clear();
@@ -192,6 +197,30 @@ class WeekData {
 			return cast tjson.TJSON.parse(rawJson);
 		}
 		return null;
+	}
+
+	// Huh, I hate Strings functions (I dont know how to use them :c)
+	public static function getWeekFromLevel(level:LevelData):WeekData {
+		#if MODS_ALLOWED
+		var directories:Array<String> = [Paths.mods(), Paths.getSharedPath()];
+		var originalLength:Int = directories.length;
+
+		for (mod in Mods.parseList().enabled)
+			directories.push(Paths.mods(mod + '/'));
+		#else
+		var directories:Array<String> = [Paths.getSharedPath()];
+		var originalLength:Int = directories.length;
+		#end
+
+		var txt:String = level.fileName.toLowerCase();
+		txt = txt.substring(0, txt.indexOf('_'));
+
+		var week:WeekFile = null;
+		for (j in 0...directories.length) {
+			var fileToCheck:String = directories[j] + 'weeks/$txt.json';
+			week = getWeekFile(fileToCheck);
+		}
+		return new WeekData(week, txt);
 	}
 
 	//   FUNCTIONS YOU WILL PROBABLY NEVER NEED TO USE

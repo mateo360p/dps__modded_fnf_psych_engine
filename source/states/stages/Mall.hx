@@ -79,7 +79,7 @@ class Mall extends BaseStage
 			return;
 		}
 
-		var nextSong:String = Paths.formatToSongPath(PlayState.storyPlaylist[1]);
+		var nextSong:String = Paths.formatToSongPath(PlayState.storyPlaylist[1][0]);
 		if(nextSong == 'winter-horrorland')
 		{
 			FlxG.sound.play(Paths.sound('Lights_Shut_off'));

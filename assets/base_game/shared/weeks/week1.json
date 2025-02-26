@@ -1,51 +1,37 @@
 {
 	"storyName": "Daddy Dearest",
 	"tweenTime": 0.5,
-	"difficulties": "Easy, Normal, Hard, Night",
-	"weekBackground": "stage",
 	"hideFreeplay": false,
-	"weekBefore": "tutorial",
+	"weekBackground": "halloween",
+	"weekBefore": "week1",
 	"startUnlocked": true,
-	"songs": [
-		[
-			"Bopeebo",
-			"dad",
-			[
-				146,
-				113,
-				253
-			]
-		],
-		[
-			"Fresh",
-			"dad",
-			[
-				146,
-				113,
-				253
-			]
-		],
-		[
-			"Dad Battle",
-			"dad",
-			[
-				146,
-				113,
-				253
-			]
-		]
-	],
-	"weekCharacters": [
-		"dad",
-		"bf",
-		"gf"
-	],
 	"hideStoryMode": false,
-	"hiddenUntilUnlocked": false,
 	"weekName": "Week 1",
+	"difficulties": "Hard",
 	"weekColor": [
 		249,
 		207,
 		81
+	],
+	"hiddenUntilUnlocked": false,
+	"weekCharacters": [
+		"spooky",
+		"bf",
+		"gf"
+	],
+	"player": "bf",
+	"levels": [
+		[
+			"Bopeebo",
+			"bf"
+		],
+		[
+			"Fresh",
+			"pico"
+		],
+		[
+			"Dad Battle",
+			"bf"
+		]
 	]
 }

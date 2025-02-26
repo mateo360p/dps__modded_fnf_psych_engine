@@ -71,7 +71,7 @@ class StoryMenuState extends MusicBeatState
 			FlxTransitionableState.skipNextTransIn = true;
 			persistentUpdate = false;
 			MusicBeatState.switchState(new states.ErrorState("NO WEEKS ADDED FOR STORY MODE\n\nPress ACCEPT to go to the Week Editor Menu.\nPress BACK to return to Main Menu.",
-				function() MusicBeatState.switchState(new states.editors.WeekEditorState()),
+				function() MusicBeatState.switchState(new states.editors.ChartingState()),
 				function() MusicBeatState.switchState(new states.MainMenuState())));
 			return;
 		}
@@ -318,16 +318,15 @@ class StoryMenuState extends MusicBeatState
 		if (!weekIsLocked(loadedWeeks[curWeek].fileName))
 		{
 			// We can't use Dynamic Array .copy() because that crashes HTML5, here's a workaround.
-			var songArray:Array<String> = [];
-			var leWeek:Array<Dynamic> = loadedWeeks[curWeek].songs;
-			for (i in 0...leWeek.length) {
-				songArray.push(leWeek[i][0]);
-			}
+			//-- Yeah, i'm not using HTML so
+			/**
+			 * [ songName, player]
+			 */
+			var levelsArray:Array<Array<String>> = loadedWeeks[curWeek].levels;
 
-			// Nevermind that's stupid lmao
 			try
 			{
-				PlayState.storyPlaylist = songArray;
+				PlayState.storyPlaylist = levelsArray;
 				PlayState.isStoryMode = true;
 				selectedWeek = true;
 	
@@ -336,7 +335,14 @@ class StoryMenuState extends MusicBeatState
 	
 				PlayState.storyDifficulty = curDifficulty;
 	
-				Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + diffic, PlayState.storyPlaylist[0].toLowerCase());
+				//loads the first song
+				var firstSong:Array<String> = [PlayState.storyPlaylist[0][0].toLowerCase(), PlayState.storyPlaylist[0][1].toLowerCase()];
+				var player:String = firstSong[1] + '_';
+
+				Song.loadFromJson(player + firstSong[0] + diffic, firstSong[0]);
+				trace("firstSong: " + player + firstSong[0] + diffic);
+				//Boppebo BF: bopeebo-normal.json
+				//Bopeebo Pico: pico_bopeebo-normal.json
 				PlayState.campaignScore = 0;
 				PlayState.campaignMisses = 0;
 			}
@@ -495,10 +501,10 @@ class StoryMenuState extends MusicBeatState
 			grpWeekCharacters.members[i].changeMenuCharacter(weekArray[i], i);
 		}
 
-		var leWeek:WeekData = loadedWeeks[curWeek];
+		var leWeekLevels:Array<Array<String>> = loadedWeeks[curWeek].levels;
 		var stringThing:Array<String> = [];
-		for (i in 0...leWeek.songs.length) {
-			stringThing.push(leWeek.songs[i][0]);
+		for (i in 0...leWeekLevels.length) {
+			stringThing.push(leWeekLevels[i][0]);
 		}
 
 		txtTracklist.text = '';
