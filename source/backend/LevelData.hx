@@ -1,5 +1,7 @@
 package backend;
 
+import flixel.util.FlxSort;
+
 typedef LevelFile =
 {
 	var levelDifficulties:String;
@@ -7,14 +9,6 @@ typedef LevelFile =
 	 * SongArray
 	 */
 	var songs:Array<Dynamic>;
-}
-
-typedef SongArray =
-{
-	var songName:String;
-    var icon:String;
-    var songColors:Array<Float>;
-    var extraDifficulties:String;
 }
 
 /**
@@ -25,7 +19,10 @@ class LevelData {
 
 	public static var levelsLoaded:Map<String, LevelData> = new Map<String, LevelData>();
 	public static var levelsList:Array<String> = [];
-    public static var playersList:Array<String> = [];
+    /**
+     * [ playerName, index ]
+     */
+    public static var playersList:Array<Dynamic> = [];
 
     public var levelDifficulties:String;
 	/**
@@ -129,17 +126,23 @@ class LevelData {
         playersList = [];
         var added:Array<String> = [];
         try {
-            for (player in CoolUtil.coolTextFile(Paths.getSharedPath('players/playersList.txt')))
+            for (num => player in CoolUtil.coolTextFile(Paths.getSharedPath('players/playersList.txt')))
             {
                 if (player == "-" || player == null || player == "" || player == "\n") continue;
                 if(player.trim().length > 0 && !added.contains(player))
                 {
                     added.push(player);
-                    playersList.push(player);
+                    playersList.push([player, num]);
+                    playersList.sort(_sortByIndex);
                 }
             }
         } catch(e) {
-            trace(e);
+            trace("ERROR WHILE LOADING PLAYERS: " + e);
         }
+    }
+
+    public static function _sortByIndex(Obj1:Array<Dynamic>, Obj2:Array<Dynamic>):Int
+    {
+        return FlxSort.byValues(FlxSort.ASCENDING, Obj1[1], Obj2[1]);
     }
 }

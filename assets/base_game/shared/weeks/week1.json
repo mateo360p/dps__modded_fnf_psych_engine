@@ -2,7 +2,7 @@
 	"storyName": "Daddy Dearest",
 	"tweenTime": 0.5,
 	"hideFreeplay": false,
-	"weekBackground": "halloween",
+	"weekBackground": "stage",
 	"weekBefore": "week1",
 	"startUnlocked": true,
 	"hideStoryMode": false,
@@ -15,7 +15,7 @@
 	],
 	"hiddenUntilUnlocked": false,
 	"weekCharacters": [
-		"spooky",
+		"dad",
 		"bf",
 		"gf"
 	],
@@ -27,7 +27,7 @@
 		],
 		[
 			"Fresh",
-			"pico"
+			"bf"
 		],
 		[
 			"Dad Battle",

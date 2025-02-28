@@ -106,3 +106,16 @@ class PsychFlxAnimate extends OriginalFlxAnimate
 		anim.play();
 	}
 }
+
+class _AnimateHelper extends FlxAnimate {
+    override public function new(x:Float, y:Float, folder:String, scrollFactor:Float, ?anim:String = "") {
+        super(x, y);
+        Paths.loadAnimateAtlas(this, folder);
+        this.anim.play(anim);
+        this.anim.onComplete.add(function() {
+            this.anim.play(anim);
+        });
+        this.scrollFactor.set(scrollFactor, scrollFactor);
+		this.antialiasing = true;
+    }
+}

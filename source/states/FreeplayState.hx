@@ -18,9 +18,11 @@ import openfl.utils.Assets;
 
 import haxe.Json;
 
+using StringTools;
+
 class FreeplayState extends MusicBeatState
 {
-	public final DEF_PLAYER:String = "bf";
+	public static final DEF_PLAYER:String = "bf";
 	public static var player:String;
 	var songs:Array<SongMetadata> = [];
 
@@ -57,14 +59,24 @@ class FreeplayState extends MusicBeatState
 
 	override function create()
 	{
+		Conductor.bpm = TitleState.musicBPM; // Return to normal BPM & music
+
 		persistentUpdate = true;
 		PlayState.isStoryMode = false;
 		LevelData.loadPlayers();
 		WeekData.reloadWeekFiles(false);
 
-		if (!LevelData.playersList.contains(player) || player == null || player == '') player = DEF_PLAYER;
-		LevelData.reloadLevels(false, player);
 		player = player.toLowerCase().trim();
+
+		trace("PLAYER:" + FreeplayState.player);
+		trace("PLAYERLIST: " + LevelData.playersList);
+
+		var plArray:Array<String> = [];
+		for (i in LevelData.playersList) plArray.push(i[0]); // Verifies if the character exist in the list [0]
+
+		if (!plArray.contains(player)) player = DEF_PLAYER;
+		trace("CUR PLAYER:" + FreeplayState.player);
+		LevelData.reloadLevels(false, player); // Loads level songs from the current player
 
 		#if DISCORD_ALLOWED
 		// Updating Discord Rich Presence
@@ -222,6 +234,9 @@ class FreeplayState extends MusicBeatState
 
 		if (FlxG.sound.music.volume < 0.7)
 			FlxG.sound.music.volume += 0.5 * elapsed;
+
+		if (FlxG.sound.music != null)
+			Conductor.songPosition = FlxG.sound.music.time;
 
 		lerpScore = Math.floor(FlxMath.lerp(intendedScore, lerpScore, Math.exp(-elapsed * 24)));
 		lerpRating = FlxMath.lerp(intendedRating, lerpRating, Math.exp(-elapsed * 12));
@@ -470,7 +485,9 @@ class FreeplayState extends MusicBeatState
 			openSubState(new ResetScoreSubState(getPlayerSongName(), curDifficulty, songs[curSelected].songCharacter));
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 		}
+		else if (FlxG.keys.justPressed.TAB) MusicBeatState.switchState(new PlayerSelectionState());
 
+		FlxG.camera.zoom = FlxMath.lerp(1, FlxG.camera.zoom, Math.exp(-elapsed * 3.125)); // Reset Camera
 		updateTexts(elapsed);
 		super.update(elapsed);
 	}
@@ -485,8 +502,7 @@ class FreeplayState extends MusicBeatState
 
 	function changeDiff(change:Int = 0)
 	{
-		if (musicPlayer.playingMusic)
-			return;
+		if (musicPlayer.playingMusic) return;
 
 		curDifficulty = FlxMath.wrap(curDifficulty + change, 0, Difficulty.list.length-1);
 		#if !switch
@@ -558,8 +574,8 @@ class FreeplayState extends MusicBeatState
 		PlayState.storyWeek = songs[curSelected].week; // Fucking piece o-
 		Difficulty.loadFromWeek();
 		Difficulty.list = Difficulty.load(LevelData.levelsLoaded.get(songs[curSelected].levelName).levelDifficulties, songs[curSelected].extraDiffs); //UGHHH NOW ITS WORSE
-		trace(Difficulty.list);
-		
+		//trace(Difficulty.list);
+
 		var savedDiff:String = songs[curSelected].lastDifficulty;
 		var lastDiff:Int = Difficulty.list.indexOf(lastDifficultyName);
 		if(savedDiff != null && !Difficulty.list.contains(savedDiff) && Difficulty.list.contains(savedDiff)) //whathaheck
@@ -616,6 +632,15 @@ class FreeplayState extends MusicBeatState
 
 	public function getPlayerSongName():String {
 		return player + '_' + songs[curSelected].songName.toLowerCase();
+	}
+
+	override function beatHit()
+	{
+		super.beatHit();
+		if (ClientPrefs.data.camZooms) {
+			FlxG.camera.zoom += 0.025;
+			FlxTween.tween(FlxG.camera, {zoom: 1}, 0.4, {ease: FlxEase.quadOut});
+		}
 	}
 
 	override function destroy():Void
