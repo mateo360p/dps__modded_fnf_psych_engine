@@ -1,5 +1,7 @@
 package states;
 
+import objects.SelectionPlayer;
+import objects.SelectionCharacter;
 import objects.PlayerIcon;
 import backend.LevelData;
 import objects.PlayerIcon.Lock;
@@ -66,7 +68,11 @@ class PlayerSelectionState extends MusicBeatState {
     var cursorLocIntended:FlxPoint = new FlxPoint(0, 0);
 
     var curChar(default, set):String = FreeplayState.DEF_PLAYER;
+	var gfChill:SelectionCharacter;
+    var playerChill:SelectionPlayer;
+    var playerChillOut:SelectionPlayer;
 
+    // TO DO: god dammit, put "antialiasing = (ClientPrefs.data.antialiasing);"" to ALL of the Sprites, not to the pixelated obviousl-
     override public function create()
     {
         super.create();
@@ -112,23 +118,20 @@ class PlayerSelectionState extends MusicBeatState {
         var charLightGF:FlxSprite = new FlxSprite(180, 240);
         charLightGF.loadGraphic(Paths.image('charSelect/charLight'));
         add(charLightGF);
-/*
-        gfChill = new CharSelectGF();
-        gfChill.switchGF("bf");
+
+        playerChill = new SelectionPlayer(620, 380, "bf");
+        add(playerChill);
+
+        gfChill = new SelectionCharacter(620, 380 , playerChill.speaker);
         add(gfChill);
 
-        playerChillOut = new CharSelectPlayer(0, 0);
-        playerChillOut.switchChar("bf");
+        /*playerChillOut = new SelectionPlayer(0, 0, "bf");
         playerChillOut.visible = false;
-        add(playerChillOut);
-
-        playerChill = new CharSelectPlayer(0, 0);
-        playerChill.switchChar("bf");
-        add(playerChill);*/
+        add(playerChillOut);*/
 
         speakers = new FlxAnimate(0, 0);
         Paths.loadAnimateAtlas(speakers, "charSelect/charSelectSpeakers");
-        speakers.antialiasing = true;
+        speakers.antialiasing = (ClientPrefs.data.antialiasing);
         add(speakers);
 
         var fgBlur:FlxSprite = new FlxSprite(-125, 170);
@@ -290,6 +293,8 @@ class PlayerSelectionState extends MusicBeatState {
         if (FlxG.keys.justPressed.ENTER) {
             trace(FreeplayState.player);
             MusicBeatState.switchState(new FreeplayState());
+            playerChill.playAnim("ready");
+            gfChill.playAnim("ready");
         }
 
         if (FlxG.keys.justPressed.R && !FlxG.keys.pressed.CONTROL) FlxG.camera.zoom = 1;
@@ -413,8 +418,11 @@ class PlayerSelectionState extends MusicBeatState {
 	override function beatHit()
     {
         super.beatHit();
+        //THESE ARE TEST!
+        playerChill.playAnim("idle", true);
+        gfChill.playAnim("idle", true);
         //trace("beat!");
-        speakers.anim.play(""); // Speakers Beat
+        speakers.anim.play("", true); // Speakers Beat
     }
 
     override function destroy():Void
@@ -463,7 +471,6 @@ class PlayerSelectionState extends MusicBeatState {
         for (player in gridPlayersList) {
             var char = player[0];
             var temp:PlayerIcon = new PlayerIcon(0, 0, (char == "locked") ? FreeplayState.DEF_PLAYER : char, player[1], (char == "locked"));
-            //temp.setGraphicSize(128, 128);
             temp.ID = 0;
             temp._lock.ID = 0;
             grpIcons.add(temp);

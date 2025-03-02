@@ -116,6 +116,6 @@ class _AnimateHelper extends FlxAnimate {
             this.anim.play(anim);
         });
         this.scrollFactor.set(scrollFactor, scrollFactor);
-		this.antialiasing = true;
+		this.antialiasing = (ClientPrefs.data.antialiasing);
     }
 }

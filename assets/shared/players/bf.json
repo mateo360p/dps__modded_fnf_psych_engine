@@ -1,0 +1,39 @@
+{
+	"animReady": {
+		"offsets": [-20, 20],
+		"indices": [],
+		"fps": 24,
+		"name": "bf cs confirm",
+		"loop": false
+	},
+	"animBruh": {
+		"offsets": [-20, 20],
+		"indices": [],
+		"fps": 24,
+		"name": "bf cs deselect",
+		"loop": false
+	},
+	"animIdle": {
+		"offsets": [-20, 20],
+		"indices": [],
+		"fps": 24,
+		"name": "bf cs idle",
+		"loop": false
+	},
+	"animSlide": {
+		"offsets": [-20, 20],
+		"indices": [],
+		"fps": 24,
+		"name": "bf slide in",
+		"loop": false
+	},
+	"name": "bf",
+	"twoBeatIdle": false,
+	"no_antialiasing": false,
+	"image": "bf/bfChill",
+	"position": [0, 0],
+	"scale": 1,
+	"flip_x": false,
+	"speaker": "gf",
+	"icon_position": [20, 20]
+}

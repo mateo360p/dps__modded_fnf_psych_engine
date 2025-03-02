@@ -20,17 +20,24 @@ class PlayerNameTag extends FlxSprite
 
         if(player == "" || player == null) player = FreeplayState.DEF_PLAYER;
         switchChar(player);
+        this.antialiasing = (ClientPrefs.data.antialiasing);
     }
 
     public function switchChar(str:String):Void
     {
+        if (str == null || str == "") return;
         shaderEffect();
 
         new FlxTimer().start(4 / 30, _ -> {
             var player:String = str.toLowerCase();
 
             // bf --> 'charSelect/playerAssets/bf/bfNameTag.png"
-            loadGraphic(Paths.image('charSelect/playerAssets/$player/' + player + "NameTag"));
+            try { // Just in case
+                loadGraphic(Paths.image('charSelect/playerAssets/$player/' + player + "NameTag"));
+            } catch(e:haxe.Exception) {
+                trace("ERROR WHILE LOADING PLAYER NAMETAG: " + e);
+            }
+
             updateHitbox();
             scale.x = scale.y = 0.77;
 
@@ -52,17 +59,16 @@ class PlayerNameTag extends FlxSprite
     {
         if (fadeOut)
         {
-        setBlockTimer(0, 1, 1);
-        setBlockTimer(1, width / 27, height / 26);
-        setBlockTimer(2, width / 10, height / 10);
-
-        setBlockTimer(3, 1, 1);
+            setBlockTimer(0, 1, 1);
+            setBlockTimer(1, width / 27, height / 26);
+            setBlockTimer(2, width / 10, height / 10);
+            setBlockTimer(3, 1, 1);
         }
         else
         {
-        setBlockTimer(0, (width / 10), (height / 10));
-        setBlockTimer(1, width / 73, height / 6);
-        setBlockTimer(2, width / 10, height / 10);
+            setBlockTimer(0, (width / 10), (height / 10));
+            setBlockTimer(1, width / 73, height / 6);
+            setBlockTimer(2, width / 10, height / 10);
         }
     }
 
@@ -72,7 +78,6 @@ class PlayerNameTag extends FlxSprite
         var daY:Float = 10 * FlxG.random.int(1, 4);
 
         if (forceX != null) daX = forceX;
-
         if (forceY != null) daY = forceY;
 
         new FlxTimer().start(frame / 30, _ -> {

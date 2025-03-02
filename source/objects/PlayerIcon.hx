@@ -31,7 +31,6 @@ class PlayerIcon extends FlxSprite {
         this.index = index;
         this.active = false;
 
-        this.makeGraphic(64, 64, 0x00000000);
         setPlayer(player, locked);
 
         antialiasing = false;
@@ -61,12 +60,10 @@ class PlayerIcon extends FlxSprite {
         }
         this.scale.x = this.scale.y = 2;
         updateHitbox();
-        //this.origin.x = 100;
     }
 
     function createLock() {
         _lock = new Lock(this.x, this.y, this.index);
-        MusicBeatState.getState().add(_lock); // Huh, this is akward
     }
 
     function set_locked(value:Bool):Bool {
