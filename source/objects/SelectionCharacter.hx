@@ -45,29 +45,6 @@ class SelectionCharacter extends FlxSprite
 
 		animOffsets = new Map<String, Array<Dynamic>>();
 		changeCharacter(char, isSpeaker);
-        //Paths.getSharedPath("images/charSelect/lock"
-
-        /*onAnimationComplete.add(function(animLabel:String) {
-        switch (animLabel)
-        {
-            case "slidein":
-            if (hasAnimation("slidein idle point"))
-            {
-                playAnimation("slidein idle point", true, false, false);
-            }
-            else
-            {
-                playAnimation("idle", true, false, false);
-            }
-            case "deselect":
-            playAnimation("deselect loop start", true, false, true);
-
-            case "slidein idle point", "cannot select Label", "unlock":
-            playAnimation("idle", true, false, false);
-            case "idle":
-            trace('Waiting for onBeatHit');
-        }
-        });*/
     }
 
     override public function setPosition(x = 0.0, y = 0.0) {
@@ -184,7 +161,7 @@ class SelectionCharacter extends FlxSprite
             playerAnimArr.push(json.animIdle);
             animList.push("idle");
         }
-        trace(name + ":" + animList);
+        //trace(name + ":" + animList);
     }
 
     public function loadAnimations(animArray:Array<PlayerAnimArray>) {
@@ -263,6 +240,12 @@ class SelectionCharacter extends FlxSprite
         }
     }
 
+    var _lastPlayedAnimation:String;
+	inline public function getAnimationName():String
+	{
+		return _lastPlayedAnimation;
+	}
+
     public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void
     {
         if(!isAnimateAtlas)
@@ -274,6 +257,7 @@ class SelectionCharacter extends FlxSprite
             atlas.anim.play(AnimName, Force, Reversed, Frame);
             atlas.update(0);
         }
+        _lastPlayedAnimation = AnimName;
 
         if (hasAnimation(AnimName))
         {

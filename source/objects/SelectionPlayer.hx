@@ -3,6 +3,8 @@ package objects;
 class SelectionPlayer extends SelectionCharacter {
     public var speaker:String = "gf";
     public var iconPositionArray:Array<Float> = [0, 0];
+    public var iconOffsets:Array<Float> = [0, 0];
+
     public function new(x:Float, y:Float, player:String) {
         super(x, y, player, false);
     }

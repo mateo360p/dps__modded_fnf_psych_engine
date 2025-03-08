@@ -1,5 +1,6 @@
 package states;
 
+import states.editors.PlayerEditorState;
 import objects.SelectionPlayer;
 import objects.SelectionCharacter;
 import objects.PlayerIcon;
@@ -58,7 +59,7 @@ class PlayerSelectionState extends MusicBeatState {
     var audioBizz:Float = 0;
     var pressedSelect:Bool = false;
     var selectTimer:FlxTimer = new FlxTimer();
-    var allowInput:Bool = false;
+    var allowInput:Bool = true; // For now :D
 
     var cursorX:Int = 0;
     var cursorY:Int = 0;
@@ -67,12 +68,14 @@ class PlayerSelectionState extends MusicBeatState {
     var cursorOffsetY:Float = -48;
     var cursorLocIntended:FlxPoint = new FlxPoint(0, 0);
 
-    var curChar(default, set):String = FreeplayState.DEF_PLAYER;
+    var curChar(default, set):String;
 	var gfChill:SelectionCharacter;
     var playerChill:SelectionPlayer;
     var playerChillOut:SelectionPlayer;
 
-    // TO DO: god dammit, put "antialiasing = (ClientPrefs.data.antialiasing);"" to ALL of the Sprites, not to the pixelated obviousl-
+    var notBeat:Bool = false;
+
+    // Done ;D
     override public function create()
     {
         super.create();
@@ -83,12 +86,12 @@ class PlayerSelectionState extends MusicBeatState {
         try {
             var newBPM:String = CoolUtil.coolTextFile(Paths.getSharedPath('music/stayFunky_bpm.txt'))[0]; // l o l
             if (newBPM != null && newBPM.length > 0) Conductor.bpm = Std.parseFloat(newBPM);
-            //trace(newBPM);
         } catch(e:haxe.Exception) trace("ERROR WHILE LOADING BPM: " + e);
 
         var bg:FlxSprite = new FlxSprite(-153, -140);
         bg.loadGraphic(Paths.image('charSelect/charSelectBG'));
         bg.scrollFactor.set(0.1, 0.1);
+        bg.antialiasing = (ClientPrefs.data.antialiasing);
         add(bg);
 
         var crowd:_AnimateHelper = new _AnimateHelper(0, 0, "charSelect/crowd", 0.3);
@@ -98,11 +101,13 @@ class PlayerSelectionState extends MusicBeatState {
         stageSpr.frames = Paths.getSparrowAtlas("charSelect/charSelectStage");
         stageSpr.animation.addByPrefix("idle", "stage full instance 1", 24, true);
         stageSpr.animation.play("idle");
+        stageSpr.antialiasing = (ClientPrefs.data.antialiasing);
         add(stageSpr);
 
         var curtains:FlxSprite = new FlxSprite(-47, -49);
         curtains.loadGraphic(Paths.image('charSelect/curtains'));
         curtains.scrollFactor.set(1.4, 1.4);
+        curtains.antialiasing = (ClientPrefs.data.antialiasing);
         add(curtains);
 
         barthing = new _AnimateHelper(0, 0, "charSelect/barThing", 0);
@@ -113,10 +118,12 @@ class PlayerSelectionState extends MusicBeatState {
 
         var charLight:FlxSprite = new FlxSprite(800, 250);
         charLight.loadGraphic(Paths.image('charSelect/charLight'));
+        charLight.antialiasing = (ClientPrefs.data.antialiasing);
         add(charLight);
 
         var charLightGF:FlxSprite = new FlxSprite(180, 240);
         charLightGF.loadGraphic(Paths.image('charSelect/charLight'));
+        charLightGF.antialiasing = (ClientPrefs.data.antialiasing);
         add(charLightGF);
 
         playerChill = new SelectionPlayer(620, 380, "bf");
@@ -137,6 +144,7 @@ class PlayerSelectionState extends MusicBeatState {
         var fgBlur:FlxSprite = new FlxSprite(-125, 170);
         fgBlur.loadGraphic(Paths.image('charSelect/foregroundBlur'));
         fgBlur.blend = openfl.display.BlendMode.MULTIPLY;
+        fgBlur.antialiasing = (ClientPrefs.data.antialiasing);
         add(fgBlur);
 
         dipshitBlur = new FlxSprite(419, -65);
@@ -144,6 +152,7 @@ class PlayerSelectionState extends MusicBeatState {
         dipshitBlur.animation.addByPrefix('idle', "CHOOSE vertical offset instance 1", 24, true);
         dipshitBlur.blend = BlendMode.ADD;
         dipshitBlur.animation.play("idle");
+        dipshitBlur.antialiasing = (ClientPrefs.data.antialiasing);
         add(dipshitBlur);
 
         dipshitBacking = new FlxSprite(423, -17);
@@ -151,32 +160,34 @@ class PlayerSelectionState extends MusicBeatState {
         dipshitBacking.animation.addByPrefix('idle', "CHOOSE horizontal offset instance 1", 24, true);
         dipshitBacking.blend = BlendMode.ADD;
         dipshitBacking.animation.play("idle");
+        dipshitBacking.antialiasing = (ClientPrefs.data.antialiasing);
         add(dipshitBacking);
         dipshitBacking.y += 210;
         FlxTween.tween(dipshitBacking, {y: dipshitBacking.y - 210}, 1.1, {ease: FlxEase.expoOut});
 
         chooseDipshit = new FlxSprite(426, -13);
         chooseDipshit.loadGraphic(Paths.image('charSelect/chooseDipshit'));
+        chooseDipshit.antialiasing = (ClientPrefs.data.antialiasing);
         add(chooseDipshit);
 
         chooseDipshit.y += 200;
         FlxTween.tween(chooseDipshit, {y: chooseDipshit.y - 200}, 1, {ease: FlxEase.expoOut});
-    
+
         dipshitBlur.y += 220;
         FlxTween.tween(dipshitBlur, {y: dipshitBlur.y - 220}, 1.2, {ease: FlxEase.expoOut});
-    
+
         chooseDipshit.scrollFactor.set();
         dipshitBacking.scrollFactor.set();
         dipshitBlur.scrollFactor.set();
 
-        nametag = new PlayerNameTag(FreeplayState.player);
+        nametag = new PlayerNameTag(FreeplayState.DEF_PLAYER);
         add(nametag);
         nametag.scrollFactor.set();
-        curChar = FreeplayState.player;
+        curChar = FreeplayState.DEF_PLAYER;
 
         grpCursors = new FlxTypedGroup<FlxSprite>();
         add(grpCursors);
-    
+
         cursor = new FlxSprite(0, 0);
         cursor.loadGraphic(Paths.image('charSelect/charSelector'));
         cursor.color = 0xFFFFFF00;
@@ -210,49 +221,50 @@ class PlayerSelectionState extends MusicBeatState {
         grpCursors.add(cursorBlue);
         grpCursors.add(cursor);
 
+        grpCursors.forEach(function(c) c.antialiasing = (ClientPrefs.data.antialiasing));
+
         // Sound shits
         selectSound = new FlxSound();
         selectSound.loadEmbedded(Paths.sound('playerSelect/CS_select'));
         selectSound.pitch = 1;
         selectSound.volume = 0.7;
-    
+
         FlxG.sound.defaultSoundGroup.add(selectSound);
         FlxG.sound.list.add(selectSound);
-    
+
         unlockSound = new FlxSound();
         unlockSound.loadEmbedded(Paths.sound('playerSelect/CS_unlock'));
         unlockSound.pitch = 1;
         unlockSound.volume = 0;
         unlockSound.play(true);
-    
+
         FlxG.sound.defaultSoundGroup.add(unlockSound);
         FlxG.sound.list.add(unlockSound);
-    
+
         lockedSound = new FlxSound();
         lockedSound.loadEmbedded(Paths.sound('playerSelect/CS_locked'));
         lockedSound.pitch = 1;
-    
+
         lockedSound.volume = 1.;
-    
+
         FlxG.sound.defaultSoundGroup.add(lockedSound);
         FlxG.sound.list.add(lockedSound);
-    
+
         staticSound = new FlxSound();
         staticSound.loadEmbedded(Paths.sound('playerSelect/static loop'));
         staticSound.pitch = 1;
-    
+
         staticSound.looped = true;
-    
+
         staticSound.volume = 0.6;
-    
+
         FlxG.sound.defaultSoundGroup.add(staticSound);
         FlxG.sound.list.add(staticSound);
 
         // playing it here to preload it. not doing this makes a super awkward pause at the end of the intro
         // -- Uhhh dude there are another ways, but heh
         FlxG.sound.playMusic(Paths.music('stayFunky'), 1);
-        initLocks();
-        newLocks();
+        initIcons();
 
         try {
             for (member in grpIcons.members) {
@@ -272,7 +284,7 @@ class PlayerSelectionState extends MusicBeatState {
         add(camFollow);
         camFollow.screenCenter();
 
-        FlxG.camera.follow(camFollow, LOCKON);
+        FlxG.camera.follow(camFollow, LOCKON, 0.01);
 
         /*var fadeShaderFilter:ShaderFilter = new ShaderFilter(fadeShader);
         FlxG.camera.filters = [fadeShaderFilter];*/
@@ -280,35 +292,14 @@ class PlayerSelectionState extends MusicBeatState {
 
     override public function update(elapsed:Float)
     {
-
         var lerpAmnt:Float = 0.95;
 
         // Without this shit the BeatHit doesn't work! (it was obvious, but, i'm dumb)
         if (FlxG.sound.music != null) Conductor.songPosition = FlxG.sound.music.time;
-
-        // TEST LINESSSS
-        if(FlxG.keys.justPressed.P) curChar = "pico";
-        if(FlxG.keys.justPressed.B) curChar = "bf";
-
-        if (FlxG.keys.justPressed.ENTER) {
-            trace(FreeplayState.player);
-            MusicBeatState.switchState(new FreeplayState());
-            playerChill.playAnim("ready");
-            gfChill.playAnim("ready");
-        }
-
-        if (FlxG.keys.justPressed.R && !FlxG.keys.pressed.CONTROL) FlxG.camera.zoom = 1;
-        else if (FlxG.keys.pressed.E) FlxG.camera.zoom += elapsed * FlxG.camera.zoom * 1.2;
-        else if (FlxG.keys.pressed.Q) FlxG.camera.zoom -= elapsed * FlxG.camera.zoom * 1.2;
-
-        if (FlxG.keys.pressed.A) FlxG.camera.scroll.x -= elapsed * 600;
-        if (FlxG.keys.pressed.D) FlxG.camera.scroll.x += elapsed * 600;	
-
-        if (FlxG.keys.pressed.S) FlxG.camera.scroll.y += elapsed * 600;
-        if (FlxG.keys.pressed.W) FlxG.camera.scroll.y -= elapsed * 600;
-        // END
-
         super.update(elapsed);
+
+        // TEST FUNCTION!
+        if (FlxG.keys.justPressed.SEVEN) MusicBeatState.switchState(new PlayerEditorState());
 
         if (controls.UI_UP_R || controls.UI_DOWN_R || controls.UI_LEFT_R || controls.UI_RIGHT_R) selectSound.pitch = 1;
 
@@ -389,6 +380,64 @@ class PlayerSelectionState extends MusicBeatState {
         if (cursorY < -1) cursorY = 1;
         if (cursorY > 1) cursorY = -1;
 
+        curChar = gridPlayersList[getCurrentSelected()][0];
+
+        grpIcons.forEach(function(i)
+            i.focused = (i.index == getCurrentSelected())
+        );
+
+        if (allowInput && !pressedSelect && controls.ACCEPT)
+        {
+            spamUp = false;
+            spamDown = false;
+            spamLeft = false;
+            spamRight = false;
+
+            acceptEvent();
+        }
+
+        if (allowInput && pressedSelect && controls.BACK)
+        {
+            cursorConfirmed.visible = false;
+            grpCursors.visible = true;
+            grpIcons.members[getCurrentSelected()].playAnimation(false);
+
+            FlxTween.globalManager.cancelTweensOf(FlxG.sound.music);
+            FlxTween.tween(FlxG.sound.music, {pitch: 1.0, volume: 1.0}, 1, {ease: FlxEase.quartInOut});
+            playerChill.playAnim("bruh");
+            gfChill.playAnim("bruh");
+            pressedSelect = false;
+            FlxTween.tween(FlxG.sound.music, {pitch: 1.0}, 1,
+            {
+                ease: FlxEase.quartInOut,
+                onComplete: function(twn:FlxTween) {
+                    playerChill.playAnim("idle", true);
+                    gfChill.playAnim("idle", true);
+                    notBeat = false;
+                }
+            });
+            selectTimer.cancel();
+        }/*
+        else
+        {
+            curChar = "locked";
+
+            gfChill.visible = false;
+
+            if (allowInput && controls.ACCEPT)
+            {
+                cursorDenied.visible = true;
+
+                playerChill.playAnim("cannot select Label", true);
+
+                lockedSound.play(true);
+                cursorDenied.animation.play("idle", true);
+                cursorDenied.animation.finishCallback = (_) -> {
+                cursorDenied.visible = false;
+                };
+            }
+        }*/
+
         camFollow.screenCenter();
         camFollow.x += cursorX * 10;
         camFollow.y += cursorY * 10;
@@ -415,13 +464,49 @@ class PlayerSelectionState extends MusicBeatState {
         cursorDenied.y = cursor.y - 4;
     }
 
+    function acceptEvent() {
+        if (curChar == "locked") {
+            //playerChill.playAnimation("cannot select Label", true);
+            cursorDenied.visible = true;
+            cursorDenied.animation.play("idle", true);
+
+            grpIcons.members[getCurrentSelected()]._lock.playAnimation("clicked", true);
+            lockedSound.play(true);
+
+            cursorDenied.animation.finishCallback = (_) -> {
+                cursorDenied.visible = false;
+            };
+            return;
+        }
+        notBeat = true;
+        cursorConfirmed.visible = true;
+        cursorConfirmed.animation.play("idle", true);
+
+        grpCursors.visible = false;
+
+        FlxG.sound.play(Paths.sound('playerSelect/CS_confirm'));
+        grpIcons.members[getCurrentSelected()].playAnimation(true);
+
+        FlxTween.tween(FlxG.sound.music, {pitch: 0.1}, 1, {ease: FlxEase.quadInOut});
+        FlxTween.tween(FlxG.sound.music, {volume: 0.0}, 1.5, {ease: FlxEase.quadInOut});
+        playerChill.playAnim("ready", true);
+        gfChill.playAnim("ready", true);
+        pressedSelect = true;
+        FreeplayState.player = curChar;
+        selectTimer.start(1.5, (_) -> {
+            // For now, no animations or something like that
+            MusicBeatState.switchState(new FreeplayState());
+        });
+    }
+
 	override function beatHit()
     {
         super.beatHit();
-        //THESE ARE TEST!
-        playerChill.playAnim("idle", true);
-        gfChill.playAnim("idle", true);
-        //trace("beat!");
+
+    if (!notBeat) {
+        playerChill.dance();
+        gfChill.dance();
+    }
         speakers.anim.play("", true); // Speakers Beat
     }
 
@@ -440,8 +525,9 @@ class PlayerSelectionState extends MusicBeatState {
     }
 
     var iconArr:Array<PlayerIcon> = [];
+    var gridPlayersList:Array<Dynamic> = [];
     var grpLocks:FlxTypedSpriteGroup<Lock>;
-    function newLocks() 
+    function initIcons() 
     { // For now generates only 9, but soon it'll be more :3, maybe-
         grpIcons = new FlxTypedSpriteGroup<PlayerIcon>();
         add(grpIcons);
@@ -449,7 +535,6 @@ class PlayerSelectionState extends MusicBeatState {
         grpLocks = new FlxTypedSpriteGroup<Lock>();
         add(grpLocks);
 
-        var gridPlayersList:Array<Dynamic> = [];
         var indexes:Array<Int> = [];
 
 		for (a in LevelData.playersList) indexes.push(a[1]); // Pushes all the indexes
@@ -476,50 +561,11 @@ class PlayerSelectionState extends MusicBeatState {
             grpIcons.add(temp);
             grpLocks.add(temp._lock);
         }
+
         updateIconPositions();
         grpIcons.scrollFactor.set();
         grpLocks.scrollFactor.set();
         trace(gridPlayersList);
-    }
-
-    function initLocks():Void
-    {
-        /*
-        grpIcons = new FlxSpriteGroup();
-        add(grpIcons);
-    
-        FlxG.debugger.addTrackerProfile(new TrackerProfile(FlxSpriteGroup, ["x", "y"]));
-        // FlxG.debugger.track(grpIcons, "iconGrp");
-    
-        for (i in 0...9)
-        {
-            if (availableChars.exists(i) && Save.instance.charactersSeen.contains(availableChars[i]))
-            {
-            var path:String = availableChars.get(i);
-            var temp:PixelatedIcon = new PixelatedIcon(0, 0);
-            temp.setCharacter(path);
-            temp.setGraphicSize(128, 128);
-            temp.updateHitbox();
-            temp.ID = 0;
-            grpIcons.add(temp);
-            }
-            else
-            {
-            if (availableChars.exists(i)) nonLocks.push(i);
-    
-            var temp:Lock = new Lock(0, 0, i);
-            temp.ID = 1;
-    
-            // temp.onAnimationComplete.add(function(anim) {
-            //   if (anim == "unlock") playerChill.playAnimation("unlock", true);
-            // });
-    
-            grpIcons.add(temp);
-            }
-        }
-        updateIconPositions();
-        grpIcons.scrollFactor.set();
-        */
     }
 
     function updateIconPositions()
@@ -579,7 +625,6 @@ class PlayerSelectionState extends MusicBeatState {
             else staticSound.stop();
         }
 
-        FreeplayState.player = value;
         nametag.switchChar(value);
         /*
         gfChill.visible = false;

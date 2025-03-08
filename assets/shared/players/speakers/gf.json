@@ -4,7 +4,7 @@
 		"indices": [],
 		"fps": 24,
 		"name": "Partner GF confirm",
-		"loop": false
+		"loop": true
 	},
 	"animBruh": {
 		"offsets": [-20, 20],

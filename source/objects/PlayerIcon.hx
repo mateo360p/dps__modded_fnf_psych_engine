@@ -1,8 +1,10 @@
 package objects;
 
+import openfl.filters.DropShadowFilter;
+import openfl.filters.BitmapFilter;
+import backend.FlxFilteredSprite;
 import flxanimate.effects.FlxTint;
 import openfl.filters.ConvolutionFilter;
-import flxanimate.data.AnimationData.DropShadowFilter;
 import openfl.display.BitmapData;
 import shaders.StrokeShader;
 import flixel.FlxSprite;
@@ -12,35 +14,36 @@ import flixel.FlxSprite;
  * This one is used in the Player Selection State :D
  * Note: These are pixelated
  */
-class PlayerIcon extends FlxSprite {
+class PlayerIcon extends FlxFilteredSprite {
     public var locked(default, set):Bool = false;
 
-    public var dropShadowFilter:DropShadowFilter;
-    public var noDropShadow:BitmapData;
-    public var withDropShadow:BitmapData;
-
+    public var isAnimated:Bool;
     public var index:Int;
 
-    var strokeShader:StrokeShader;
-    var convolutionFilter:ConvolutionFilter;
-
     public var _lock:Lock;
+
+    var focusedFilters:Array<BitmapFilter> = [
+        new DropShadowFilter(0, 0, 0xFFFFFF, 1, 2, 2, 19, 1, false, false, false),
+        new DropShadowFilter(5, 45, 0x000000, 1, 2, 2, 1, 1, false, false, false)
+    ];
+
+    public var focused(default, set):Bool = false;
 
     public function new(x:Float, y:Float, player:String, index:Int, locked:Bool = false) {
         super(x, y);
         this.index = index;
         this.active = false;
 
-        setPlayer(player, locked);
+        createLock();
+        this.locked = locked;
+
+        setPlayer(player);
 
         antialiasing = false;
-        strokeShader = new StrokeShader();
     }
 
-    public function setPlayer(char:String, isLocked:Bool) {
-        createLock();
-        this.locked = isLocked;
-        var isAnimated = openfl.utils.Assets.exists(Paths.getSharedPath('images/charSelect/playerAssets/' + char + '/icon.xml'));
+    public function setPlayer(char:String) {
+        isAnimated = openfl.utils.Assets.exists(Paths.getSharedPath('images/charSelect/playerAssets/' + char + '/icon.xml'));
 
         if (!isAnimated) {
             loadGraphic(Paths.image('charSelect/playerAssets/' + char + '/icon'));
@@ -50,16 +53,30 @@ class PlayerIcon extends FlxSprite {
             this.animation.addByPrefix('idle', 'idle0', 10, true);
             this.animation.addByPrefix('confirm', 'confirm0', 10, false);
             this.animation.addByPrefix('confirm-hold', 'confirm-hold0', 10, true);
+            this.animation.addByPrefix('revert', 'confirm0', 10, false);
 
             this.animation.finishCallback = function(name:String):Void {
                 trace('Finish pixel animation: ${name}');
                 if (name == 'confirm') this.animation.play('confirm-hold');
+                if (name == 'revert') this.animation.play('idle');
             };
 
             this.animation.play('idle');
         }
-        this.scale.x = this.scale.y = 2;
+        this.scale.set(2, 2);
         updateHitbox();
+    }
+
+    public function playAnimation(confirm:Bool) {
+        if (isAnimated) {
+            // WAIT WE CAN DO THIS?
+            switch (confirm) {
+                case true:
+                    this.animation.play("confirm");
+                case false:
+                    this.animation.play("revert", true, true);
+            }
+        }
     }
 
     function createLock() {
@@ -67,9 +84,25 @@ class PlayerIcon extends FlxSprite {
     }
 
     function set_locked(value:Bool):Bool {
-        /*this.visible = !value;
-        this._lock.visible = value;*/
+        this.visible = !value;
+        this._lock.visible = value;
         return locked = value;
+    }
+
+    function set_focused(value:Bool):Bool {
+        if (focused == value) return value;
+
+        if (value) {
+            this.filters = focusedFilters;
+            this._lock.playAnimation("selected");
+            FlxTween.tween(this.scale, {x: 2.6, y: 2.6}, 0.1, {ease: FlxEase.elasticOut});
+            //this.scale.set(2.6, 2.6);
+        } else {
+            this.filters = null;
+            this._lock.playAnimation("idle");
+            this.scale.set(2, 2);
+        }
+        return (focused = value);
     }
 }
 
