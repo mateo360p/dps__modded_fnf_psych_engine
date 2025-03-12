@@ -16,6 +16,7 @@ import flixel.FlxSprite;
  */
 class PlayerIcon extends FlxFilteredSprite {
     public var locked(default, set):Bool = false;
+    public var scaleTween:FlxTween;
 
     public var isAnimated:Bool;
     public var index:Int;
@@ -27,7 +28,7 @@ class PlayerIcon extends FlxFilteredSprite {
         new DropShadowFilter(5, 45, 0x000000, 1, 2, 2, 1, 1, false, false, false)
     ];
 
-    public var focused(default, set):Bool = false;
+    public var focused(default, set):Bool = false; // MmmMmMmm maybe make this static?
 
     public function new(x:Float, y:Float, player:String, index:Int, locked:Bool = false) {
         super(x, y);
@@ -95,11 +96,11 @@ class PlayerIcon extends FlxFilteredSprite {
         if (value) {
             this.filters = focusedFilters;
             this._lock.playAnimation("selected");
-            FlxTween.tween(this.scale, {x: 2.6, y: 2.6}, 0.1, {ease: FlxEase.elasticOut});
-            //this.scale.set(2.6, 2.6);
+            scaleTween = FlxTween.tween(this.scale, {x: 2.6, y: 2.6}, 0.1, {ease: FlxEase.elasticOut, onComplete: function(_) _ == null});
         } else {
             this.filters = null;
             this._lock.playAnimation("idle");
+            if (scaleTween != null) scaleTween.cancel();
             this.scale.set(2, 2);
         }
         return (focused = value);

@@ -20,11 +20,11 @@
 		"name": "Partner GF idle",
 		"loop": false
 	},
-	"name": "gf",
 	"twoBeatIdle": false,
 	"no_antialiasing": false,
 	"image": "bf/gfChill",
 	"position": [0, 0],
 	"scale": 1,
-	"flip_x": false
+	"flip_x": false,
+	"editor_player": false
 }

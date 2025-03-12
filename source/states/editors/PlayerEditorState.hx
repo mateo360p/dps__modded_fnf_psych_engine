@@ -1,5 +1,13 @@
 package states.editors;
 
+import states.editors.content.PsychJsonPrinter;
+import haxe.Json;
+import flixel.util.FlxDestroyUtil;
+
+import openfl.net.FileReference;
+import openfl.events.Event;
+import openfl.events.IOErrorEvent;
+import openfl.utils.Assets;
 import objects.SelectionPlayer;
 import objects.SelectionCharacter;
 import objects.PlayerIcon;
@@ -12,7 +20,9 @@ import openfl.display.BlendMode;
 
 class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.PsychUIEvent {
 
-    var CHARACTER(default, set):String = "bf";
+    var charName(default, set):String = "bf";
+
+    var unsavedProgress:Bool = false;
     var INDEX(default, set):Int = 4;
     var speakers:FlxAnimate;
 
@@ -64,10 +74,25 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
 
     var notBeat:Bool = false;
 	var grpIcons:FlxTypedSpriteGroup<PlayerIcon>;
+	var UI_box:PsychUIBox;
+	var camHUD:FlxCamera;
+	var imageInputText:PsychUIInputText;
+	var scaleStepper:PsychUINumericStepper;
+	var noAntialiasingCheckBox:PsychUICheckBox;
+	var flipXCheckBox:PsychUICheckBox;
+    var positionXStepper:PsychUINumericStepper;
+	var positionYStepper:PsychUINumericStepper;
+	var positionIconXStepper:PsychUINumericStepper;
+	var positionIconYStepper:PsychUINumericStepper;
+	var playerInputText:PsychUIInputText;
 
     override public function create()
     {
         super.create();
+
+        camHUD = new FlxCamera();
+		camHUD.bgColor.alpha = 0;
+		FlxG.cameras.add(camHUD, false);
 
         LevelData.loadPlayers();
 
@@ -115,12 +140,13 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
         charLightGF.loadGraphic(Paths.image('charSelect/charLight'));
         charLightGF.antialiasing = (ClientPrefs.data.antialiasing);
         add(charLightGF);
-/*
-        playerChill = new SelectionPlayer(620, 380, "bf");
-        add(playerChill);
+
+        addCharacter();
+        /*playerChill = new SelectionPlayer(620, 380, "bf");
+        add(playerChill);*/
 
         gfChill = new SelectionCharacter(620, 380 , playerChill.speaker);
-        add(gfChill);*/
+        add(gfChill);
 
         speakers = new FlxAnimate(0, 0);
         Paths.loadAnimateAtlas(speakers, "charSelect/charSelectSpeakers");
@@ -173,6 +199,7 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
 
         FlxG.sound.playMusic(Paths.music('stayFunky'), 0);
         initIcons();
+        updateIconOffsets();
 
         try {
             grpIcons.y += 300;
@@ -186,8 +213,113 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
 
         FlxG.camera.follow(camFollow, LOCKON, 0.01);
 
+        FlxG.mouse.visible = true;
+        makeUIMenu();
+
         /*var fadeShaderFilter:ShaderFilter = new ShaderFilter(fadeShader);
         FlxG.camera.filters = [fadeShaderFilter];*/
+    }
+
+    function addCharacter(?reload:Bool = false)
+    {
+        var pos:Int = -1;
+        if(playerChill != null)
+        {
+            pos = members.indexOf(playerChill);
+            remove(playerChill);
+            playerChill.destroy();
+        }
+
+        playerChill = new SelectionPlayer(620, 380, charName);
+        playerChill.debugMode = true;
+        //playerChill.missingCharacter = false;
+
+        if(pos > -1) insert(pos, playerChill);
+        else add(playerChill);
+        updateCharacterPositions();
+        if (reload) updateIconOffsets();
+        //reloadAnimList();
+    }
+
+    function makeUIMenu()
+    {
+        UI_box = new PsychUIBox(FlxG.width - 375, 155, 350, 280, ['Animations', 'Character']);
+        UI_box.scrollFactor.set();
+        UI_box.cameras = [camHUD];
+        add(UI_box);
+/*
+        addGhostUI();
+        addSettingsUI();
+        addAnimationsUI();*/
+        addCharacterUI();
+
+        //UI_box.selectedName = 'Settings';
+        UI_box.selectedName = 'Character';
+    }
+
+    function addCharacterUI()
+    {
+        var tab_group = UI_box.getTab('Character').menu;
+
+        imageInputText = new PsychUIInputText(15, 30, 200, playerChill.image, 8);
+        var reloadImage:PsychUIButton = new PsychUIButton(imageInputText.x + 210, imageInputText.y - 3, "Reload Image", function()
+        {
+            var lastAnim = playerChill.getAnimationName();
+            playerChill.image = imageInputText.text;
+            //reloadCharacterImage();
+            if(!playerChill.isAnimationNull()) {
+                playerChill.playAnim(lastAnim, true);
+            }
+        });
+
+        flipXCheckBox = new PsychUICheckBox(15, reloadImage.y + 40, "Flip X", 50);
+        flipXCheckBox.checked = playerChill.flipX;
+        flipXCheckBox.onClick = function() {
+            playerChill.flipX = flipXCheckBox.checked;
+        };
+
+        noAntialiasingCheckBox = new PsychUICheckBox(flipXCheckBox.x + 80, flipXCheckBox.y, "No Antialiasing", 80);
+        noAntialiasingCheckBox.checked = playerChill.noAntialiasing;
+        noAntialiasingCheckBox.onClick = function() {
+            playerChill.antialiasing = false;
+            if(!noAntialiasingCheckBox.checked && ClientPrefs.data.antialiasing) {
+                playerChill.antialiasing = true;
+            }
+            playerChill.noAntialiasing = noAntialiasingCheckBox.checked;
+        };
+
+        scaleStepper = new PsychUINumericStepper(noAntialiasingCheckBox.x, flipXCheckBox.y + 40, 0.1, 1, 0.05, 10, 2);
+
+        positionXStepper = new PsychUINumericStepper(noAntialiasingCheckBox.x + 110, noAntialiasingCheckBox.y, 10, playerChill.positionArray[0], -9000, 9000, 0);
+        positionYStepper = new PsychUINumericStepper(positionXStepper.x + 70, positionXStepper.y, 10, playerChill.positionArray[1], -9000, 9000, 0);
+
+        positionIconXStepper = new PsychUINumericStepper(positionXStepper.x, positionXStepper.y + 40, 10, playerChill.iconPositionArray[0], -9000, 9000, 0);
+        positionIconYStepper = new PsychUINumericStepper(positionYStepper.x, positionYStepper.y + 40, 10, playerChill.iconPositionArray[1], -9000, 9000, 0);
+
+        var saveCharacterButton:PsychUIButton = new PsychUIButton(reloadImage.x, scaleStepper.y + 40, "Save Character", function() {
+            savePlayer();
+        });
+
+        playerInputText = new PsychUIInputText(flipXCheckBox.x, saveCharacterButton.y, 200, playerChill.charName, 8);
+
+        tab_group.add(new FlxText(imageInputText.x, imageInputText.y - 18, 100, 'Image file name:'));
+        tab_group.add(new FlxText(scaleStepper.x, scaleStepper.y - 18, 100, 'Scale:'));
+        tab_group.add(new FlxText(positionXStepper.x, positionXStepper.y - 18, 100, 'Character X/Y:'));
+        tab_group.add(new FlxText(positionIconXStepper.x, positionIconXStepper.y - 18, 100, 'Icon X/Y:'));
+        tab_group.add(new FlxText(playerInputText.x, playerInputText.y - 18, 100, 'Player name (for Editor):'));
+        tab_group.add(imageInputText);
+        tab_group.add(reloadImage);
+        tab_group.add(scaleStepper);
+        tab_group.add(flipXCheckBox);
+        tab_group.add(noAntialiasingCheckBox);
+        tab_group.add(positionXStepper);
+        tab_group.add(positionYStepper);
+        tab_group.add(positionIconXStepper);
+        tab_group.add(positionIconYStepper);
+        tab_group.add(saveCharacterButton);
+        tab_group.add(playerInputText);
+
+        reloadCharacterOptions();
     }
 
     override public function update(elapsed:Float)
@@ -196,11 +328,22 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
         if (FlxG.sound.music != null) Conductor.songPosition = FlxG.sound.music.time;
         super.update(elapsed);
 
+        if (FlxG.keys.justPressed.R && !FlxG.keys.pressed.CONTROL) FlxG.camera.zoom = 1;
+        else if (FlxG.keys.pressed.E) FlxG.camera.zoom += elapsed * FlxG.camera.zoom * 1.2;
+        else if (FlxG.keys.pressed.Q) FlxG.camera.zoom -= elapsed * FlxG.camera.zoom * 1.2;
+
+        if (FlxG.keys.pressed.A) FlxG.camera.scroll.x -= elapsed * 600;
+        if (FlxG.keys.pressed.D) FlxG.camera.scroll.x += elapsed * 600;	
+
+        if (FlxG.keys.pressed.S) FlxG.camera.scroll.y += elapsed * 600;
+        if (FlxG.keys.pressed.W) FlxG.camera.scroll.y -= elapsed * 600;
+
+
         if (FlxG.keys.justPressed.P) INDEX++;
         if (FlxG.keys.justPressed.M) INDEX--;
 
-        if (FlxG.keys.justPressed.Q) CHARACTER = "bf";
-        if (FlxG.keys.justPressed.W) CHARACTER = "pico";
+        //if (FlxG.keys.justPressed.Q) charName = "bf";
+       // if (FlxG.keys.justPressed.W) charName = "pico";
 
         if (FlxG.keys.justPressed.ESCAPE) MusicBeatState.switchState(new PlayerSelectionState());
 
@@ -239,7 +382,7 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
 
         for (e in 0...9) {
             if(index != e) gridPlayersList.push(["locked", e]);
-            else gridPlayersList.push([CHARACTER, e]);
+            else gridPlayersList.push([charName, e]);
         }
 
         for (player in gridPlayersList) {
@@ -354,21 +497,177 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
         return value;
     }
 
-    public function UIEvent(id:String, sender:Dynamic) {}
+    public function UIEvent(id:String, sender:Dynamic) {
+        if(id == PsychUINumericStepper.CHANGE_EVENT)
+        {
+            if (sender == scaleStepper)
+            {
+                //reloadCharacterImage();
+                playerChill.jsonScale = sender.value;
+                playerChill.scale.set(playerChill.jsonScale, playerChill.jsonScale);
+                playerChill.updateHitbox();
+                unsavedProgress = true;
+            }
+            else if(sender == positionXStepper)
+            {
+                playerChill.positionArray[0] = positionXStepper.value;
+                updateCharacterPositions();
+                unsavedProgress = true;
+            }
+            else if(sender == positionYStepper)
+            {
+                playerChill.positionArray[1] = positionYStepper.value;
+                updateCharacterPositions();
+                unsavedProgress = true;
+            }
+            else if(sender == positionIconXStepper)
+            {
+                playerChill.iconPositionArray[0] = positionIconXStepper.value;
+                updateIconOffsets();
+                //trace(playerChill.iconPositionArray);
+                unsavedProgress = true;
+            }
+            else if(sender == positionIconYStepper)
+            {
+                playerChill.iconPositionArray[1] = positionIconYStepper.value;
+                updateIconOffsets();
+                //trace(playerChill.iconPositionArray);
+                unsavedProgress = true;
+            }
+        }
+        else if(id == PsychUIInputText.CHANGE_EVENT)
+        {
+            if (sender == playerInputText) {
+                playerInputText.text = playerChill.charName;
+            }
+        }
+    }
+
+    function reloadCharacterImage()
+    {
+        var lastAnim:String = playerChill.getAnimationName();
+
+        var lastAnims = playerChill.playerAnimArr.copy();
+        playerChill.atlas = FlxDestroyUtil.destroy(playerChill.atlas);
+        playerChill.isAnimateAtlas = false;
+        playerChill.color = FlxColor.WHITE;
+        playerChill.alpha = 1;
+
+        playerChill.loadImage(playerChill.image, playerChill.x, playerChill.y);
+        playerChill.loadAnimations(lastAnims);
+    }
+
+    inline function updateCharacterPositions()
+    {
+        playerChill.x = playerChill.staticX + playerChill.positionArray[0];
+        playerChill.y = playerChill.staticY + playerChill.positionArray[1];
+    }
+
+    inline function updateIconOffsets()
+    {
+        if (playerChill.iconPositionArray == null || playerChill.iconPositionArray == []) return;
+
+        for (icon in grpIcons) {
+            icon.offset.set(playerChill.iconPositionArray[0], playerChill.iconPositionArray[1]);
+        }
+    }
 
     public function reloadIcons() {
         gridPlayersList = [];
         for (e in 0...9) {
             if(INDEX != e) gridPlayersList.push(["locked", e]);
-            else gridPlayersList.push([CHARACTER, e]);
+            else gridPlayersList.push([charName, e]);
         }
 
         for (icon in grpIcons) {
             if (icon.index != INDEX) icon.locked = true;
             else {
-                icon.setPlayer(CHARACTER);
+                icon.setPlayer(charName);
                 icon.locked = false;
+                updateIconOffsets();
             }
+        }
+    }
+
+	function reloadCharacterOptions() {
+		if(UI_box == null) return;
+
+		imageInputText.text = playerChill.image;
+        playerInputText.text = playerChill.charName;
+		scaleStepper.value = playerChill.jsonScale;
+		flipXCheckBox.checked = playerChill.flipX;
+		noAntialiasingCheckBox.checked = playerChill.noAntialiasing;
+		positionXStepper.value = playerChill.positionArray[0];
+		positionYStepper.value = playerChill.positionArray[1];
+		positionIconXStepper.value = playerChill.iconPositionArray[0];
+		positionIconYStepper.value = playerChill.iconPositionArray[1];
+	}
+
+    var _file:FileReference;
+    function onSaveComplete(_):Void
+    {
+        _file.removeEventListener(Event.COMPLETE, onSaveComplete);
+        _file.removeEventListener(Event.CANCEL, onSaveCancel);
+        _file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+        _file = null;
+        FlxG.log.notice("Successfully saved file.");
+    }
+
+    /**
+     * Called when the save file dialog is cancelled.
+     */
+    function onSaveCancel(_):Void
+    {
+        _file.removeEventListener(Event.COMPLETE, onSaveComplete);
+        _file.removeEventListener(Event.CANCEL, onSaveCancel);
+        _file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+        _file = null;
+    }
+
+    /**
+     * Called if there is an error while saving the gameplay recording.
+     */
+    function onSaveError(_):Void
+    {
+        _file.removeEventListener(Event.COMPLETE, onSaveComplete);
+        _file.removeEventListener(Event.CANCEL, onSaveCancel);
+        _file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+        _file = null;
+        FlxG.log.error("Problem saving file");
+    }
+
+    
+    function savePlayer()
+    {
+        var json:Dynamic = {
+			//"animations": playerChill.animationsArray,
+            "twoBeatIdle": playerChill.twoBeatIdle,
+			"image": playerChill.image,
+			"scale": playerChill.jsonScale,
+			//"sing_duration": playerChill.singDuration,
+			//"healthicon": playerChill.healthIcon,
+
+			"position":	playerChill.positionArray,
+			//"camera_position": playerChill.cameraPosition,
+
+			"flip_x": playerChill.flipX,
+			"no_antialiasing": playerChill.noAntialiasing,
+			//"healthbar_colors": playerChill.healthColorArray,
+			"speaker": playerChill.speaker,
+			"icon_position": playerChill.iconPositionArray,
+			"editor_player": playerChill.isPlayer
+		};
+
+		var data:String = PsychJsonPrinter.print(json, ['position','icon_position']);
+        var _player = playerChill.charName;
+
+		if (data.length > 0)
+        {
+            _file = new FileReference();
+            _file.addEventListener(Event.COMPLETE, onSaveComplete);
+            _file.addEventListener(Event.CANCEL, onSaveCancel);
+            _file.addEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+            _file.save(data, _player + ".json");
         }
     }
 
@@ -378,8 +677,8 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
         return (value);
     }
 
-    function set_CHARACTER(value:String):String {
-        CHARACTER = value;
+    function set_charName(value:String):String {
+        charName = value;
         reloadIcons();
         return (value);
     }

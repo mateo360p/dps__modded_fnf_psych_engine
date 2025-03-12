@@ -555,7 +555,9 @@ class PlayerSelectionState extends MusicBeatState {
 
         for (player in gridPlayersList) {
             var char = player[0];
+            var _player:SelectionPlayer = new SelectionPlayer(0, 0 , char);
             var temp:PlayerIcon = new PlayerIcon(0, 0, (char == "locked") ? FreeplayState.DEF_PLAYER : char, player[1], (char == "locked"));
+            if (_player != null) if(_player.iconPositionArray != null) temp.offset.set(_player.iconPositionArray[0], _player.iconPositionArray[1]);
             temp.ID = 0;
             temp._lock.ID = 0;
             grpIcons.add(temp);

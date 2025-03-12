@@ -27,7 +27,6 @@
 		"name": "bf slide in",
 		"loop": false
 	},
-	"name": "bf",
 	"twoBeatIdle": false,
 	"no_antialiasing": false,
 	"image": "bf/bfChill",
@@ -35,5 +34,6 @@
 	"scale": 1,
 	"flip_x": false,
 	"speaker": "gf",
-	"icon_position": [20, 20]
+	"icon_position": [20, 20],
+	"editor_player": true
 }

@@ -18,7 +18,6 @@ class SelectionCharacter extends FlxSprite
 {
     public var animOffsets:Map<String, Array<Dynamic>>;
 
-    public var name:String;
 	public var twoBeatIdle:Bool = false; //Character use "danceLeft" and "danceRight" instead of "idle"
     public var noAntialiasing:Bool;
 	public var positionArray:Array<Float> = [0, 0];
@@ -34,6 +33,11 @@ class SelectionCharacter extends FlxSprite
     public var staticX:Float = 0;
     public var staticY:Float = 0;
 
+    public var image:String;
+    public var isPlayer:Bool;
+	public var jsonScale:Float;
+    public var charName:String;
+
     public function new(x:Float, y:Float, char:String, ?isSpeaker:Bool = true)
     {
         super(x, y);
@@ -46,17 +50,19 @@ class SelectionCharacter extends FlxSprite
 		animOffsets = new Map<String, Array<Dynamic>>();
 		changeCharacter(char, isSpeaker);
     }
-
+/*
     override public function setPosition(x = 0.0, y = 0.0) {
         this.staticX = x;
         this.staticY = y;
 
         this.x = staticX + positionArray[0];
         this.y = staticY + positionArray[1];
-    }
+    }*/
 
 	public function changeCharacter(character:String, ?isGF:Bool = true)
     {
+        if (character == "locked") return; // :D
+
         animOffsets = [];
         var characterPath:String = 'players/$character.json';
         if (isGF) characterPath = 'players/speakers/$character.json';
@@ -91,41 +97,14 @@ class SelectionCharacter extends FlxSprite
 
     public function loadCharacterFile(json:Dynamic)
     {
-        name = json.name;
-        var atlaspath:String = Paths.getSharedPath('images/charSelect/playerAssets/${json.image}');
-        isAnimateAtlas = false;
+        loadImage(json.image);
 
-        #if flxanimate
-        var animToFind:String = atlaspath + '/Animation.json';
-        trace("ATLAS SHOULD BE IN: " + animToFind);
-        if (#if MODS_ALLOWED FileSystem.exists(animToFind) || #end Assets.exists(animToFind))
-            isAnimateAtlas = true;
-        #end
-
-        scale.set(1, 1);
+        image = json.image;
+        charName = json.character;
+        isPlayer = json.editor_player;
+		jsonScale = json.scale;
+        scale.set(jsonScale, jsonScale);
         updateHitbox();
-        trace('$name: ATLAS ' + isAnimateAtlas);
-        try {        
-            if(!isAnimateAtlas)
-            {
-                frames = Paths.getMultiAtlas(json.image.split(','));
-            }
-        #if flxanimate
-            else
-            {
-                atlas = new FlxAtlasSprite(0, 0, atlaspath);
-                atlas.showPivot = false;
-            }
-        } catch(e:haxe.Exception) {
-            FlxG.log.warn('Could not load image or atlas in $name: $e');
-            trace(e.stack);
-        }
-        #end
-
-        if(json.scale != 1) {
-            scale.set(json.scale, json.scale);
-            updateHitbox();
-        }
 
         // positioning
         if (json.position != null) positionArray = json.position;
@@ -145,7 +124,41 @@ class SelectionCharacter extends FlxSprite
         #if flxanimate
         if(isAnimateAtlas) copyAtlasValues();
         #end
+        updateHitbox();
         //trace('Loaded file to character ' + curCharacter);
+    }
+
+    public function loadImage(_image:String, ?x:Float = 0, ?y:Float = 0) {
+        var atlaspath:String = Paths.getSharedPath('images/charSelect/playerAssets/$_image');
+        isAnimateAtlas = false;
+
+        #if flxanimate
+        var animToFind:String = atlaspath + '/Animation.json';
+        trace("ATLAS SHOULD BE IN: " + animToFind);
+        if (#if MODS_ALLOWED FileSystem.exists(animToFind) || #end Assets.exists(animToFind))
+            isAnimateAtlas = true;
+        #end
+/*
+        scale.set(1, 1);
+        updateHitbox();*/
+        try {        
+            if(!isAnimateAtlas)
+            {
+                frames = Paths.getMultiAtlas(_image.split(','));
+            }
+        #if flxanimate
+            else
+            {
+                atlas = new FlxAtlasSprite(0, 0, atlaspath);
+                atlas.showPivot = false;
+            }
+        } catch(e:haxe.Exception) {
+            FlxG.log.warn('Could not load image or atlas: $e');
+            trace(e.stack);
+        }
+        //if(isAnimateAtlas) copyAtlasValues();
+        //updateHitbox();
+        #end
     }
 
     public function prepareAnimations(json:Dynamic) {
@@ -161,7 +174,6 @@ class SelectionCharacter extends FlxSprite
             playerAnimArr.push(json.animIdle);
             animList.push("idle");
         }
-        //trace(name + ":" + animList);
     }
 
     public function loadAnimations(animArray:Array<PlayerAnimArray>) {
@@ -222,6 +234,7 @@ class SelectionCharacter extends FlxSprite
             atlas.antialiasing = antialiasing;
             atlas.colorTransform = colorTransform;
             atlas.color = color;
+            atlas.updateHitbox();
         }
     }
 
@@ -275,6 +288,11 @@ class SelectionCharacter extends FlxSprite
     public function quickAnimAdd(name:String, anim:String)
     {
         animation.addByPrefix(name, anim, 24, false);
+    }
+
+    inline public function isAnimationNull():Bool
+    {
+        return !isAnimateAtlas ? (animation.curAnim == null) : (atlas.anim.curInstance == null || atlas.anim.curSymbol == null);
     }
 
     public function hasAnimation(anim:String):Bool
