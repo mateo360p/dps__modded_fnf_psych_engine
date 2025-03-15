@@ -1,5 +1,7 @@
 package objects;
 
+import states.FreeplayState;
+import openfl.utils.Assets;
 import openfl.filters.DropShadowFilter;
 import openfl.filters.BitmapFilter;
 import backend.FlxFilteredSprite;
@@ -38,13 +40,23 @@ class PlayerIcon extends FlxFilteredSprite {
         createLock();
         this.locked = locked;
 
+        //if (player == null) player = FreeplayState.DEF_PLAYER;
         setPlayer(player);
 
         antialiasing = false;
     }
 
     public function setPlayer(char:String) {
-        isAnimated = openfl.utils.Assets.exists(Paths.getSharedPath('images/charSelect/playerAssets/' + char + '/icon.xml'));
+        isAnimated = Assets.exists(Paths.getSharedPath('images/charSelect/playerAssets/' + char + '/icon.xml'));
+
+        if (!Assets.exists(Paths.getSharedPath('images/charSelect/playerAssets/' + char + '/icon.png'))) {
+            this.color = FlxColor.BLACK;
+            this.alpha = 0.6;
+            return;
+        } else {
+            this.color = FlxColor.WHITE;
+            this.alpha = 1;
+        }
 
         if (!isAnimated) {
             loadGraphic(Paths.image('charSelect/playerAssets/' + char + '/icon'));

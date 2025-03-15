@@ -397,26 +397,29 @@ class PsychUIInputText extends FlxSpriteGroup
 		{
 			if(FlxG.mouse.overlaps(behindText, camera))
 			{
-				if(!FlxG.keys.pressed.SHIFT) selectIndex = -1;
-				else if(selectIndex == -1) selectIndex = caretIndex;
-				focusOn = this;
-				caretIndex = 0;
-				var lastBound:Float = 0;
-				var textObjX:Float = textObj.getScreenPosition(camera).x;
-				var mousePosX:Float = FlxG.mouse.getScreenPosition(camera).x;
-				var txtX:Float = textObjX - textObj.textField.scrollH;
-
-				for (i => bound in _boundaries)
+				if (this.visible) 
 				{
-					if(mousePosX >= txtX + (bound - lastBound)/2)
+					if(!FlxG.keys.pressed.SHIFT) selectIndex = -1;
+					else if(selectIndex == -1) selectIndex = caretIndex;
+					focusOn = this;
+					caretIndex = 0;
+					var lastBound:Float = 0;
+					var textObjX:Float = textObj.getScreenPosition(camera).x;
+					var mousePosX:Float = FlxG.mouse.getScreenPosition(camera).x;
+					var txtX:Float = textObjX - textObj.textField.scrollH;
+
+					for (i => bound in _boundaries)
 					{
-						caretIndex = i+1;
-						txtX += bound - lastBound;
-						lastBound = bound;
+						if(mousePosX >= txtX + (bound - lastBound)/2)
+						{
+							caretIndex = i+1;
+							txtX += bound - lastBound;
+							lastBound = bound;
+						}
+						else break;
 					}
-					else break;
+					updateCaret();
 				}
-				updateCaret();
 			}
 			else if(focusOn == this)
 				focusOn = null;
@@ -424,7 +427,9 @@ class PsychUIInputText extends FlxSpriteGroup
 			//trace('changed focus to: ' + this);
 		}
 
-		if(focusOn == this)
+		//if (!this.visible && focusOn == this) focusOn == null;
+
+		if(focusOn == this && this.visible)
 		{
 			_caretTime = (_caretTime + elapsed) % 1;
 			if(textObj != null && textObj.exists)

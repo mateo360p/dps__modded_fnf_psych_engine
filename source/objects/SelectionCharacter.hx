@@ -25,7 +25,7 @@ class SelectionCharacter extends FlxSprite
 	public var playerAnimArr:Array<PlayerAnimArray> = [];
     public var animList:Array<String> = [];
 
-    public var atlas:FlxAtlasSprite;
+    public var atlas:FlxAnimate;
     public var isAnimateAtlas:Bool = false;
 	public var debugMode:Bool = false;
 	public var danced:Bool = false;
@@ -128,19 +128,17 @@ class SelectionCharacter extends FlxSprite
         //trace('Loaded file to character ' + curCharacter);
     }
 
-    public function loadImage(_image:String, ?x:Float = 0, ?y:Float = 0) {
-        var atlaspath:String = Paths.getSharedPath('images/charSelect/playerAssets/$_image');
+    public function loadImage(_image:String, ?reload:Bool = false) {
+        var atlaspath:String = 'charSelect/playerAssets/$_image';
         isAnimateAtlas = false;
 
         #if flxanimate
-        var animToFind:String = atlaspath + '/Animation.json';
+        var animToFind:String = Paths.getSharedPath('images/$atlaspath' + '/Animation.json');
         trace("ATLAS SHOULD BE IN: " + animToFind);
         if (#if MODS_ALLOWED FileSystem.exists(animToFind) || #end Assets.exists(animToFind))
             isAnimateAtlas = true;
         #end
-/*
-        scale.set(1, 1);
-        updateHitbox();*/
+
         try {        
             if(!isAnimateAtlas)
             {
@@ -149,16 +147,18 @@ class SelectionCharacter extends FlxSprite
         #if flxanimate
             else
             {
-                atlas = new FlxAtlasSprite(0, 0, atlaspath);
+                atlas = new FlxAnimate();
+                Paths.loadAnimateAtlas(atlas, atlaspath);
+                //else atlas.loadAtlas(atlaspath);
                 atlas.showPivot = false;
             }
         } catch(e:haxe.Exception) {
             FlxG.log.warn('Could not load image or atlas: $e');
             trace(e.stack);
         }
-        //if(isAnimateAtlas) copyAtlasValues();
-        //updateHitbox();
+        //if(isAnimateAtlas && reload) copyAtlasValues();
         #end
+        //updateHitbox();
     }
 
     public function prepareAnimations(json:Dynamic) {
@@ -234,7 +234,7 @@ class SelectionCharacter extends FlxSprite
             atlas.antialiasing = antialiasing;
             atlas.colorTransform = colorTransform;
             atlas.color = color;
-            atlas.updateHitbox();
+            //atlas.updateHitbox();
         }
     }
 
@@ -330,7 +330,7 @@ class SelectionCharacter extends FlxSprite
 
         if(isAnimateAtlas)
         {
-            if(atlas.anim.curInstance != null)
+            if(atlas.anim.curInstance != null && atlas.anim.curSymbol != null)
             {
                 copyAtlasValues();
                 atlas.draw();
