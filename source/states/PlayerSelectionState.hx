@@ -1,6 +1,10 @@
 package states;
 
+//import states.editors.PlayerEditorState;
+import funkin.vis.dsp.SpectralAnalyzer;
 import states.editors.PlayerEditorState;
+import objects.Character;
+import openfl.display3D.IndexBuffer3D;
 import objects.SelectionPlayer;
 import objects.SelectionCharacter;
 import objects.PlayerIcon;
@@ -12,6 +16,8 @@ import flxanimate.PsychFlxAnimate._AnimateHelper;
 import openfl.display.BlendMode;
 
 class PlayerSelectionState extends MusicBeatState {
+    public static final positionsArr:Array<Int> = [600, 400];
+
     var grpIcons:FlxTypedSpriteGroup<PlayerIcon>;
     var speakers:FlxAnimate;
 
@@ -74,6 +80,7 @@ class PlayerSelectionState extends MusicBeatState {
     var playerChillOut:SelectionPlayer;
 
     var notBeat:Bool = false;
+	var initialized:Bool = false;
 
     // Done ;D
     override public function create()
@@ -126,15 +133,24 @@ class PlayerSelectionState extends MusicBeatState {
         charLightGF.antialiasing = (ClientPrefs.data.antialiasing);
         add(charLightGF);
 
-        playerChill = new SelectionPlayer(620, 380, "bf");
+        playerChill = new SelectionPlayer(positionsArr[0], positionsArr[1], Character.DEFAULT_CHARACTER);
         add(playerChill);
 
-        gfChill = new SelectionCharacter(620, 380 , playerChill.speaker);
+        gfChill = new SelectionCharacter(positionsArr[0], positionsArr[1], playerChill.speaker);
         add(gfChill);
 
-        /*playerChillOut = new SelectionPlayer(0, 0, "bf");
+        @:privateAccess
+        gfChill.analyzer = new SpectralAnalyzer(FlxG.sound.music._channel.__audioSource, 7, 0.1);
+        #if desktop
+        // On desktop it uses FFT stuff that isn't as optimized as the direct browser stuff we use on HTML5
+        // So we want to manually change it!
+        @:privateAccess
+        gfChill.analyzer.fftN = 512;
+        #end
+
+        playerChillOut = new SelectionPlayer(playerChill.x, playerChill.y, Character.DEFAULT_CHARACTER);
         playerChillOut.visible = false;
-        add(playerChillOut);*/
+        add(playerChillOut);
 
         speakers = new FlxAnimate(0, 0);
         Paths.loadAnimateAtlas(speakers, "charSelect/charSelectSpeakers");
@@ -180,10 +196,10 @@ class PlayerSelectionState extends MusicBeatState {
         dipshitBacking.scrollFactor.set();
         dipshitBlur.scrollFactor.set();
 
-        nametag = new PlayerNameTag(FreeplayState.DEF_PLAYER);
+        nametag = new PlayerNameTag(Character.DEFAULT_CHARACTER);
         add(nametag);
         nametag.scrollFactor.set();
-        curChar = FreeplayState.DEF_PLAYER;
+        curChar = Character.DEFAULT_CHARACTER;
 
         grpCursors = new FlxTypedGroup<FlxSprite>();
         add(grpCursors);
@@ -298,11 +314,9 @@ class PlayerSelectionState extends MusicBeatState {
         if (FlxG.sound.music != null) Conductor.songPosition = FlxG.sound.music.time;
         super.update(elapsed);
 
-        // TEST FUNCTION!
         if (FlxG.keys.justPressed.SEVEN) MusicBeatState.switchState(new PlayerEditorState());
 
         if (controls.UI_UP_R || controls.UI_DOWN_R || controls.UI_LEFT_R || controls.UI_RIGHT_R) selectSound.pitch = 1;
-
         syncAudio(elapsed);
 
         if (allowInput && !pressedSelect)
@@ -404,8 +418,8 @@ class PlayerSelectionState extends MusicBeatState {
 
             FlxTween.globalManager.cancelTweensOf(FlxG.sound.music);
             FlxTween.tween(FlxG.sound.music, {pitch: 1.0, volume: 1.0}, 1, {ease: FlxEase.quartInOut});
-            playerChill.playAnim("bruh");
-            gfChill.playAnim("bruh");
+            playerChill.playAnim("deselect");
+            gfChill.playAnim("deselect");
             pressedSelect = false;
             FlxTween.tween(FlxG.sound.music, {pitch: 1.0}, 1,
             {
@@ -417,26 +431,7 @@ class PlayerSelectionState extends MusicBeatState {
                 }
             });
             selectTimer.cancel();
-        }/*
-        else
-        {
-            curChar = "locked";
-
-            gfChill.visible = false;
-
-            if (allowInput && controls.ACCEPT)
-            {
-                cursorDenied.visible = true;
-
-                playerChill.playAnim("cannot select Label", true);
-
-                lockedSound.play(true);
-                cursorDenied.animation.play("idle", true);
-                cursorDenied.animation.finishCallback = (_) -> {
-                cursorDenied.visible = false;
-                };
-            }
-        }*/
+        }
 
         camFollow.screenCenter();
         camFollow.x += cursorX * 10;
@@ -487,10 +482,12 @@ class PlayerSelectionState extends MusicBeatState {
         FlxG.sound.play(Paths.sound('playerSelect/CS_confirm'));
         grpIcons.members[getCurrentSelected()].playAnimation(true);
 
+        FlxTween.globalManager.cancelTweensOf(FlxG.sound.music);
+
         FlxTween.tween(FlxG.sound.music, {pitch: 0.1}, 1, {ease: FlxEase.quadInOut});
         FlxTween.tween(FlxG.sound.music, {volume: 0.0}, 1.5, {ease: FlxEase.quadInOut});
-        playerChill.playAnim("ready", true);
-        gfChill.playAnim("ready", true);
+        playerChill.playAnim("confirm", true);
+        gfChill.playAnim("confirm", true);
         pressedSelect = true;
         FreeplayState.player = curChar;
         selectTimer.start(1.5, (_) -> {
@@ -503,10 +500,10 @@ class PlayerSelectionState extends MusicBeatState {
     {
         super.beatHit();
 
-    if (!notBeat) {
-        playerChill.dance();
-        gfChill.dance();
-    }
+        if (!notBeat) {
+            playerChill.dance();
+            gfChill.dance();
+        }
         speakers.anim.play("", true); // Speakers Beat
     }
 
@@ -556,7 +553,7 @@ class PlayerSelectionState extends MusicBeatState {
         for (player in gridPlayersList) {
             var char = player[0];
             var _player:SelectionPlayer = new SelectionPlayer(0, 0 , char);
-            var temp:PlayerIcon = new PlayerIcon(0, 0, (char == "locked") ? FreeplayState.DEF_PLAYER : char, player[1], (char == "locked"));
+            var temp:PlayerIcon = new PlayerIcon(0, 0, (char == "locked") ? Character.DEFAULT_CHARACTER : char, player[1], (char == "locked"));
             if (_player != null) if(_player.iconPositionArray != null) temp.offset.set(_player.iconPositionArray[0], _player.iconPositionArray[1]);
             temp.ID = 0;
             temp._lock.ID = 0;
@@ -616,6 +613,7 @@ class PlayerSelectionState extends MusicBeatState {
         }
     }
 
+    var changeTimer:FlxTimer;
     function set_curChar(value:String):String
     {
         if (curChar == value) return value;
@@ -627,30 +625,53 @@ class PlayerSelectionState extends MusicBeatState {
             else staticSound.stop();
         }
 
+        notBeat = true;
         nametag.switchChar(value);
-        /*
-        gfChill.visible = false;
-        playerChill.visible = false;
-        playerChillOut.visible = true;
-        playerChillOut.playAnimation("slideout");
-        var index = playerChillOut.anim.getFrameLabel("slideout").index;
-        playerChillOut.onAnimationFrame.removeAll();
-        playerChillOut.onAnimationFrame.add((_, frame:Int) -> {
-            if (frame >= index + 1)
-            {
-            playerChill.visible = true;
-            playerChill.switchChar(value);
-            gfChill.switchGF(value);
-            gfChill.visible = true;
-            }
-            if (frame >= index + 2)
-            {
-            playerChillOut.switchChar(value);
-            playerChillOut.visible = false;
-            playerChillOut.onAnimationFrame.removeAll();
-            }
-        });*/
 
+        // Welcome to Hell!
+        playerChill.visible = false;
+        playerChill.changeCharacter(value);
+        playerChill.setPosition(positionsArr[0] + playerChill.positionArray[0], positionsArr[1] + playerChill.positionArray[1]);
+
+        gfChill.visible = (gfChill.curCharacter == playerChill.speaker); // If the new player's partner is the same, then doesn't disappear
+        if (playerChillOut.curCharacter != "locked") playerChillOut.visible = true;
+
+        if (initialized) playerChillOut.playAnim("slide out", true);
+        if (changeTimer != null) changeTimer.cancel();
+
+        changeTimer = new FlxTimer().start((playerChillOut.curCharacter == "locked") ? 0 : 1/12, function(tmr:FlxTimer) {
+            if (initialized) playerChill.playAnim('slide in', true);
+            playerChill.visible = true;
+
+            // Oh my god I hate this-
+            if (!playerChill.isAnimateAtlas) {
+                playerChill.animation.finishCallback = function(name:String)
+                {
+                    if (name == "slide in") notBeat = false;
+                    playerChill.animation.finishCallback = null;
+                }
+            } else {
+                playerChill.atlas.anim.onComplete.add(
+                    function() {
+                        notBeat = false; // I hate atlas so bad
+                        playerChill.atlas.anim.onComplete.removeAll();
+                    }
+                );
+            }
+
+            if (gfChill.curCharacter != playerChill.speaker) gfChill.changeCharacter(playerChill.speaker);
+            gfChill.setPosition(positionsArr[0] + gfChill.positionArray[0], positionsArr[1] + gfChill.positionArray[1]);
+            if (gfChill.curCharacter != "none") gfChill.visible = true;
+
+            playerChillOut.visible = false;
+            playerChillOut.changeCharacter(value);
+            playerChillOut.setPosition(playerChill.x, playerChill.y);
+            playerChillOut.visible = false;
+
+            //notBeat = false;
+            initialized = true;
+            tmr = null;
+        });
         return value;
     }
 

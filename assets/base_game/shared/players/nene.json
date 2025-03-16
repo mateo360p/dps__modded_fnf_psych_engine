@@ -1,0 +1,45 @@
+{
+	"animations": [
+		{
+			"offsets": [0, 0],
+			"indices": [],
+			"fps": 24,
+			"anim": "idle",
+			"loop": false,
+			"name": "nene cs idle"
+		},
+		{
+			"offsets": [0, 0],
+			"indices": [],
+			"fps": 24,
+			"anim": "confirm",
+			"loop": true,
+			"name": "Nene cs confirm"
+		},
+		{
+			"offsets": [516, 145],
+			"indices": [],
+			"fps": 24,
+			"anim": "deselect",
+			"loop": false,
+			"name": "nene cs deselect"
+		}
+	],
+	"no_antialiasing": false,
+	"icon_position": [
+		0,
+		0
+	],
+	"image": "charSelect/playerAssets/pico/neneChill",
+	"position": [115, 10],
+	"speaker": "none",
+	"hey_anim": "",
+	"healthicon": "face",
+	"flip_x": false,
+	"healthbar_colors": [0, 0, 0],
+	"camera_position": [0, 0],
+	"sing_duration": 1,
+	"hey_sound": "",
+	"scale": 1,
+	"_editor_isPlayer": false
+}

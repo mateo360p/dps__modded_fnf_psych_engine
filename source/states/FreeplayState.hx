@@ -1,5 +1,6 @@
 package states;
 
+import objects.Character;
 import backend.LevelData;
 import backend.WeekData;
 import backend.Highscore;
@@ -22,7 +23,6 @@ using StringTools;
 
 class FreeplayState extends MusicBeatState
 {
-	public static final DEF_PLAYER:String = "bf";
 	public static var player:String;
 	var songs:Array<SongMetadata> = [];
 
@@ -74,7 +74,7 @@ class FreeplayState extends MusicBeatState
 		var plArray:Array<String> = [];
 		for (i in LevelData.playersList) plArray.push(i[0]); // Verifies if the character exist in the list [0]
 
-		if (!plArray.contains(player)) player = DEF_PLAYER;
+		if (!plArray.contains(player)) player = Character.DEFAULT_CHARACTER;
 		trace("CUR PLAYER:" + FreeplayState.player);
 		LevelData.reloadLevels(false, player); // Loads level songs from the current player
 

@@ -74,7 +74,7 @@ class LevelData {
                 for (file in FileSystem.readDirectory(directory))
                 {
                     var path = haxe.io.Path.join([directory, file]);
-                    trace(path);
+                    //trace(path);
                     if (!FileSystem.isDirectory(path) && file.endsWith(player + '.json'))
                     {
                         addLevel(file.substr(0, file.length - 5), path, directories[i], i, originalLength);

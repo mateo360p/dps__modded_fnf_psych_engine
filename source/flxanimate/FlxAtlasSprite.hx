@@ -13,6 +13,7 @@ import flxanimate.animate.FlxKeyFrame;
 
 /**
  * No offense PsychFlxAnimate, but you suck c:
+ * NOTE: This will put in (0,0) pos by default, use setPosition()!;
  */
 class FlxAtlasSprite extends FlxAnimate
 {
@@ -42,7 +43,7 @@ class FlxAtlasSprite extends FlxAnimate
 
   var canPlayOtherAnims:Bool = true;
 
-  public function new(x:Float, y:Float, ?path:String, ?settings:Settings)
+  public function new(path:String, ?settings:Settings)
   {
     if (settings == null) settings = SETTINGS;
 
@@ -57,7 +58,7 @@ class FlxAtlasSprite extends FlxAnimate
       throw 'FlxAtlasSprite does not have an Animation.json file at the specified path (${path})';
     }
 
-    super(x, y, path, settings);
+    super(0, 0, path, settings);
 
     if (this.anim.stageInstance == null)
     {

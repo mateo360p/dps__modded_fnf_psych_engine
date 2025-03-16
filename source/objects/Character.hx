@@ -42,6 +42,8 @@ typedef AnimArray = {
 class Character extends FlxSprite
 {
 
+	public var folder:String = "characters";
+
 	public var mostRecentRow:Int = 0; //again, for the Ghost
 
 	/**
@@ -113,7 +115,7 @@ class Character extends FlxSprite
 		animationsArray = [];
 		animOffsets = [];
 		curCharacter = character;
-		var characterPath:String = 'characters/$character.json';
+		var characterPath:String = '$folder/$character.json';
 
 		var path:String = Paths.getPath(characterPath, TEXT);
 		#if MODS_ALLOWED
@@ -122,10 +124,16 @@ class Character extends FlxSprite
 		if (!Assets.exists(path))
 		#end
 		{
-			path = Paths.getSharedPath('characters/' + DEFAULT_CHARACTER + '.json'); //If a character couldn't be found, change him to BF just to prevent a crash
+			path = Paths.getSharedPath('$folder/$DEFAULT_CHARACTER.json'); //If a character couldn't be found, change him to BF just to prevent a crash
 			missingCharacter = true;
-			missingText = new FlxText(0, 0, 300, 'ERROR:\n$character.json', 16);
+			missingText = new FlxText(0, 0, 300, 'ERROR in $folder:\n$character.json', 16);
+			missingText.visible = true;
 			missingText.alignment = CENTER;
+		}
+		else
+		{
+			missingCharacter = false;
+			if (missingText != null) missingText.visible = false;
 		}
 
 		try
@@ -473,7 +481,7 @@ class Character extends FlxSprite
 	// Atlas support
 	// special thanks ne_eo for the references, you're the goat!!
 	@:allow(states.editors.CharacterEditorState)
-	public var isAnimateAtlas(default, null):Bool = false;
+	public var isAnimateAtlas:Bool = false;
 	#if flxanimate
 	public var atlas:FlxAnimate;
 	public override function draw()

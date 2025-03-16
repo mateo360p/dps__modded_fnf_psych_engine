@@ -69,7 +69,7 @@ class PlayerIcon extends FlxFilteredSprite {
             this.animation.addByPrefix('revert', 'confirm0', 10, false);
 
             this.animation.finishCallback = function(name:String):Void {
-                trace('Finish pixel animation: ${name}');
+                //trace('Finish pixel animation: ${name}');
                 if (name == 'confirm') this.animation.play('confirm-hold');
                 if (name == 'revert') this.animation.play('idle');
             };
@@ -129,7 +129,8 @@ class Lock extends FlxAtlasSprite
 
     override public function new(x:Float = 0, y:Float = 0, index:Int)
     {
-        super(x, y, Paths.getSharedPath("images/charSelect/lock"));
+        super(Paths.getSharedPath("images/charSelect/lock"));
+        setPosition(x, y);
 
         var tint:FlxTint = new FlxTint(colors[index], 1);
         var arr:Array<String> = ["lock", "lock top 1", "lock top 2", "lock top 3", "lock base fuck it"];

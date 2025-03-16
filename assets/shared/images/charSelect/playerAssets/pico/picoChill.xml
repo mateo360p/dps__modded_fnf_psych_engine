@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="Pico CS fixed.png">
+	<!-- Created with Adobe Animate version 23.0.2.103 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="pico cs confirm0000" x="1153" y="715" width="290" height="354" frameX="0" frameY="-2" frameWidth="290" frameHeight="356"/>
+	<SubTexture name="pico cs confirm0001" x="1153" y="715" width="290" height="354" frameX="0" frameY="-2" frameWidth="290" frameHeight="356"/>
+	<SubTexture name="pico cs confirm0002" x="291" y="716" width="288" height="355" frameX="-1" frameY="0" frameWidth="290" frameHeight="356"/>
+	<SubTexture name="pico cs confirm0003" x="291" y="716" width="288" height="355" frameX="-1" frameY="0" frameWidth="290" frameHeight="356"/>
+	<SubTexture name="pico cs confirm0004" x="291" y="716" width="288" height="355" frameX="-1" frameY="0" frameWidth="290" frameHeight="356"/>
+	<SubTexture name="pico cs confirm0005" x="291" y="716" width="288" height="355" frameX="-1" frameY="0" frameWidth="290" frameHeight="356"/>
+	<SubTexture name="pico cs confirm0006" x="291" y="716" width="288" height="355" frameX="-1" frameY="0" frameWidth="290" frameHeight="356"/>
+	<SubTexture name="pico cs deselect0000" x="1731" y="724" width="288" height="342" frameX="0" frameY="-4" frameWidth="288" frameHeight="346"/>
+	<SubTexture name="pico cs deselect0001" x="1731" y="724" width="288" height="342" frameX="0" frameY="-4" frameWidth="288" frameHeight="346"/>
+	<SubTexture name="pico cs deselect0002" x="864" y="716" width="288" height="346"/>
+	<SubTexture name="pico cs deselect0003" x="864" y="716" width="288" height="346"/>
+	<SubTexture name="pico cs deselect0004" x="864" y="716" width="288" height="346"/>
+	<SubTexture name="pico cs deselect0005" x="864" y="716" width="288" height="346"/>
+	<SubTexture name="pico cs deselect0006" x="1443" y="722" width="288" height="346"/>
+	<SubTexture name="pico cs deselect0007" x="1443" y="722" width="288" height="346"/>
+	<SubTexture name="pico cs deselect0008" x="1443" y="722" width="288" height="346"/>
+	<SubTexture name="pico cs deselect0009" x="1443" y="722" width="288" height="346"/>
+	<SubTexture name="pico cs deselect0010" x="864" y="716" width="288" height="346"/>
+	<SubTexture name="pico cs deselect0011" x="864" y="716" width="288" height="346"/>
+	<SubTexture name="pico cs deselect0012" x="864" y="716" width="288" height="346"/>
+	<SubTexture name="pico cs deselect0013" x="864" y="716" width="288" height="346"/>
+	<SubTexture name="pico cs deselect0014" x="1443" y="722" width="288" height="346"/>
+	<SubTexture name="pico cs deselect0015" x="1443" y="722" width="288" height="346"/>
+	<SubTexture name="pico cs deselect0016" x="1443" y="722" width="288" height="346"/>
+	<SubTexture name="pico cs deselect0017" x="1443" y="722" width="288" height="346"/>
+	<SubTexture name="pico cs deselect0018" x="864" y="716" width="288" height="346"/>
+	<SubTexture name="pico cs deselect0019" x="864" y="716" width="288" height="346"/>
+	<SubTexture name="pico cs deselect0020" x="864" y="716" width="288" height="346"/>
+	<SubTexture name="pico cs deselect0021" x="864" y="716" width="288" height="346"/>
+	<SubTexture name="pico cs deselect0022" x="1443" y="722" width="288" height="346"/>
+	<SubTexture name="pico cs deselect0023" x="1443" y="722" width="288" height="346"/>
+	<SubTexture name="pico cs idle0000" x="1" y="716" width="290" height="353" frameX="0" frameY="-6" frameWidth="290" frameHeight="359"/>
+	<SubTexture name="pico cs idle0001" x="1" y="716" width="290" height="353" frameX="0" frameY="-6" frameWidth="290" frameHeight="359"/>
+	<SubTexture name="pico cs idle0002" x="1444" y="367" width="290" height="355" frameX="0" frameY="-3" frameWidth="290" frameHeight="359"/>
+	<SubTexture name="pico cs idle0003" x="1444" y="367" width="290" height="355" frameX="0" frameY="-3" frameWidth="290" frameHeight="359"/>
+	<SubTexture name="pico cs idle0004" x="1" y="358" width="288" height="358" frameX="0" frameY="0" frameWidth="290" frameHeight="359"/>
+	<SubTexture name="pico cs idle0005" x="1" y="358" width="288" height="358" frameX="0" frameY="0" frameWidth="290" frameHeight="359"/>
+	<SubTexture name="pico cs idle0006" x="289" y="358" width="288" height="358" frameX="0" frameY="0" frameWidth="290" frameHeight="359"/>
+	<SubTexture name="pico cs idle0007" x="289" y="358" width="288" height="358" frameX="0" frameY="0" frameWidth="290" frameHeight="359"/>
+	<SubTexture name="pico cs idle0008" x="577" y="358" width="288" height="358" frameX="0" frameY="0" frameWidth="290" frameHeight="359"/>
+	<SubTexture name="pico cs idle0009" x="577" y="358" width="288" height="358" frameX="0" frameY="0" frameWidth="290" frameHeight="359"/>
+	<SubTexture name="pico cs idle0010" x="865" y="358" width="288" height="358" frameX="0" frameY="0" frameWidth="290" frameHeight="359"/>
+	<SubTexture name="pico cs idle0011" x="865" y="358" width="288" height="358" frameX="0" frameY="0" frameWidth="290" frameHeight="359"/>
+	<SubTexture name="pico cs idle0012" x="865" y="358" width="288" height="358" frameX="0" frameY="0" frameWidth="290" frameHeight="359"/>
+	<SubTexture name="pico cs idle0013" x="865" y="358" width="288" height="358" frameX="0" frameY="0" frameWidth="290" frameHeight="359"/>
+	<SubTexture name="pico cs idle0014" x="865" y="358" width="288" height="358" frameX="0" frameY="0" frameWidth="290" frameHeight="359"/>
+	<SubTexture name="pico slide in0000" x="441" y="1" width="438" height="357" frameX="0" frameY="-7" frameWidth="685" frameHeight="366"/>
+	<SubTexture name="pico slide in0001" x="879" y="1" width="398" height="357" frameX="-176" frameY="-7" frameWidth="685" frameHeight="366"/>
+	<SubTexture name="pico slide in0002" x="1277" y="1" width="303" height="360" frameX="-382" frameY="-6" frameWidth="685" frameHeight="366"/>
+	<SubTexture name="pico slide in0003" x="1277" y="1" width="303" height="360" frameX="-382" frameY="-6" frameWidth="685" frameHeight="366"/>
+	<SubTexture name="pico slide in0004" x="1580" y="1" width="295" height="366" frameX="-367" frameY="0" frameWidth="685" frameHeight="366"/>
+	<SubTexture name="pico slide in0005" x="1580" y="1" width="295" height="366" frameX="-367" frameY="0" frameWidth="685" frameHeight="366"/>
+	<SubTexture name="pico slide in0006" x="1153" y="361" width="291" height="354" frameX="-353" frameY="-7" frameWidth="685" frameHeight="366"/>
+	<SubTexture name="pico slide in0007" x="1153" y="361" width="291" height="354" frameX="-353" frameY="-7" frameWidth="685" frameHeight="366"/>
+	<SubTexture name="pico slide in0008" x="1734" y="367" width="288" height="357" frameX="-352" frameY="-4" frameWidth="685" frameHeight="366"/>
+	<SubTexture name="pico slide out0000" x="579" y="716" width="285" height="358" frameX="0" frameY="0" frameWidth="441" frameHeight="361"/>
+	<SubTexture name="pico slide out0001" x="1" y="1" width="440" height="357" frameX="-1" frameY="-4" frameWidth="441" frameHeight="361"/>
+</TextureAtlas>
