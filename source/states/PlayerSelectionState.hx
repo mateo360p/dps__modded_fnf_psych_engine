@@ -137,16 +137,10 @@ class PlayerSelectionState extends MusicBeatState {
         add(playerChill);
 
         gfChill = new SelectionCharacter(positionsArr[0], positionsArr[1], playerChill.speaker);
+        if (gfChill.speakerBG != null) add(gfChill.speakerBG);
+        if (gfChill.vizSprites != null) for (i in gfChill.vizSprites) add(i);
         add(gfChill);
-
-        @:privateAccess
-        gfChill.analyzer = new SpectralAnalyzer(FlxG.sound.music._channel.__audioSource, 7, 0.1);
-        #if desktop
-        // On desktop it uses FFT stuff that isn't as optimized as the direct browser stuff we use on HTML5
-        // So we want to manually change it!
-        @:privateAccess
-        gfChill.analyzer.fftN = 512;
-        #end
+		gfChill.snd = FlxG.sound.music;
 
         playerChillOut = new SelectionPlayer(playerChill.x, playerChill.y, Character.DEFAULT_CHARACTER);
         playerChillOut.visible = false;
@@ -629,6 +623,7 @@ class PlayerSelectionState extends MusicBeatState {
         nametag.switchChar(value);
 
         // Welcome to Hell!
+        // Ok, uhhhh, I really need to optimize and organize all of this-
         playerChill.visible = false;
         playerChill.changeCharacter(value);
         playerChill.setPosition(positionsArr[0] + playerChill.positionArray[0], positionsArr[1] + playerChill.positionArray[1]);
@@ -659,10 +654,24 @@ class PlayerSelectionState extends MusicBeatState {
                 );
             }
 
-            if (gfChill.curCharacter != playerChill.speaker) gfChill.changeCharacter(playerChill.speaker);
+            if (gfChill.curCharacter != playerChill.speaker) {
+                var pos:Int = members.indexOf(gfChill);
+                if (gfChill.vizSprites != null) for (i in gfChill.vizSprites) remove(i);
+                if (gfChill.speakerBG != null) remove(gfChill.speakerBG);
+                remove(gfChill);
+                gfChill.changeCharacter(playerChill.speaker);
+                gfChill.snd = FlxG.sound.music;
+                if (gfChill.speakerBG != null) insert(pos - 1, gfChill.speakerBG);
+                insert(pos + 1, gfChill);
+                if (gfChill.vizSprites != null) for (i in gfChill.vizSprites) insert(pos, i);
+            }
             gfChill.setPosition(positionsArr[0] + gfChill.positionArray[0], positionsArr[1] + gfChill.positionArray[1]);
+            if (gfChill.vizSprites != null) for (i in gfChill.vizSprites) i.setPosition(i.x + gfChill.x + 193.15, i.y + gfChill.y + 81.4);
+            if (gfChill.speakerBG != null) gfChill.speakerBG.setPosition(gfChill.x + 145.3, gfChill.y + 49.5);
+            // Bug detected!!!, if you swap between pico and other character the vizSprites will move, I don't have more sanity
+            // so I will fix it in the next commit, maybe
             if (gfChill.curCharacter != "none") gfChill.visible = true;
-
+            //dude wtf
             playerChillOut.visible = false;
             playerChillOut.changeCharacter(value);
             playerChillOut.setPosition(playerChill.x, playerChill.y);

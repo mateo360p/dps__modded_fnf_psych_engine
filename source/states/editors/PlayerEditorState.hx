@@ -645,6 +645,9 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
         {
             playerChill.speaker = speakerNameInputText.text;
             gfChill.changeCharacter(playerChill.speaker);
+            gfChill.setPosition(PlayerSelectionState.positionsArr[0], PlayerSelectionState.positionsArr[1]);
+            gfChill.x += gfChill.positionArray[0];
+            gfChill.y += gfChill.positionArray[1];
         });
 
         characterNameInputText = new PsychUIInputText(imageInputText.x, imageInputText.y + 40, 100, playerChill.curCharacter, 8);
@@ -1426,6 +1429,7 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
             _file.addEventListener(IOErrorEvent.IO_ERROR, onSaveError);
             _file.save(data, _player + ".json");
         }
+        unsavedProgress = false;
     }
 
     function set_INDEX(value:Int):Int {

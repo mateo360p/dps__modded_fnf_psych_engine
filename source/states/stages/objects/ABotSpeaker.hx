@@ -6,9 +6,9 @@ import funkin.vis.dsp.SpectralAnalyzer;
 
 class ABotSpeaker extends FlxSpriteGroup
 {
-	final VIZ_MAX = 7; //ranges from viz1 to viz7
-	final VIZ_POS_X:Array<Float> = [0, 59, 56, 66, 54, 52, 51];
-	final VIZ_POS_Y:Array<Float> = [0, -8, -3.5, -0.4, 0.5, 4.7, 7];
+	static final VIZ_MAX = 7; //ranges from viz1 to viz7
+	final VIZ_POS_X:Array<Float> = [0, 59, 115, 180, 234, 286, 337];
+	final VIZ_POS_Y:Array<Float> = [0, -8, -11.2, -11.6, -11.2, -6.5, 1.4];
 
 	public var bg:FlxSprite;
 	public var vizSprites:Array<FlxSprite> = [];
@@ -19,7 +19,7 @@ class ABotSpeaker extends FlxSpriteGroup
 	#if funkin.vis
 	var analyzer:SpectralAnalyzer;
 	#end
-	var volumes:Array<Float> = [];
+	//var volumes:Array<Float> = [];
 
 	public var snd(default, set):FlxSound;
 	function set_snd(changed:FlxSound)
@@ -41,24 +41,11 @@ class ABotSpeaker extends FlxSpriteGroup
 		bg.antialiasing = antialias;
 		add(bg);
 
-		var vizX:Float = 0;
-		var vizY:Float = 0;
-		var vizFrames = Paths.getSparrowAtlas('abot/aBotViz');
-		for (i in 1...VIZ_MAX+1)
-		{
-			volumes.push(0.0);
-			vizX += VIZ_POS_X[i-1];
-			vizY += VIZ_POS_Y[i-1];
-			var viz:FlxSprite = new FlxSprite(vizX + 140, vizY + 74);
-			viz.frames = vizFrames;
-			viz.animation.addByPrefix('VIZ', 'viz$i', 0);
-			viz.animation.play('VIZ', true);
-			viz.animation.curAnim.finish(); //make it go to the lowest point
-			viz.antialiasing = antialias;
-			vizSprites.push(viz);
-			viz.updateHitbox();
-			viz.centerOffsets();
-			add(viz);
+		vizSprites = setVizSprites('abot/aBotViz', VIZ_POS_X, VIZ_POS_Y);
+		for (a in vizSprites) {
+			a.x += 140;
+			a.y += 74;
+			add(a);
 		}
 
 		eyeBg = new FlxSprite(-30, 215).makeGraphic(1, 1, FlxColor.WHITE);
@@ -83,6 +70,29 @@ class ABotSpeaker extends FlxSpriteGroup
 		add(speaker);
 	}
 
+	public static function setVizSprites(spr:String, posX:Array<Float>, posY:Array<Float>):Array<FlxSprite> {
+		var vizX:Float = 0;
+		var vizY:Float = 0;
+		var vizFrames = Paths.getSparrowAtlas(spr);
+
+		var vizArr:Array<FlxSprite> = [];
+		for (i in 1...VIZ_MAX + 1)
+		{
+			vizX = posX[i - 1];
+			vizY = posY[i - 1];
+			var viz:FlxSprite = new FlxSprite(vizX, vizY);
+			viz.frames = vizFrames;
+			viz.animation.addByPrefix('VIZ', 'viz$i', 0);
+			viz.animation.play('VIZ', true);
+			viz.animation.curAnim.finish(); //make it go to the lowest point
+			viz.antialiasing = ClientPrefs.data.antialiasing;
+			vizArr.push(viz);
+			viz.updateHitbox();
+			viz.centerOffsets();
+		}
+		return vizArr;
+	}
+
 	#if funkin.vis
 	var levels:Array<Bar>;
 	var levelMax:Int = 0;
@@ -92,7 +102,6 @@ class ABotSpeaker extends FlxSpriteGroup
 		if(analyzer == null) return;
 
 		levels = analyzer.getLevels(levels);
-		var oldLevelMax = levelMax;
 		levelMax = 0;
 		for (i in 0...Std.int(Math.min(vizSprites.length, levels.length)))
 		{
@@ -101,13 +110,6 @@ class ABotSpeaker extends FlxSpriteGroup
 		
 			vizSprites[i].animation.curAnim.curFrame = animFrame;
 			levelMax = Std.int(Math.max(levelMax, 5 - animFrame));
-		}
-
-		if(levelMax >= 4)
-		{
-			//trace(levelMax);
-			if(oldLevelMax <= levelMax && (levelMax >= 5 || speaker.anim.curFrame >= 3))
-				beatHit();
 		}
 	}
 	#end

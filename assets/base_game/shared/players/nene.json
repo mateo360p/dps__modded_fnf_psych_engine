@@ -2,27 +2,27 @@
 	"animations": [
 		{
 			"offsets": [0, 0],
-			"indices": [],
+			"loop": false,
 			"fps": 24,
 			"anim": "idle",
-			"loop": false,
+			"indices": [],
 			"name": "nene cs idle"
 		},
 		{
 			"offsets": [0, 0],
-			"indices": [],
+			"loop": true,
 			"fps": 24,
 			"anim": "confirm",
-			"loop": true,
+			"indices": [],
 			"name": "Nene cs confirm"
 		},
 		{
-			"offsets": [516, 145],
+			"offsets": [0, -5],
 			"indices": [],
 			"fps": 24,
 			"anim": "deselect",
 			"loop": false,
-			"name": "nene cs deselect"
+			"name": "Nene cs deselect"
 		}
 	],
 	"no_antialiasing": false,
@@ -31,7 +31,7 @@
 		0
 	],
 	"image": "charSelect/playerAssets/pico/neneChill",
-	"position": [115, 10],
+	"position": [-555, -200],
 	"speaker": "none",
 	"hey_anim": "",
 	"healthicon": "face",
