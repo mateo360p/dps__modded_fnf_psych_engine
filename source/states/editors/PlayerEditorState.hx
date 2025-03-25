@@ -58,36 +58,6 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
 
     var grpXSpread(default, set):Float = 107;
     var grpYSpread(default, set):Float = 127;
-    var nonLocks = [];
-
-    var bopTimer:Float = 0;
-    var delay = 1 / 24;
-    var bopFr = 0;
-    var bopPlay:Bool = false;
-    var bopRefX:Float = 0;
-    var bopRefY:Float = 0;
-
-    var holdTmrUp:Float = 0;
-    var holdTmrDown:Float = 0;
-    var holdTmrLeft:Float = 0;
-    var holdTmrRight:Float = 0;
-    var spamUp:Bool = false;
-    var spamDown:Bool = false;
-    var spamLeft:Bool = false;
-    var spamRight:Bool = false;
-
-    var sync:Bool = false;
-    var syncLock:Lock = null;
-    var audioBizz:Float = 0;
-    var pressedSelect:Bool = false;
-    var selectTimer:FlxTimer = new FlxTimer();
-    var allowInput:Bool = true; // For now :D
-
-    var cursorX:Int = 0;
-    var cursorY:Int = 0;
-    var cursorFactor:Float = 110;
-    var cursorOffsetX:Float = -16;
-    var cursorOffsetY:Float = -48;
 
 	var gfChill:SelectionCharacter;
     var playerChill:SelectionPlayer;
@@ -112,6 +82,16 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
 
 	var UIGhost_box:PsychUIBox;
     var UI_box:PsychUIBox;
+    var curChar:String;
+    var goToSelector:Bool;
+
+    public function new(?char:String = null, ?goToSelector:Bool = true)
+    {
+        this.curChar = char;
+        this.goToSelector = goToSelector;
+
+        super();
+    }
 
     override public function create()
     {
@@ -168,9 +148,6 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
         charLightGF.antialiasing = (ClientPrefs.data.antialiasing);
         add(charLightGF);
 
-        /*playerChill = new SelectionPlayer(600, 400, Character.DEFAULT_CHARACTER);
-        add(playerChill);*/
-
 		ghost = new FlxSprite();
 		ghost.visible = false;
 		ghost.alpha = ghostAlpha;
@@ -183,7 +160,7 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
 		animsTxt.cameras = [camHUD];
         add(animsTxt);
 
-        addCharacter();
+        addCharacter(false, curChar);
 
         gfChill = new SelectionCharacter(PlayerSelectionState.positionsArr[0], PlayerSelectionState.positionsArr[1], playerChill.speaker);
         add(gfChill);
@@ -191,18 +168,13 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
         gfChill.x += gfChill.positionArray[0];
         gfChill.y += gfChill.positionArray[1];
 
+        // Unused
         @:privateAccess
         gfChill.analyzer = new SpectralAnalyzer(FlxG.sound.music._channel.__audioSource, 7, 0.1);
         #if desktop
-        // On desktop it uses FFT stuff that isn't as optimized as the direct browser stuff we use on HTML5
-        // So we want to manually change it!
         @:privateAccess
         gfChill.analyzer.fftN = 512;
         #end
-/*
-        playerChillOut = new SelectionPlayer(playerChill.x, playerChill.y, Character.DEFAULT_CHARACTER);
-        playerChillOut.visible = false;
-        add(playerChillOut);*/
 
         speakers = new FlxAnimate(0, 0);
         Paths.loadAnimateAtlas(speakers, "charSelect/charSelectSpeakers");
@@ -251,7 +223,6 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
         nametag = new PlayerNameTag(Character.DEFAULT_CHARACTER);
         add(nametag);
         nametag.scrollFactor.set();
-        //curChar = FreeplayState.DEF_PLAYER;
 
         FlxG.sound.playMusic(Paths.music('stayFunky'), 0);
         initIcons();
@@ -363,6 +334,8 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
         playerChill = new SelectionPlayer(PlayerSelectionState.positionsArr[0], PlayerSelectionState.positionsArr[1], char);
         playerChill.debugMode = true;
 
+        curChar = char;
+
         if(pos > -1) insert(pos, playerChill);
         else add(playerChill);
         updateCharacterPositions();
@@ -386,7 +359,6 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
         addAnimationsUI();
         addCharacterUI();
 
-        //UI_box.selectedName = 'Settings';
         UI_box.selectedName = 'Character';
         UIGhost_box.selectedName = "Ghost";
     }
@@ -395,8 +367,6 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
 	function addGhostUI()
     {
         var tab_group = UIGhost_box.getTab('Ghost').menu;
-
-        //var hideGhostButton:PsychUIButton = null;
         var makeGhostButton:PsychUIButton = new PsychUIButton(25, 15, "Make Ghost", function() {
             var anim = anims[curAnim];
             if(!playerChill.isAnimationNull())
@@ -451,19 +421,8 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
                     var otherSpr:FlxSprite = (spr == animateGhost) ? ghost : animateGhost;
                     if(otherSpr != null) otherSpr.visible = false;
                 }
-                /*hideGhostButton.active = true;
-                hideGhostButton.alpha = 1;*/
-                trace('created ghost image');
             }
         });
-
-        /*hideGhostButton = new PsychUIButton(20 + makeGhostButton.width, makeGhostButton.y, "Hide Ghost", function() {
-            ghost.visible = false;
-            hideGhostButton.active = false;
-            hideGhostButton.alpha = 0.6;
-        });
-        hideGhostButton.active = false;
-        hideGhostButton.alpha = 0.6;*/
 
         var highlightGhost:PsychUICheckBox = new PsychUICheckBox(20 + makeGhostButton.x + makeGhostButton.width, makeGhostButton.y, "Highlight Ghost", 100);
         highlightGhost.onClick = function()
@@ -1201,26 +1160,6 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
 			if(lastAnim != '') playerChill.playAnim(lastAnim, true);
 			else playerChill.dance();
 		}
-        /*
-        playerChill.loadAnimations(lastAnims);
-        playerChill.offset.set(0, 0);
-        playerChill.scale.set(playerChill.jsonScale, playerChill.jsonScale);
-        trace('INFO:' + 
-        'X:${playerChill.getPosition().x} ' + 
-        'Y:${playerChill.getPosition().y} ' + 
-        'OFFSET X:${playerChill.offset.x} ' + 
-        'OFFSET Y:${playerChill.offset.y} ' +
-        'SCALE X:${playerChill.scale.x} ' +
-        'SCALE Y:${playerChill.scale.y}'
-        );
-        trace('ATLAS INFO:' + 
-        'X:${playerChill.atlas.getPosition().x} ' + 
-        'Y:${playerChill.atlas.getPosition().y} ' + 
-        'OFFSET X:${playerChill.atlas.offset.x} ' + 
-        'OFFSET Y:${playerChill.atlas.offset.y} ' +
-        'SCALE X:${playerChill.atlas.scale.x} ' +
-        'SCALE Y:${playerChill.atlas.scale.y}'
-        );*/
     }
 
     function addAnimation(anim:String, name:String, fps:Float, loop:Bool, indices:Array<Int>)

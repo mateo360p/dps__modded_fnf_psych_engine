@@ -39,6 +39,7 @@ class FreeplayState extends MusicBeatState
 	var lerpRating:Float = 0;
 	var intendedScore:Int = 0;
 	var intendedRating:Float = 0;
+	var tabToChangeTxt:FlxText;
 
 	private var grpSongs:FlxTypedGroup<Alphabet>;
 	private var curPlaying:Bool = false;
@@ -56,6 +57,7 @@ class FreeplayState extends MusicBeatState
 	var bottomBG:FlxSprite;
 
 	var musicPlayer:MusicPlayer;
+	var tabPlayerSine:Float = 0;
 
 	override function create()
 	{
@@ -163,6 +165,12 @@ class FreeplayState extends MusicBeatState
 		add(diffText);
 
 		add(scoreText);
+
+		tabToChangeTxt = new FlxText(0, 0, 0, Language.getPhrase('tab_change_player', 'PRESS [TAB] TO SELECT PLAYER'), 48);
+		//if(FlxG.random.bool(0.1)) tabToChangeTxt.text += '\nBITCH.'; HmmMmMMmMMmmMmM
+		tabToChangeTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		tabToChangeTxt.borderSize = 2;
+		add(tabToChangeTxt);
 
 
 		missingTextBG = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
@@ -489,6 +497,11 @@ class FreeplayState extends MusicBeatState
 
 		FlxG.camera.zoom = FlxMath.lerp(1, FlxG.camera.zoom, Math.exp(-elapsed * 3.125)); // Reset Camera
 		updateTexts(elapsed);
+
+		//I also used something like this for my project lol
+		tabPlayerSine += 90 * elapsed;
+		tabToChangeTxt.alpha = 1 - Math.sin((Math.PI * tabPlayerSine) / 180);
+
 		super.update(elapsed);
 	}
 

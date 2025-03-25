@@ -15,6 +15,7 @@ class MasterEditorMenu extends MusicBeatState
 		'Stage Editor',
 		'Week Editor',
 		'Menu Character Editor',
+		'Selection Character Editor',
 		'Dialogue Editor',
 		'Dialogue Portrait Editor',
 		'Note Splash Editor'
@@ -104,6 +105,7 @@ class MasterEditorMenu extends MusicBeatState
 
 		if (controls.ACCEPT)
 		{
+			FlxG.sound.music.volume = 0;
 			switch(options[curSelected]) {
 				case 'Chart Editor'://felt it would be cool maybe
 					LoadingState.loadAndSwitchState(new ChartingState(), false);
@@ -111,8 +113,12 @@ class MasterEditorMenu extends MusicBeatState
 					LoadingState.loadAndSwitchState(new CharacterEditorState(Character.DEFAULT_CHARACTER, false));
 				case 'Stage Editor':
 					LoadingState.loadAndSwitchState(new StageEditorState());
-				/*case 'Week Editor':
-					MusicBeatState.switchState(new WeekEditorState());*/
+				case 'Week Editor':
+					FlxG.sound.play(Paths.sound('cancelMenu')); // Disabled!!! :'D
+					FlxG.sound.music.volume = 1;
+					//MusicBeatState.switchState(new WeekEditorState());
+				case 'Selection Character Editor':
+					MusicBeatState.switchState(new PlayerEditorState(Character.DEFAULT_CHARACTER, false));
 				case 'Menu Character Editor':
 					MusicBeatState.switchState(new MenuCharacterEditorState());
 				case 'Dialogue Editor':
@@ -122,7 +128,6 @@ class MasterEditorMenu extends MusicBeatState
 				case 'Note Splash Editor':
 					MusicBeatState.switchState(new NoteSplashEditorState());
 			}
-			FlxG.sound.music.volume = 0;
 			FreeplayState.destroyFreeplayVocals();
 		}
 		

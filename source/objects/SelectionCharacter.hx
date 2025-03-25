@@ -1,7 +1,7 @@
 package objects;
 
+import states.PlayerSelectionState;
 import states.stages.objects.ABotSpeaker;
-import flxanimate.PsychFlxAnimate._AnimateHelper;
 #if funkin.vis
 import funkin.vis.dsp.SpectralAnalyzer;
 #end
@@ -10,16 +10,16 @@ class SelectionCharacter extends Character
 {
     final VIZ_POS_X:Array<Float> = [0, 26, 52.6, 80, 108, 139.2, 167];
 	final VIZ_POS_Y:Array<Float> = [0, 1.7, 5, 10.3, 18.6, 29.1, 41.2];
-    
+
     #if funkin.vis
 	var analyzer:SpectralAnalyzer;
 	#end
-	var enableVisualizer:Bool = false;
+	var enableVisualizer(default, set):Bool = false;
+
 	public var vizSprites:Array<FlxSprite>;
-
     public var speakerBG:FlxSprite;
-
     public var snd(default, set):FlxSound;
+
 	function set_snd(changed:FlxSound)
 	{
 		snd = changed;
@@ -36,35 +36,46 @@ class SelectionCharacter extends Character
 
 	override public function changeCharacter(character:String)
     {
-        if (character == "none") {
-            this.visible = false;
-            this.curCharacter = "none";
-            this.enableVisualizer = false;
-            //trace("no gf?, me neither :c");
-            return; // :D
+        this.enableVisualizer = false;
+        switch (character) {
+            case "none":
+                this.alpha = 0;
+                this.curCharacter = "none";
+                //trace("no gf?, me neither :c");
+                return;
+            case "nene":
+                this.enableVisualizer = true;
+            default:
         }
 
-        if (character == "nene") {
-            enableVisualizer = true;
-            speakerBG = new FlxSprite(0, 0).loadGraphic(Paths.image('charSelect/playerAssets/pico/stereoBG'));
-            speakerBG.antialiasing = ClientPrefs.data.antialiasing;
-            vizSprites = ABotSpeaker.setVizSprites('charSelect/playerAssets/pico/aBotViz', VIZ_POS_X, VIZ_POS_Y);
-            //if (vizSprites != null) for (i in vizSprites) i.setPosition(i.x + this.x, i.y + this.y);
-        } else {
-            enableVisualizer = false;
-            speakerBG = null;
-            vizSprites = null;
-        }
-
-        this.visible = true;
-
+        this.alpha = 1; // Since alpha isn't used here...
         folder = "players";
+
         super.changeCharacter(character);
+
+        snd = FlxG.sound.music;
+        setPosition(PlayerSelectionState.positionsArr[0] + positionArray[0], PlayerSelectionState.positionsArr[1] + positionArray[1]);
+        setObjectsPos();
     }
 
-    override public function loadCharacterFile(json:Dynamic)
-    {
-        super.loadCharacterFile(json);
+    inline function speakerAnalyzerExists():Bool return (speakerBG != null) && (vizSprites != null);
+
+    inline public function funcSpeakerBG(functionChit:FlxSprite->Void) {
+        if (speakerBG == null) return;
+        functionChit(speakerBG);
+    }
+
+    inline public function funcVizSpr(functionChit:FlxSprite->Void) {
+        // Someone has to make a function like this for an array, if no one does or no one hasn't, I might do it, idk
+        if (vizSprites == null || vizSprites == []) return;
+        for (i in vizSprites) {
+            functionChit(i);
+        }
+    }
+
+    inline public function setObjectsPos() {
+        funcSpeakerBG(function(i) i.setPosition(this.x + 145.3, this.y + 49.5));
+        funcVizSpr(function(i) i.setPosition(i.x + this.x + 193.15, i.y + this.y + 81.4));
     }
 
     #if funkin.vis
@@ -74,7 +85,7 @@ class SelectionCharacter extends Character
     {
         super.update(elapsed);
 
-        if (vizSprites != null) for (i in vizSprites) i.visible = speakerBG.visible = this.visible;
+        funcVizSpr(function(a) a.visible = speakerBG.visible = this.visible);
         if(analyzer == null || enableVisualizer == false || vizSprites == null ) return;
 
 		levels = analyzer.getLevels(levels);
@@ -103,4 +114,36 @@ class SelectionCharacter extends Character
 		#end
 	}
 	#end
+
+    function set_enableVisualizer(value:Bool):Bool {
+        if (value) {
+            if (!speakerAnalyzerExists()) {
+                speakerBG = new FlxSprite(0, 0).loadGraphic(Paths.image('charSelect/playerAssets/pico/stereoBG'));
+                speakerBG.antialiasing = ClientPrefs.data.antialiasing;
+            }
+            vizSprites = ABotSpeaker.setVizSprites('charSelect/playerAssets/pico/aBotViz', VIZ_POS_X, VIZ_POS_Y);
+            //setObjectsPos();
+        } else {
+            speakerBG = null;
+            vizSprites = null;
+        }
+        return (enableVisualizer = value);
+    }
+
+    
+    public function onFinishAnimationOnce(anim:String, aFunction:Void -> Void) {
+        if (!isAnimateAtlas) {
+            this.animation.finishCallback = function(name:String) {
+                if (name != anim) return;
+                aFunction();
+                this.animation.finishCallback = null;
+            }
+        } else {
+            this.atlas.anim.onComplete.add( function() {
+                if (getAnimationName() != anim) return;
+                aFunction();
+                this.atlas.anim.onComplete.removeAll();
+            });
+        }
+    }
 }

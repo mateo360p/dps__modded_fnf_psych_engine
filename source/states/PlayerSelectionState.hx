@@ -1,10 +1,7 @@
 package states;
 
-//import states.editors.PlayerEditorState;
-import funkin.vis.dsp.SpectralAnalyzer;
 import states.editors.PlayerEditorState;
 import objects.Character;
-import openfl.display3D.IndexBuffer3D;
 import objects.SelectionPlayer;
 import objects.SelectionCharacter;
 import objects.PlayerIcon;
@@ -65,7 +62,7 @@ class PlayerSelectionState extends MusicBeatState {
     var audioBizz:Float = 0;
     var pressedSelect:Bool = false;
     var selectTimer:FlxTimer = new FlxTimer();
-    var allowInput:Bool = true; // For now :D
+    var allowInput:Bool = false; // For now :D
 
     var cursorX:Int = 0;
     var cursorY:Int = 0;
@@ -82,7 +79,6 @@ class PlayerSelectionState extends MusicBeatState {
     var notBeat:Bool = false;
 	var initialized:Bool = false;
 
-    // Done ;D
     override public function create()
     {
         super.create();
@@ -140,7 +136,6 @@ class PlayerSelectionState extends MusicBeatState {
         if (gfChill.speakerBG != null) add(gfChill.speakerBG);
         if (gfChill.vizSprites != null) for (i in gfChill.vizSprites) add(i);
         add(gfChill);
-		gfChill.snd = FlxG.sound.music;
 
         playerChillOut = new SelectionPlayer(playerChill.x, playerChill.y, Character.DEFAULT_CHARACTER);
         playerChillOut.visible = false;
@@ -231,7 +226,10 @@ class PlayerSelectionState extends MusicBeatState {
         grpCursors.add(cursorBlue);
         grpCursors.add(cursor);
 
-        grpCursors.forEach(function(c) c.antialiasing = (ClientPrefs.data.antialiasing));
+        grpCursors.forEach(function(c) {
+            c.antialiasing = ClientPrefs.data.antialiasing;
+            c.alpha = 0;
+        });
 
         // Sound shits
         selectSound = new FlxSound();
@@ -288,16 +286,19 @@ class PlayerSelectionState extends MusicBeatState {
         cursorBlue.scrollFactor.set();
         cursorDarkBlue.scrollFactor.set();
 
-        FlxTween.color(cursor, 0.2, 0xFFFFFF00, 0xFFFFCC00, {type: PINGPONG});
-
         camFollow = new FlxObject(0, 0, 1, 1);
         add(camFollow);
         camFollow.screenCenter();
 
         FlxG.camera.follow(camFollow, LOCKON, 0.01);
 
-        /*var fadeShaderFilter:ShaderFilter = new ShaderFilter(fadeShader);
-        FlxG.camera.filters = [fadeShaderFilter];*/
+        new FlxTimer().start(0.7, function(tmr) {
+            FlxTween.tween(cursor, {alpha: 1}, 0.2 ,{ease: FlxEase.cubeIn, onComplete: function(twn) {
+                grpCursors.forEach(function(c) c.alpha = cursor.alpha);
+                allowInput = true;
+                FlxTween.color(cursor, 0.2, 0xFFFFFF00, 0xFFFFCC00, {type: PINGPONG});
+            }});
+        });
     }
 
     override public function update(elapsed:Float)
@@ -308,7 +309,7 @@ class PlayerSelectionState extends MusicBeatState {
         if (FlxG.sound.music != null) Conductor.songPosition = FlxG.sound.music.time;
         super.update(elapsed);
 
-        if (FlxG.keys.justPressed.SEVEN) MusicBeatState.switchState(new PlayerEditorState());
+        if (FlxG.keys.justPressed.SEVEN) MusicBeatState.switchState(new PlayerEditorState(curChar, true));
 
         if (controls.UI_UP_R || controls.UI_DOWN_R || controls.UI_LEFT_R || controls.UI_RIGHT_R) selectSound.pitch = 1;
         syncAudio(elapsed);
@@ -455,7 +456,8 @@ class PlayerSelectionState extends MusicBeatState {
 
     function acceptEvent() {
         if (curChar == "locked") {
-            //playerChill.playAnimation("cannot select Label", true);
+            playerChill.playAnim("cannot", true);
+            playerChill.onFinishAnimationOnce("cannot", () -> playerChill.playAnim("idle"));
             cursorDenied.visible = true;
             cursorDenied.animation.play("idle", true);
 
@@ -533,15 +535,7 @@ class PlayerSelectionState extends MusicBeatState {
         for (e in 0...9) {
             // if the index doesn't have a player, then sets to locked
             if(!indexes.contains(e)) gridPlayersList.push(["locked", e]);
-            else 
-            {
-                for (i in LevelData.playersList) { // Getting player from index :u
-                    if (i[1] == e) {
-                        gridPlayersList.push([i[0], e]);
-                        break;
-                    }
-                }
-            }
+            else for (i in LevelData.playersList) if (i[1] == e) {gridPlayersList.push([i[0], e]); break; }// Getting player from index :u
         }
 
         for (player in gridPlayersList) {
@@ -558,50 +552,34 @@ class PlayerSelectionState extends MusicBeatState {
         updateIconPositions();
         grpIcons.scrollFactor.set();
         grpLocks.scrollFactor.set();
-        trace(gridPlayersList);
+        trace("Full List:" + gridPlayersList);
     }
 
     function updateIconPositions()
     {
         grpIcons.x = 450;
         grpIcons.y = 120;
-        for (index => member in grpIcons.members)
-        {
+
+        function linesSafer(index:Int, member:FlxSprite) {
             var posX:Float = (index % 3);
             var posY:Float = Math.floor(index / 3);
 
-            member.x = posX * grpXSpread;
-            member.y = posY * grpYSpread;
-
-            member.x += grpIcons.x;
-            member.y += grpIcons.y;
+            member.x = (posX * grpXSpread) + grpIcons.x;
+            member.y = (posY * grpYSpread) + grpIcons.y;
         }
-        for (index => member in grpLocks.members)
-        {
-            var posX:Float = (index % 3);
-            var posY:Float = Math.floor(index / 3);
 
-            member.x = posX * grpXSpread;
-            member.y = posY * grpYSpread;
-
-            member.x += grpIcons.x;
-            member.y += grpIcons.y;
-        }
+        for (index => icon in grpIcons.members) linesSafer(index, icon);
+        for (index => lock in grpLocks.members) linesSafer(index, lock);
     }
 
     function syncAudio(elapsed:Float):Void
     {
         @:privateAccess
-        if (sync && unlockSound.time > 0)
-        {
-            //playerChillOut.anim._tick = 0;
+        if (sync && unlockSound.time > 0) {
             if (syncLock != null) syncLock.anim._tick = 0;
 
-            if ((unlockSound.time - audioBizz) >= ((delay) * 100))
-            {
+            if ((unlockSound.time - audioBizz) >= ((delay) * 100)) {
                 if (syncLock != null) syncLock.anim._tick = delay;
-
-                //playerChillOut.anim._tick = delay;
                 audioBizz += delay * 100;
             }
         }
@@ -622,66 +600,47 @@ class PlayerSelectionState extends MusicBeatState {
         notBeat = true;
         nametag.switchChar(value);
 
-        // Welcome to Hell!
-        // Ok, uhhhh, I really need to optimize and organize all of this-
         playerChill.visible = false;
         playerChill.changeCharacter(value);
-        playerChill.setPosition(positionsArr[0] + playerChill.positionArray[0], positionsArr[1] + playerChill.positionArray[1]);
 
         gfChill.visible = (gfChill.curCharacter == playerChill.speaker); // If the new player's partner is the same, then doesn't disappear
-        if (playerChillOut.curCharacter != "locked") playerChillOut.visible = true;
 
-        if (initialized) playerChillOut.playAnim("slide out", true);
-        if (changeTimer != null) changeTimer.cancel();
+        playerChillOut.visible = true;
+        playerChillOut.playAnim("slide out", true);
+        playerChillOut.onFinishAnimationOnce("slide out", () -> onfinishChit(value));
 
-        changeTimer = new FlxTimer().start((playerChillOut.curCharacter == "locked") ? 0 : 1/12, function(tmr:FlxTimer) {
-            if (initialized) playerChill.playAnim('slide in', true);
-            playerChill.visible = true;
-
-            // Oh my god I hate this-
-            if (!playerChill.isAnimateAtlas) {
-                playerChill.animation.finishCallback = function(name:String)
-                {
-                    if (name == "slide in") notBeat = false;
-                    playerChill.animation.finishCallback = null;
-                }
-            } else {
-                playerChill.atlas.anim.onComplete.add(
-                    function() {
-                        notBeat = false; // I hate atlas so bad
-                        playerChill.atlas.anim.onComplete.removeAll();
-                    }
-                );
-            }
-
-            if (gfChill.curCharacter != playerChill.speaker) {
-                var pos:Int = members.indexOf(gfChill);
-                if (gfChill.vizSprites != null) for (i in gfChill.vizSprites) remove(i);
-                if (gfChill.speakerBG != null) remove(gfChill.speakerBG);
-                remove(gfChill);
-                gfChill.changeCharacter(playerChill.speaker);
-                gfChill.snd = FlxG.sound.music;
-                if (gfChill.speakerBG != null) insert(pos - 1, gfChill.speakerBG);
-                insert(pos + 1, gfChill);
-                if (gfChill.vizSprites != null) for (i in gfChill.vizSprites) insert(pos, i);
-            }
-            gfChill.setPosition(positionsArr[0] + gfChill.positionArray[0], positionsArr[1] + gfChill.positionArray[1]);
-            if (gfChill.vizSprites != null) for (i in gfChill.vizSprites) i.setPosition(i.x + gfChill.x + 193.15, i.y + gfChill.y + 81.4);
-            if (gfChill.speakerBG != null) gfChill.speakerBG.setPosition(gfChill.x + 145.3, gfChill.y + 49.5);
-            // Bug detected!!!, if you swap between pico and other character the vizSprites will move, I don't have more sanity
-            // so I will fix it in the next commit, maybe
-            if (gfChill.curCharacter != "none") gfChill.visible = true;
-            //dude wtf
-            playerChillOut.visible = false;
-            playerChillOut.changeCharacter(value);
-            playerChillOut.setPosition(playerChill.x, playerChill.y);
-            playerChillOut.visible = false;
-
-            //notBeat = false;
-            initialized = true;
-            tmr = null;
-        });
         return value;
+    }
+
+    // When the playerOut ends his "slide out" anim
+    function onfinishChit(char:String) {
+        function linesSafer() {
+            notBeat = false;
+            if (curChar == "locked") playerChill.playAnim("idle");
+        }
+
+        if (!initialized) linesSafer();
+        else playerChill.playAnim('slide in', true, false, initialized ? 0 : 1);
+        playerChill.visible = true;
+
+        playerChill.onFinishAnimationOnce("slide in", () -> linesSafer());
+
+        if (gfChill.curCharacter != playerChill.speaker) { // Reloading partner
+            gfChill.funcVizSpr(function(i) remove(i));
+            gfChill.funcSpeakerBG(function(i) remove(i));
+
+            gfChill.changeCharacter(playerChill.speaker);
+
+            gfChill.funcSpeakerBG(function(i) insert(members.indexOf(gfChill) - 1, i));
+            gfChill.funcVizSpr(function(i) insert(members.indexOf(gfChill), i));
+        }
+        changeTimer = new FlxTimer().start(1/12, function (tmr) gfChill.visible = true);
+        // Yup, I think the bug is fixed!
+
+        playerChillOut.visible = false;
+        playerChillOut.changeCharacter(char);
+
+        initialized = true;
     }
 
     function coolLerp(base:Float, target:Float, ratio:Float):Float
