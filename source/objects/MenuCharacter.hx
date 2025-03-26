@@ -28,6 +28,10 @@ class MenuCharacter extends Character
 		changeMenuCharacter(character, type);
 	}
 
+	override public function changeCharacter(character:String) {
+		// Nothing :O
+	}
+
 	public function changeMenuCharacter(?character:String = 'bf', type:Int) {
 		if(character == null) character = '';
 		if(character == this.character) return;

@@ -2543,21 +2543,19 @@ class PlayState extends MusicBeatState
 					var player:String = firstSong[1] + '_';
 
 					trace('LOADING NEXT SONG');
-					//trace(Paths.formatToSongPath(PlayState.storyPlaylist[0]) + difficulty);
 
 					FlxTransitionableState.skipNextTransIn = true;
 					FlxTransitionableState.skipNextTransOut = true;
 					prevCamFollow = camFollow;
+
 					Song.loadFromJson(player + firstSong[0] + difficulty, firstSong[0]);
 					trace("nextSong: " + player + firstSong[0] + difficulty);
-					//Song.loadFromJson(PlayState.storyPlaylist[0] + difficulty, PlayState.storyPlaylist[0]);
+
 					FlxG.sound.music.stop();
 
 					canResync = false;
 					LoadingState.prepareToSong();
-					trace("I should die now");
 					LoadingState.loadAndSwitchState(new PlayState(), false, false);
-					trace("WAIT WHAT");
 				}
 			}
 			else

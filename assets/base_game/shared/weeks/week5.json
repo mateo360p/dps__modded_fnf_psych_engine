@@ -1,0 +1,37 @@
+{
+	"tweenTime": 0.5,
+	"levels": [
+		[
+			"Cocoa",
+			"bf"
+		],
+		[
+			"Eggnog",
+			"bf"
+		],
+		[
+			"Winter Horrorland",
+			"bf"
+		]
+	],
+	"weekColor": [
+		249,
+		207,
+		81
+	],
+	"hiddenUntilUnlocked": false,
+	"hideFreeplay": false,
+	"weekBackground": "christmas",
+	"difficulties": "",
+	"weekCharacters": [
+		"parents-christmas",
+		"bf",
+		"gf"
+	],
+	"storyName": "RED SNOW",
+	"weekName": "Week 5",
+	"player": "bf",
+	"hideStoryMode": false,
+	"weekBefore": "week4",
+	"startUnlocked": true
+}

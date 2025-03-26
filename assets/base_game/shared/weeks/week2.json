@@ -1,29 +1,22 @@
 {
-	"storyName": "Spooky Month",
 	"tweenTime": 0.5,
+	"storyName": "Spooky Month",
+	"player": "bf",
+	"difficulties": "Hard",
 	"hideFreeplay": false,
 	"weekBackground": "halloween",
 	"weekBefore": "week1",
 	"startUnlocked": true,
-	"hideStoryMode": false,
-	"weekName": "Week 2",
-	"difficulties": "Hard",
-	"weekColor": [
-		249,
-		207,
-		81
-	],
-	"hiddenUntilUnlocked": false,
 	"weekCharacters": [
 		"spooky",
 		"bf",
 		"gf"
 	],
-	"player": "bf",
+	"hideStoryMode": false,
 	"levels": [
 		[
 			"Spookeez",
-			"pico"
+			"bf"
 		],
 		[
 			"South",
@@ -33,5 +26,12 @@
 			"Monster",
 			"bf"
 		]
-	]
+	],
+	"hiddenUntilUnlocked": false,
+	"weekColor": [
+		249,
+		207,
+		81
+	],
+	"weekName": "Week 2"
 }

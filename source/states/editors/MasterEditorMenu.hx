@@ -1,5 +1,6 @@
 package states.editors;
 
+import states.editors.LevelEditorState.LevelEditorState;
 import backend.WeekData;
 
 import objects.Character;
@@ -14,6 +15,7 @@ class MasterEditorMenu extends MusicBeatState
 		'Character Editor',
 		'Stage Editor',
 		'Week Editor',
+		'Level Editor',
 		'Menu Character Editor',
 		'Selection Character Editor',
 		'Dialogue Editor',
@@ -114,9 +116,9 @@ class MasterEditorMenu extends MusicBeatState
 				case 'Stage Editor':
 					LoadingState.loadAndSwitchState(new StageEditorState());
 				case 'Week Editor':
-					FlxG.sound.play(Paths.sound('cancelMenu')); // Disabled!!! :'D
-					FlxG.sound.music.volume = 1;
-					//MusicBeatState.switchState(new WeekEditorState());
+					MusicBeatState.switchState(new WeekEditorState());
+				case 'Level Editor':
+					MusicBeatState.switchState(new LevelEditorState());
 				case 'Selection Character Editor':
 					MusicBeatState.switchState(new PlayerEditorState(Character.DEFAULT_CHARACTER, false));
 				case 'Menu Character Editor':

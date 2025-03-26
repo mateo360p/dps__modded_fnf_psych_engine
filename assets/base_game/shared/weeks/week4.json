@@ -1,25 +1,18 @@
 {
-	"storyName": "Mommy Must Murder",
 	"tweenTime": 0.5,
+	"storyName": "Mommy Must Murder",
+	"player": "bf",
+	"difficulties": "Easy, Normal, Hard",
 	"hideFreeplay": false,
-	"weekBackground": "phillyTrain",
+	"weekBackground": "limo",
 	"weekBefore": "week3",
 	"startUnlocked": true,
-	"hideStoryMode": false,
-	"weekName": "Week 2",
-	"difficulties": "Easy, Normal, Hard",
-	"weekColor": [
-		249,
-		207,
-		81
-	],
-	"hiddenUntilUnlocked": false,
 	"weekCharacters": [
 		"mom",
 		"bf",
 		"gf"
 	],
-	"player": "bf",
+	"hideStoryMode": false,
 	"levels": [
 		[
 			"Satin Panties",
@@ -33,5 +26,12 @@
 			"Milf",
 			"bf"
 		]
-	]
+	],
+	"hiddenUntilUnlocked": false,
+	"weekColor": [
+		249,
+		207,
+		81
+	],
+	"weekName": "Week 2"
 }

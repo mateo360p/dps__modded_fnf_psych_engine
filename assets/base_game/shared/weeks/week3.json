@@ -1,25 +1,18 @@
 {
-	"storyName": "Pico",
 	"tweenTime": 0.5,
+	"storyName": "Pico",
+	"player": "bf",
+	"difficulties": "Easy, Normal, Hard, Night",
 	"hideFreeplay": false,
-	"weekBackground": "phillyTrain",
+	"weekBackground": "philly",
 	"weekBefore": "week2",
 	"startUnlocked": true,
-	"hideStoryMode": false,
-	"weekName": "Week 2",
-	"difficulties": "Easy, Normal, Hard, Night",
-	"weekColor": [
-		249,
-		207,
-		81
-	],
-	"hiddenUntilUnlocked": false,
 	"weekCharacters": [
 		"pico",
 		"bf",
 		"gf"
 	],
-	"player": "bf",
+	"hideStoryMode": false,
 	"levels": [
 		[
 			"Pico",
@@ -33,5 +26,12 @@
 			"Blammed",
 			"bf"
 		]
-	]
+	],
+	"hiddenUntilUnlocked": false,
+	"weekColor": [
+		249,
+		207,
+		81
+	],
+	"weekName": "Week 3"
 }
