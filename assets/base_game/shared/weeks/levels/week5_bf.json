@@ -1,10 +1,4 @@
 {
-	"tweenTime": 0.5,
-	"storyName": "RED SNOW",
-	"hideFreeplay": false,
-	"weekBackground": "christmas",
-	"weekBefore": "week4",
-	"startUnlocked": true,
 	"songs": [
 		[
 			"Cocoa",
@@ -13,7 +7,8 @@
 				160,
 				209,
 				255
-			]
+			],
+			"Night"
 		],
 		[
 			"Eggnog",
@@ -34,17 +29,5 @@
 			]
 		]
 	],
-	"hideStoryMode": false,
-	"weekCharacters": [
-		"parents-christmas",
-		"bf",
-		"gf"
-	],
-	"hiddenUntilUnlocked": false,
-	"weekColor": [
-		249,
-		207,
-		81
-	],
-	"weekName": "Week 5"
+	"levelDifficulties": "Easy, Normal, Hard"
 }

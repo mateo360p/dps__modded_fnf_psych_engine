@@ -1,0 +1,5 @@
+package characters;
+
+class Nene {
+    
+}

@@ -2,15 +2,15 @@
 	"tweenTime": 0.5,
 	"levels": [
 		[
-			"Cocoa",
+			"Ugh",
 			"bf"
 		],
 		[
-			"Eggnog",
+			"Guns",
 			"bf"
 		],
 		[
-			"Winter Horrorland",
+			"Stress",
 			"bf"
 		]
 	],
@@ -21,16 +21,17 @@
 	],
 	"hiddenUntilUnlocked": false,
 	"hideFreeplay": false,
-	"weekBackground": "christmas",
-	"difficulties": "",
+	"weekBackground": "tank",
+	"difficulties": null,
 	"weekCharacters": [
-		"parents-christmas",
+		"tankman",
 		"bf",
 		"gf"
 	],
-	"weekName": "Week 5",
-	"storyName": "RED SNOW",
+	"storyName": "Tankman",
+	"weekName": "Week 7",
+	"player": "bf",
 	"hideStoryMode": false,
-	"weekBefore": "week4",
+	"weekBefore": "week6",
 	"startUnlocked": true
 }

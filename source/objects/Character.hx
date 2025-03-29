@@ -248,7 +248,16 @@ class Character extends FlxSprite
 		#if flxanimate
 		if(isAnimateAtlas) copyAtlasValues();
 		#end
+
+		startChar("nene");
 		//trace('Loaded file to character ' + curCharacter);
+	}
+
+	public function startChar(char:String) {
+		switch (char) {
+			case "nene":
+				
+		}
 	}
 
 	override function update(elapsed:Float)

@@ -3176,13 +3176,15 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 			if(Song.chartPath != null && Song.chartPath.length > 0)
 			{
 				var parentFolder:String = Song.chartPath.replace('\\', '/');
-				parentFolder = parentFolder.substr(0, Song.chartPath.lastIndexOf('/')+1);
+				parentFolder = parentFolder.substring(0, parentFolder.lastIndexOf('/') + 1); // This was the dumbbest error ever-
+				//trace(parentFolder + 'notetypes.txt');
 				var notetypeFile:Array<String> = CoolUtil.coolTextFile(parentFolder + 'notetypes.txt');
 				if(notetypeFile.length > 0)
 				{
 					for (ntTyp in notetypeFile)
 					{
 						var name:String = ntTyp.trim();
+						//trace(name);
 						if(!noteTypes.contains(name))
 							noteTypes.push(name);
 					}

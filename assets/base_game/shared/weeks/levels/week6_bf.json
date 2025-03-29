@@ -1,0 +1,33 @@
+{
+	"songs": [
+		[
+			"Senpai",
+			"senpai-pixel",
+			[
+				255,
+				120,
+				191
+			]
+		],
+		[
+			"Roses",
+			"senpai-pixel",
+			[
+				255,
+				120,
+				191
+			],
+			"Night"
+		],
+		[
+			"Thorns",
+			"spirit-pixel",
+			[
+				255,
+				120,
+				191
+			]
+		]
+	],
+	"levelDifficulties": "Easy, Normal, Hard"
+}

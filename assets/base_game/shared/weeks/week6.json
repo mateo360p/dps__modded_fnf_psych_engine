@@ -2,15 +2,15 @@
 	"tweenTime": 0.5,
 	"levels": [
 		[
-			"Cocoa",
+			"Senpai",
 			"bf"
 		],
 		[
-			"Eggnog",
+			"Roses",
 			"bf"
 		],
 		[
-			"Winter Horrorland",
+			"Thorns",
 			"bf"
 		]
 	],
@@ -21,16 +21,17 @@
 	],
 	"hiddenUntilUnlocked": false,
 	"hideFreeplay": false,
-	"weekBackground": "christmas",
+	"weekBackground": "school",
 	"difficulties": "",
 	"weekCharacters": [
-		"parents-christmas",
+		"senpai",
 		"bf",
 		"gf"
 	],
-	"weekName": "Week 5",
-	"storyName": "RED SNOW",
+	"storyName": "hating simulator ft. moawling",
+	"weekName": "Week 6",
+	"player": "bf",
 	"hideStoryMode": false,
-	"weekBefore": "week4",
+	"weekBefore": "week5",
 	"startUnlocked": true
 }

@@ -499,9 +499,34 @@ class WeekEditorState extends MusicBeatState implements PsychUIEventHandler.Psyc
 		if(fullPath != null) {
 			var rawJson:String = File.getContent(fullPath);
 			if(rawJson != null) {
-				loadedWeek = cast Json.parse(rawJson);
-				if(loadedWeek.weekCharacters != null && loadedWeek.weekName != null) //Make sure it's really a week
+				var weeklySuffering:Dynamic = cast Json.parse(rawJson);
+				// Hell, again
+				if(weeklySuffering.weekCharacters != null && weeklySuffering.weekName != null) // Make sure it's really a week
 				{
+					var weeklyHappiness:WeekFile = WeekData.createWeekFile();
+					if (weeklySuffering.levels == null){
+						weeklyHappiness.levels = [];
+						var songsPrev:Array<Dynamic> = weeklySuffering.songs ?? [[""]];
+						for (i in songsPrev) weeklyHappiness.levels.push([i[0], Character.DEFAULT_CHARACTER]);
+					} else weeklyHappiness.levels = weeklySuffering.levels;
+
+					// Compatibility with the Original Psych Engine!
+					weeklyHappiness.weekColor = weeklySuffering.weekColor ?? WeekData.defWeekColor;
+					weeklyHappiness.tweenTime = weeklySuffering.tweenTime ?? WeekData.defTweenTime;
+					// Anddd the other stuff...
+					weeklyHappiness.hiddenUntilUnlocked = weeklySuffering.hiddenUntilUnlocked;
+					weeklyHappiness.hideFreeplay = weeklySuffering.hideFreeplay;
+					weeklyHappiness.weekBackground = weeklySuffering.weekBackground;
+					weeklyHappiness.difficulties = weeklySuffering.difficulties;
+					weeklyHappiness.weekCharacters = weeklySuffering.weekCharacters;
+					weeklyHappiness.weekName = weeklySuffering.weekName;
+					weeklyHappiness.storyName = weeklySuffering.storyName;
+					weeklyHappiness.hideStoryMode = weeklySuffering.hideStoryMode;
+					weeklyHappiness.weekBefore = weeklySuffering.weekBefore;
+					weeklyHappiness.startUnlocked = weeklySuffering.startUnlocked;
+
+					loadedWeek = weeklyHappiness; // All that chit to avoid the "songs" value in old weeks
+
 					var cutName:String = _file.name.substr(0, _file.name.length - 5);
 					trace("Successfully loaded file: " + cutName);
 					loadError = false;

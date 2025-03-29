@@ -404,9 +404,10 @@ class PlayState extends MusicBeatState
 			case 'mallEvil': new MallEvil();			//Week 5 - Winter Horrorland
 			case 'school': new School();				//Week 6 - Senpai, Roses
 			case 'schoolEvil': new SchoolEvil();		//Week 6 - Thorns
-			case 'tank': new Tank();					//Week 7 - Ugh, Guns, Stress
+			case 'tank': new Tank();					//Week 7
 			case 'phillyStreets': new PhillyStreets(); 	//Weekend 1 - Darnell, Lit Up, 2Hot
 			case 'phillyBlazin': new PhillyBlazin();	//Weekend 1 - Blazin
+			case 'phillyStreetsAlt': new PhillyStreetsAlt(); 	//Weekend 1 (BF)
 		}
 		if(isPixelStage) introSoundsSuffix = '-pixel';
 
@@ -1371,7 +1372,7 @@ class PlayState extends MusicBeatState
 						trace('Failed to load events:' + i);
 					}
 				} else {
-					trace('null events file founded!');
+					//trace('null events file founded!');
 				}
 			}
 		}
@@ -2959,11 +2960,9 @@ class PlayState extends MusicBeatState
 			case 'bf' | 'boyfriend' | '0':
 				ghost = bfGhost ;
 				player = boyfriend;
-				//tween = bfGhostTween ;
 			case 'dad' | 'opponent' | '1':
 				ghost = dadGhost ;
 				player = dad;
-				//tween = dadGhostTween ;
 		}
 
 		ghost.antialiasing = player.antialiasing;

@@ -1,6 +1,10 @@
 package states.stages;
 
+import flixel.util.FlxAxes;
+import flixel.addons.display.FlxBackdrop;
+import flixel.graphics.FlxGraphic;
 import openfl.filters.ShaderFilter;
+//import shaders.RainShader;
 import shaders.RainShader;
 
 import flixel.addons.display.FlxTiledSprite;
@@ -28,6 +32,13 @@ class PhillyStreets extends BaseStage
 	final MAX_BLINK_DELAY:Int = 7;
 	final VULTURE_THRESHOLD:Float = 0.5;
 	var blinkCountdown:Int = 3;
+	final mistPosChit:Array<Float> = [-650, -100];
+
+	/**
+	 * REMEMBER TO PUT THE "/" SHIT AT THE END!!!
+	 */
+	public var folder:String = "";
+	public var isAlt:Bool = false;
 
 	var rainShader:RainShader;
 	var rainShaderStartIntensity:Float = 0;
@@ -45,11 +56,18 @@ class PhillyStreets extends BaseStage
 
 	var darkenable:Array<FlxSprite> = [];
 	var abot:ABotSpeaker;
+
+	var mist0:FlxBackdrop;
+	var mist1:FlxBackdrop;
+	var mist2:FlxBackdrop;
+	var mist3:FlxBackdrop;
+	var mist4:FlxBackdrop;
+	var mist5:FlxBackdrop;
 	override function create()
 	{
 		if(!ClientPrefs.data.lowQuality)
 		{
-			var skyImage = Paths.image('phillyStreets/phillySkybox');
+			var skyImage = Paths.image('phillyStreets/' + folder + 'phillySkybox');
 			scrollingSky = new FlxTiledSprite(skyImage, skyImage.width + 400, skyImage.height, true, false);
 			scrollingSky.antialiasing = ClientPrefs.data.antialiasing;
 			scrollingSky.setPosition(-650, -375);
@@ -58,20 +76,32 @@ class PhillyStreets extends BaseStage
 			add(scrollingSky);
 			darkenable.push(scrollingSky);
 		
-			var phillySkyline:BGSprite = new BGSprite('phillyStreets/phillySkyline', -545, -273, 0.2, 0.2);
+			var phillySkyline:BGSprite = new BGSprite('phillyStreets/' + folder + 'phillySkyline', -545, -273, 0.2, 0.2);
 			add(phillySkyline);
 			darkenable.push(phillySkyline);
 
-			var phillyForegroundCity:BGSprite = new BGSprite('phillyStreets/phillyForegroundCity', 625, 94, 0.3, 0.3);
+			var phillyForegroundCity:BGSprite = new BGSprite('phillyStreets/' + folder + 'phillyForegroundCity', 625, 94, 0.3, 0.3);
 			add(phillyForegroundCity);
 			darkenable.push(phillyForegroundCity);
+
+			if (isAlt) {
+				mist5 = new FlxBackdrop(Paths.image('phillyStreets/erect/mistMid'), FlxAxes.X);
+				mist5.setPosition(mistPosChit[0], mistPosChit[1]);
+				mist5.scrollFactor.set(0.5, 0.5);
+				mist5.blend = ADD;
+				mist5.color = 0xFF5c5c5c;
+				mist5.alpha = 1;
+				mist5.velocity.x = 20;
+				mist5.scale.set(1.1, 1.1);
+				add(mist5);
+			}
 		}
 
-		var phillyConstruction:BGSprite = new BGSprite('phillyStreets/phillyConstruction', 1800, 364, 0.7, 1);
+		var phillyConstruction:BGSprite = new BGSprite('phillyStreets/' + folder + 'phillyConstruction', 1800, 364, 0.7, 1);
 		add(phillyConstruction);
 		darkenable.push(phillyConstruction);
 
-		var phillyHighwayLights:BGSprite = new BGSprite('phillyStreets/phillyHighwayLights', 284, 305, 1, 1);
+		var phillyHighwayLights:BGSprite = new BGSprite('phillyStreets/' + folder + 'phillyHighwayLights', 284, 305, 1, 1);
 		add(phillyHighwayLights);
 		darkenable.push(phillyHighwayLights);
 
@@ -84,7 +114,7 @@ class PhillyStreets extends BaseStage
 			darkenable.push(phillyHighwayLightsLightmap);
 		}
 
-		var phillyHighway:BGSprite = new BGSprite('phillyStreets/phillyHighway', 139, 209, 1, 1);
+		var phillyHighway:BGSprite = new BGSprite('phillyStreets/' + folder + 'phillyHighway', 139, 209, 1, 1);
 		add(phillyHighway);
 		darkenable.push(phillyHighway);
 
@@ -96,7 +126,7 @@ class PhillyStreets extends BaseStage
 
 			for (i in 0...2)
 			{
-				var car:BGSprite = new BGSprite('phillyStreets/phillyCars', 1200, 818, 0.9, 1, ['car1', 'car2', 'car3', 'car4'], false);
+				var car:BGSprite = new BGSprite('phillyStreets/' + folder + 'phillyCars', 1200, 818, 0.9, 1, ['car1', 'car2', 'car3', 'car4'], false);
 				add(car);
 				switch(i)
 				{
@@ -107,18 +137,56 @@ class PhillyStreets extends BaseStage
 			}
 			phillyCars2.flipX = true;
 
-			phillyTraffic = new BGSprite('phillyStreets/phillyTraffic', 1840, 608, 0.9, 1, ['redtogreen', 'greentored'], false);
+			if (isAlt) {
+				mist4 = new FlxBackdrop(Paths.image('phillyStreets/erect/mistBack'), FlxAxes.X);
+				mist4.setPosition(mistPosChit[0], mistPosChit[1]);
+				mist4.scrollFactor.set(0.8, 0.8);
+				mist4.blend = ADD;
+				mist4.color = 0xFF5c5c5c;
+				mist4.alpha = 1;
+				mist4.velocity.x = 40;
+				mist4.scale.set(0.7, 0.7);
+				add(mist4);
+			}
+
+			phillyTraffic = new BGSprite('phillyStreets/' + folder + 'phillyTraffic', 1840, 608, 0.9, 1, ['redtogreen', 'greentored'], false);
 			add(phillyTraffic);
 			darkenable.push(phillyTraffic);
 
-			var phillyTrafficLightmap:BGSprite = new BGSprite('phillyStreets/phillyTraffic_lightmap', 1840, 608, 0.9, 1);
+			var phillyTrafficLightmap:BGSprite = new BGSprite('phillyStreets/' + folder + 'phillyTraffic_lightmap', 1840, 608, 0.9, 1);
 			phillyTrafficLightmap.blend = ADD;
 			phillyTrafficLightmap.alpha = 0.6;
 			add(phillyTrafficLightmap);
 			darkenable.push(phillyTrafficLightmap);
 		}
 
-		var phillyForeground:BGSprite = new BGSprite('phillyStreets/phillyForeground', 88, 317, 1, 1);
+		if (isAlt) {
+			var grey1:BGSprite = new BGSprite("phillyStreets/erect/greyGradient", 88, 317);
+			var grey2 = grey1.clone(); // Uhhh its the literal same chit, i dont understand-
+
+			grey1.alpha = 0.3;
+			add(grey1);
+			darkenable.push(grey1);
+
+			if (!ClientPrefs.data.lowQuality) {
+				grey2.alpha = 0.9;
+				add(grey2);
+				darkenable.push(grey2);
+			}
+
+			mist3 = new FlxBackdrop(Paths.image('phillyStreets/erect/mistMid'), FlxAxes.X);
+			mist3.setPosition(mistPosChit[0], mistPosChit[1]);
+			mist3.scrollFactor.set(0.95, 0.95);
+			mist3.blend = ADD;
+			mist3.color = 0xFF5c5c5c;
+			mist3.alpha = 0.5;
+			mist3.velocity.x = -50;
+			mist3.scale.set(0.8, 0.8);
+
+			add(mist3);
+		}
+
+		var phillyForeground:BGSprite = new BGSprite('phillyStreets/' + folder + 'phillyForeground', 88, 317, 1, 1);
 		add(phillyForeground);
 		darkenable.push(phillyForeground);
 		
@@ -185,8 +253,40 @@ class PhillyStreets extends BaseStage
 
 		spraycanPile = new BGSprite('SpraycanPile', 920, 1045, 1, 1);
 		precache();
-		add(spraycanPile);
-		darkenable.push(spraycanPile);
+		if (!isAlt) { add(spraycanPile); darkenable.push(spraycanPile);}
+
+		if (isAlt) {
+			mist1 = new FlxBackdrop(Paths.image('phillyStreets/erect/mistMid'), FlxAxes.X);
+			mist1.setPosition(mistPosChit[0], mistPosChit[1]);
+			mist1.scrollFactor.set(1.1, 1.1);
+			mist1.blend = ADD;
+			mist1.color = 0xFF5c5c5c;
+			mist1.alpha = 0.6;
+			mist1.velocity.x = 150;
+			add(mist1);
+
+			if(!ClientPrefs.data.lowQuality) {
+				mist0 = new FlxBackdrop(Paths.image('phillyStreets/erect/mistMid'), FlxAxes.X);
+				mist0.setPosition(mistPosChit[0], mistPosChit[1]);
+				mist0.scrollFactor.set(1.2, 1.2);
+				mist0.blend = ADD;
+				mist0.color = 0xFF5c5c5c;
+				mist0.alpha = 0.6;
+				mist0.velocity.x = 172;
+
+				mist2 = new FlxBackdrop(Paths.image('phillyStreets/erect/mistBack'), FlxAxes.X);
+				mist2.setPosition(mistPosChit[0], mistPosChit[1]);
+				mist2.scrollFactor.set(1.2, 1.2);
+				mist2.blend = ADD;
+				mist2.color = 0xFF5c5c5c;
+				mist2.alpha = 0.8;
+				mist2.velocity.x = -80;
+			}
+
+			if (mist0 != null) add(mist0);
+			add(mist1);
+			if (mist2 != null) add(mist2);
+		}
 
 		if(gf != null)
 		{
@@ -520,9 +620,21 @@ class PhillyStreets extends BaseStage
 	
 	var currentNeneState:NeneState = STATE_DEFAULT;
 	var animationFinished:Bool = false;
+	var _timer:Float = 0;
 	override function update(elapsed:Float)
 	{
 		if(scrollingSky != null) scrollingSky.scrollX -= elapsed * 22;
+
+		// V E R Y  F U N N Y
+		if (isAlt) {
+			_timer += elapsed;
+			if (mist0 != null) mist0.y = 660 + (Math.sin(_timer * 0.35) * 70);
+			if (mist1 != null) mist1.y = 500 + (Math.sin(_timer * 0.3) * 80);
+			if (mist2 != null) mist2.y = 540 + (Math.sin(_timer * 0.4) * 60);
+			if (mist3 != null) mist3.y = 230 + (Math.sin(_timer * 0.3) * 70);
+			if (mist4 != null) mist4.y = 170 + (Math.sin(_timer * 0.35) * 50);
+			if (mist5 != null) mist5.y = -80 + (Math.sin(_timer * 0.08) * 100);
+		}
 
 		if(rainShader != null)
 		{
@@ -906,6 +1018,8 @@ class PhillyStreets extends BaseStage
 				dad.playAnim('kickCan', true);
 				dad.specialAnim = true;
 				kickCanSnd.play(true, sndTime - 50);
+				spraycan = new SpraycanAtlasSprite(spraycanPile.x + 530, spraycanPile.y - 240);
+				add(spraycan); // DUMBASS!
 				spraycan.playCanStart();
 				camFollow.x += 250;
 				game.cameraSpeed = 1.5;

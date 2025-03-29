@@ -122,10 +122,10 @@ class LevelEditorState extends MusicBeatState implements PsychUIEventHandler.Psy
 
         diffsInputText = new PsychUIInputText(playerInputText.x, playerInputText.y + 40, 100, levelFile.levelDifficulties, 8);
 
-		var loadLevelButton:PsychUIButton = new PsychUIButton(diffsInputText.x, diffsInputText.y + 70, "Load Level", function() {
+		var loadLevelButton:PsychUIButton = new PsychUIButton(diffsInputText.x, diffsInputText.y + 70, "Load Level or Old Week songs", function() {
             if(!unsavedProgress) loadLevel();
 			else openSubState(new Prompt('Are you sure you want to start over?', loadLevel));
-		});
+		}, 160);
 
         var loadFWeekButton:PsychUIButton = new PsychUIButton(playerInputText.x, loadLevelButton.y + 40, "Load From Week", function() {
             if(!unsavedProgress) loadLevelFromWeek();
@@ -305,15 +305,19 @@ class LevelEditorState extends MusicBeatState implements PsychUIEventHandler.Psy
 			var rawJson:String = File.getContent(fullPath);
 			if(rawJson != null) {
 				loadedLevel = cast Json.parse(rawJson);
-				if(loadedLevel.levelDifficulties != null && loadedLevel.songs != null) // Make sure it's really a level ;D
+				if(loadedLevel.songs != null) // Make sure it's really a level, ORRR and old week ;D
 				{
 					var cutName:String = _file.name.substr(0, _file.name.length - 5);
 					trace("Successfully loaded file: " + cutName);
-                    MusicBeatState.switchState(new LevelEditorState(loadedLevel, cutName.substring(cutName.lastIndexOf("_") + 1), false, cutName.substring(0, cutName.lastIndexOf("_"))));
+
+					var simpleLevel:LevelFile = LevelData.createLevelFile(); // This is to evoid all the shit that an old week has
+					simpleLevel.songs = loadedLevel.songs;
+					if (loadedLevel.levelDifficulties != null) simpleLevel.levelDifficulties = loadedLevel.levelDifficulties;
+                    MusicBeatState.switchState(new LevelEditorState(simpleLevel, cutName.substring(cutName.lastIndexOf("_") + 1), false, cutName.substring(0, cutName.lastIndexOf("_"))));
 					return;
 				} else {
                     FlxG.sound.play(Paths.sound('cancelMenu')); // Dumbass
-                    trace("This isn't a Level File, is it?");
+                    trace("This isn't a Level File, or at least an old week, is it?");
                 }
 			}
 		}
@@ -342,12 +346,12 @@ class LevelEditorState extends MusicBeatState implements PsychUIEventHandler.Psy
 				{
 					var cutName:String = _file.name.substr(0, _file.name.length - 5);
 					trace("Successfully loaded file: " + cutName);
-                    var arr:Array<Dynamic> = loadedWeek.levels;
+
+					levelFile.levelDifficulties = loadedWeek.difficulties ?? ""; // WHAT, THIS EXISTS!?
                     levelFile.songs = []; // Yeah, "null" songs
-                    for (i in arr) {
+                    for (i in loadedWeek.levels) {
                         levelFile.songs.push([i[0], 'face', [146, 113, 253]]);
                     }
-                    levelFile.levelDifficulties = "";
                     MusicBeatState.switchState(new LevelEditorState(levelFile, Character.DEFAULT_CHARACTER, true, cutName));
 					return;
 				} else {

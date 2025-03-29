@@ -1,5 +1,6 @@
 package shaders;
 
+import flixel.addons.display.FlxRuntimeShader;
 import flixel.system.FlxAssets.FlxShader;
 import openfl.display.BitmapData;
 import openfl.display.ShaderParameter;
@@ -210,6 +211,8 @@ class RainShader extends FlxShader
 			uniform sampler2D uLightMap;
 			uniform int numLights;
 
+			uniform vec3 uRainColor;
+
 			const int MAX_LIGHTS = 8;
 			UNIFORM Light lights[MAX_LIGHTS];
 
@@ -344,9 +347,8 @@ class RainShader extends FlxShader
 				}
 				*/
 
-				vec3 rainColor = vec3(0.4, 0.5, 0.8);
 				color += add;
-				color = mix(color, rainColor, 0.1 * rainSum);
+				color = mix(color, uRainColor, 0.1 * rainSum);
 
 				// vec3 fog = light * (0.5 + rainSum * 0.5);
 				// color = color / (1.0 + fog) + fog;
@@ -426,6 +428,15 @@ class RainShader extends FlxShader
 		return mask = value;
 	}
 
+	public var rainColor(default, set):FlxColor;
+
+	function set_rainColor(color:FlxColor):FlxColor
+	{
+		setFloatArray("uRainColor", [color.red / 255, color.green / 255, color.blue / 255]); //idk what i'm doing-
+		//this.uRainColor = [color.red / 255, color.green / 255, color.blue / 255];
+		return rainColor = color;
+	}
+
 	public var lightMap(default, set):BitmapData;
 
 	function set_lightMap(value:BitmapData):BitmapData
@@ -452,11 +463,31 @@ class RainShader extends FlxShader
 		this.uPuddleScaleY.value = [0.0];
 		this.numLights.value = [0];
 		this.uScreenResolution.value = [FlxG.width, FlxG.height];
+		this.rainColor = 0xFF6680cc;
 	}
 
 	public function update(elapsed:Float):Void
 	{
 		time += elapsed;
+	}
+
+		/**
+	 * Modify a float array parameter of the shader.
+	 *
+	 * @param name The name of the parameter to modify.
+	 * @param value The new value to use.
+	 */
+	public function setFloatArray(name:String, value:Array<Float>):Void
+	{
+		var prop:ShaderParameter<Float> = Reflect.field(data, name);
+
+		if (prop == null)
+		{
+			FlxG.log.warn('Shader float[] property "$name" not found.');
+			return;
+		}
+
+		prop.value = value;
 	}
 
 	/*override function __processGLData(source:String, storageType:String):Void
