@@ -1,0 +1,31 @@
+{
+	"directory": "week4",
+	"defaultZoom": 0.875,
+	"stageUI": "",
+
+	"boyfriend": [1120, -150],
+	"girlfriend": [400, 130],
+	"opponent": [200, 70],
+	"hide_girlfriend": false,
+
+	"camera_boyfriend": [-200, 100],
+	"camera_opponent": [0, 0],
+	"camera_girlfriend": [0, 0],
+	"camera_speed": 1,
+
+	"preload": {
+		"images/limo/limoDancer": 2,
+		"images/limo/erect/limoDrive": 2,
+		"images/gore/": 2,
+		"images/limo/fastCarLol": 3,
+		"images/limo/erect/limoSunset": 3,
+		"images/limo/erect/shooting star": 3,
+		"images/limo/erect/bgLimo": 3
+	},
+
+	"_editorMeta": {
+		"dad": "mom-car",
+		"boyfriend": "bf-car",
+		"gf": "gf-car"
+	}
+}

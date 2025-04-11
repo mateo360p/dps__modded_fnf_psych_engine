@@ -3,7 +3,7 @@
 		"generatedBy": "Psych Engine v1.0b - Chart Editor V-Slice Importer",
 		"charter": "fabs + PhantomArcade",
 		"artist": "Kawai Sprite",
-		"speed": 2,
+		"speed": 2.4,
 		"stage": "phillyBlazin",
 		"player1": "pico-blazin",
 		"player2": "darnell-blazin",
@@ -244,7 +244,8 @@
 					[28333.3333333334, 2, 0, "weekend-1-dodgelow"],
 					[28833.3333333333, 1, 0, "weekend-1-punchhighblocked"],
 					[29000, 3, 0, "weekend-1-blockhigh"],
-					[29166.6666666667, 0, 0, "weekend-1-punchhigh"],
+					[29125, 0, 0, "weekend-1-punchhigh"],
+					[29250, 3, 0, "weekend-1-dodgelow"],
 					[29333.3333333333, 1, 0, "weekend-1-blockhigh"]
 				],
 				"sectionBeats": 4,
@@ -383,6 +384,7 @@
 			{
 				"sectionNotes": [
 					[48333.3333333333, 3, 0, "weekend-1-blockhigh"],
+					[48500, 0, 0, "weekend-1-punchhighblocked"],
 					[48583.3333333333, 1, 0, "weekend-1-punchlow"],
 					[48833.3333333333, 3, 0, "weekend-1-dodgelow"],
 					[49000, 0, 0, "weekend-1-punchhigh"],
@@ -565,6 +567,7 @@
 			{
 				"sectionNotes": [
 					[69666.6666666666, 3, 0, "weekend-1-blockhigh"],
+					[69833.3333333333, 0, 0, "weekend-1-punchhighblocked"],
 					[69916.6666666666, 1, 0, "weekend-1-punchlow"],
 					[70166.6666666666, 3, 0, "weekend-1-dodgelow"],
 					[70333.3333333333, 0, 0, "weekend-1-punchhigh"],
@@ -888,7 +891,8 @@
 					[108333.333333333, 2, 0, "weekend-1-dodgelow"],
 					[108833.333333333, 1, 0, "weekend-1-punchhighblocked"],
 					[109000, 3, 0, "weekend-1-blockhigh"],
-					[109166.666666667, 0, 0, "weekend-1-punchhigh"],
+					[109125, 0, 0, "weekend-1-punchhigh"],
+					[109250, 3, 0, "weekend-1-dodgelow"],
 					[109333.333333333, 1, 0, "weekend-1-blockhigh"]
 				],
 				"sectionBeats": 4,

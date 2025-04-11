@@ -76,8 +76,8 @@ class MusicBeatState extends FlxState
 
 		if(FlxG.save.data != null) FlxG.save.data.fullscreen = FlxG.fullscreen;
 		
-		stagesFunc(function(stage:BaseStage) {
-			stage.update(elapsed);
+		stagesFunc(function(funky:FunkyObject) {
+			funky.update(elapsed);
 		});
 
 		super.update(elapsed);
@@ -169,41 +169,41 @@ class MusicBeatState extends FlxState
 
 	public function stepHit():Void
 	{
-		stagesFunc(function(stage:BaseStage) {
-			stage.curStep = curStep;
-			stage.curDecStep = curDecStep;
-			stage.stepHit();
+		stagesFunc(function(funky:FunkyObject) {
+			funky.curStep = curStep;
+			funky.curDecStep = curDecStep;
+			funky.stepHit();
 		});
 
 		if (curStep % 4 == 0)
 			beatHit();
 	}
 
-	public var stages:Array<BaseStage> = [];
+	public var funkyObj:Array<FunkyObject> = [];
 	public function beatHit():Void
 	{
 		//trace('Beat: ' + curBeat);
-		stagesFunc(function(stage:BaseStage) {
-			stage.curBeat = curBeat;
-			stage.curDecBeat = curDecBeat;
-			stage.beatHit();
+		stagesFunc(function(funky:FunkyObject) {
+			funky.curBeat = curBeat;
+			funky.curDecBeat = curDecBeat;
+			funky.beatHit();
 		});
 	}
 
 	public function sectionHit():Void
 	{
 		//trace('Section: ' + curSection + ', Beat: ' + curBeat + ', Step: ' + curStep);
-		stagesFunc(function(stage:BaseStage) {
-			stage.curSection = curSection;
-			stage.sectionHit();
+		stagesFunc(function(funky:FunkyObject) {
+			funky.curSection = curSection;
+			funky.sectionHit();
 		});
 	}
 
-	function stagesFunc(func:BaseStage->Void)
+	public function stagesFunc(func:FunkyObject->Void)
 	{
-		for (stage in stages)
-			if(stage != null && stage.exists && stage.active)
-				func(stage);
+		for (funky in funkyObj)
+			if(funky != null && funky.exists && funky.active)
+				func(funky);
 	}
 
 	function getBeatsOnSection()

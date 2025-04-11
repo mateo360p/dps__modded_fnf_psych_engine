@@ -2,8 +2,12 @@ stage
 spooky
 philly
 limo
+limoAlt
 mall
 mallEvil
 school
 schoolEvil
 tank
+phillyStreets
+phillyStreetsAlt
+phillyBlazin

@@ -29,6 +29,7 @@ class MenuCharacter extends Character
 	}
 
 	override public function changeCharacter(character:String) {
+		isFunkyObject = false;
 		// Nothing :O
 	}
 

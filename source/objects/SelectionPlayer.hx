@@ -4,8 +4,8 @@ class SelectionPlayer extends SelectionCharacter {
     public var speaker:String = "none";
     public var iconPositionArray:Array<Float> = [0, 0];
 
-    public function new(x:Float, y:Float, player:String) {
-        super(x, y, player);
+    public function new(x:Float, y:Float, player:String, ?inDebug:Bool = false) {
+        super(x, y, player, inDebug);
     }
 
     override public function loadCharacterFile(json:Dynamic)

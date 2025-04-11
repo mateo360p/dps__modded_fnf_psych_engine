@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="pico_middleFinger.png">
+	<!-- Created using the Spritesheet and XML generator -->
+	<!-- https://uncertainprod.github.io/FNF-Spritesheet-XML-generator-Web -->
+	<SubTexture name="middle finger0000" x="0" y="0" width="79" height="70" frameX="0" frameY="-4" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0001" x="0" y="0" width="79" height="70" frameX="0" frameY="-4" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0002" x="0" y="70" width="75" height="69" frameX="0" frameY="-6" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0003" x="79" y="0" width="78" height="69" frameX="0" frameY="-6" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0004" x="79" y="0" width="78" height="69" frameX="0" frameY="-6" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0005" x="79" y="0" width="78" height="69" frameX="0" frameY="-6" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0006" x="79" y="0" width="78" height="69" frameX="0" frameY="-6" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0007" x="79" y="0" width="78" height="69" frameX="0" frameY="-6" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0008" x="79" y="0" width="78" height="69" frameX="0" frameY="-6" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0009" x="79" y="0" width="78" height="69" frameX="0" frameY="-6" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0010" x="79" y="0" width="78" height="69" frameX="0" frameY="-6" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0011" x="79" y="0" width="78" height="69" frameX="0" frameY="-6" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0012" x="79" y="0" width="78" height="69" frameX="0" frameY="-6" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0013" x="79" y="0" width="78" height="69" frameX="0" frameY="-6" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0014" x="79" y="0" width="78" height="69" frameX="0" frameY="-6" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0015" x="79" y="0" width="78" height="69" frameX="0" frameY="-6" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0016" x="79" y="0" width="78" height="69" frameX="0" frameY="-6" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0017" x="79" y="0" width="78" height="69" frameX="0" frameY="-6" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0018" x="79" y="0" width="78" height="69" frameX="0" frameY="-6" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0019" x="79" y="0" width="78" height="69" frameX="0" frameY="-6" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0020" x="79" y="0" width="78" height="69" frameX="0" frameY="-6" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0021" x="79" y="0" width="78" height="69" frameX="0" frameY="-6" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0022" x="79" y="0" width="78" height="69" frameX="0" frameY="-6" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0023" x="79" y="0" width="78" height="69" frameX="0" frameY="-6" frameWidth="80" frameHeight="80"/>
+</TextureAtlas>

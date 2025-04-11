@@ -3,7 +3,7 @@ package states.stages;
 import states.stages.objects.*;
 import objects.Character;
 
-class Philly extends BaseStage
+class Philly extends FunkyObject
 {
 	var phillyLightsColors:Array<FlxColor>;
 	var phillyWindow:BGSprite;

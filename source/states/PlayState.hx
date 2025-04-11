@@ -400,6 +400,7 @@ class PlayState extends MusicBeatState
 			case 'spooky': new Spooky();				//Week 2
 			case 'philly': new Philly();				//Week 3
 			case 'limo': new Limo();					//Week 4
+			case 'limoAlt': new LimoAlt();				//Week 4 (Erect)
 			case 'mall': new Mall();					//Week 5 - Cocoa, Eggnog
 			case 'mallEvil': new MallEvil();			//Week 5 - Winter Horrorland
 			case 'school': new School();				//Week 6 - Senpai, Roses
@@ -407,7 +408,7 @@ class PlayState extends MusicBeatState
 			case 'tank': new Tank();					//Week 7
 			case 'phillyStreets': new PhillyStreets(); 	//Weekend 1 - Darnell, Lit Up, 2Hot
 			case 'phillyBlazin': new PhillyBlazin();	//Weekend 1 - Blazin
-			case 'phillyStreetsAlt': new PhillyStreetsAlt(); 	//Weekend 1 (BF)
+			case 'phillyStreetsAlt': new PhillyStreetsAlt(); 	//Weekend 1 (Erect, BF)
 		}
 		if(isPixelStage) introSoundsSuffix = '-pixel';
 
@@ -650,7 +651,7 @@ class PlayState extends MusicBeatState
 
 		resetRPC();
 
-		stagesFunc(function(stage:BaseStage) stage.createPost());
+		stagesFunc(function(stage:FunkyObject) stage.createPost());
 		callOnScripts('onCreatePost');
 		
 		var splash:NoteSplash = new NoteSplash();
@@ -1071,7 +1072,7 @@ class PlayState extends MusicBeatState
 					});
 				}
 
-				stagesFunc(function(stage:BaseStage) stage.countdownTick(tick, swagCounter));
+				stagesFunc(function(stage:FunkyObject) stage.countdownTick(tick, swagCounter));
 				callOnLuas('onCountdownTick', [swagCounter]);
 				callOnHScript('onCountdownTick', [tick, swagCounter]);
 
@@ -1276,7 +1277,7 @@ class PlayState extends MusicBeatState
 			opponentVocals.pause();
 		}
 
-		stagesFunc(function(stage:BaseStage) stage.startSong());
+		stagesFunc(function(stage:FunkyObject) stage.startSong());
 
 		// Song duration in a float, useful for the time left feature
 		songLength = FlxG.sound.music.length;
@@ -1518,7 +1519,7 @@ class PlayState extends MusicBeatState
 			return;
 		}
 
-		stagesFunc(function(stage:BaseStage) stage.eventPushed(event));
+		stagesFunc(function(stage:FunkyObject) stage.eventPushed(event));
 		eventsPushed.push(event.event);
 	}
 
@@ -1544,7 +1545,7 @@ class PlayState extends MusicBeatState
 			case 'Play Sound':
 				Paths.sound(event.value1); //Precache sound
 		}
-		stagesFunc(function(stage:BaseStage) stage.eventPushedUnique(event));
+		stagesFunc(function(stage:FunkyObject) stage.eventPushedUnique(event));
 	}
 
 	function eventEarlyTrigger(event:EventNote):Float {
@@ -1622,7 +1623,7 @@ class PlayState extends MusicBeatState
 
 	override function openSubState(SubState:FlxSubState)
 	{
-		stagesFunc(function(stage:BaseStage) stage.openSubState(SubState));
+		stagesFunc(function(stage:FunkyObject) stage.openSubState(SubState));
 		if (paused)
 		{
 			if (FlxG.sound.music != null)
@@ -1646,7 +1647,7 @@ class PlayState extends MusicBeatState
 	{
 		super.closeSubState();
 		
-		stagesFunc(function(stage:BaseStage) stage.closeSubState());
+		stagesFunc(function(stage:FunkyObject) stage.closeSubState());
 		if (paused)
 		{
 			if (FlxG.sound.music != null && !startingSong && canResync)
@@ -2363,7 +2364,7 @@ class PlayState extends MusicBeatState
 				FlxG.sound.play(Paths.sound(value1), flValue2);
 		}
 
-		stagesFunc(function(stage:BaseStage) stage.eventCalled(eventName, value1, value2, flValue1, flValue2, strumTime));
+		stagesFunc(function(stage:FunkyObject) stage.eventCalled(eventName, value1, value2, flValue1, flValue2, strumTime));
 		callOnScripts('onEvent', [eventName, value1, value2, strumTime]);
 	}
 
@@ -2973,7 +2974,8 @@ class PlayState extends MusicBeatState
 		ghost.x = player.x;
 		ghost.y = player.y;
 		ghost.animation.play(animToPlay, true);
-		ghost.offset.set(player.animOffsets.get(animToPlay)[0], player.animOffsets.get(animToPlay)[1]);
+		try {ghost.offset.set(player.animOffsets.get(animToPlay)[0], player.animOffsets.get(animToPlay)[1]);}
+		catch (e:Dynamic) {}
 		ghost.flipX = player.flipX;
 		ghost.flipY = player.flipY;
 		ghost.blend = HARDLIGHT;
@@ -3023,7 +3025,7 @@ class PlayState extends MusicBeatState
 		});
 
 		noteMissCommon(daNote.noteData, daNote);
-		stagesFunc(function(stage:BaseStage) stage.noteMiss(daNote));
+		stagesFunc(function(stage:FunkyObject) stage.noteMiss(daNote));
 		var result:Dynamic = callOnLuas('noteMiss', [notes.members.indexOf(daNote), daNote.noteData, daNote.noteType, daNote.isSustainNote]);
 		if(result != LuaUtils.Function_Stop && result != LuaUtils.Function_StopHScript && result != LuaUtils.Function_StopAll) callOnHScript('noteMiss', [daNote]);
 	}
@@ -3034,7 +3036,7 @@ class PlayState extends MusicBeatState
 
 		noteMissCommon(direction);
 		FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
-		stagesFunc(function(stage:BaseStage) stage.noteMissPress(direction));
+		stagesFunc(function(stage:FunkyObject) stage.noteMissPress(direction));
 		callOnScripts('noteMissPress', [direction]);
 	}
 
@@ -3129,6 +3131,7 @@ class PlayState extends MusicBeatState
 		if (songName != 'tutorial')
 			camZooming = true;
 
+		var animToPlay:String = singAnimations[Std.int(Math.abs(Math.min(singAnimations.length-1, note.noteData)))] + note.animSuffix;
 		if(note.noteType == 'Hey!' && dad.hasAnimation('hey'))
 		{
 			dad.playAnim('hey', true);
@@ -3138,7 +3141,6 @@ class PlayState extends MusicBeatState
 		else if(!note.noAnimation)
 		{
 			var char:Character = dad;
-			var animToPlay:String = singAnimations[Std.int(Math.abs(Math.min(singAnimations.length-1, note.noteData)))] + note.animSuffix;
 			var animCheck:String = 'hey';
 			if(note.gfNote)
 			{
@@ -3175,13 +3177,19 @@ class PlayState extends MusicBeatState
 					}
 				}
 			}
+		} else if(note.noteType == 'Echo') // Yeah is kinda pointless, I should add more to this
+		{
+			createGhost("dad", animToPlay);
+			// TODO:
+			// Make the ghost bigger (like exploding)
+			// add the "echo" rating, like in the animations :O
 		}
 
 		if(opponentVocals.length <= 0) vocals.volume = 1;
 		strumPlayAnim(true, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate);
 		note.hitByOpponent = true;
 		
-		stagesFunc(function(stage:BaseStage) stage.opponentNoteHit(note));
+		stagesFunc(function(stage:FunkyObject) stage.opponentNoteHit(note));
 		var result:Dynamic = callOnLuas('opponentNoteHit', [notes.members.indexOf(note), Math.abs(note.noteData), note.noteType, note.isSustainNote]);
 		if(result != LuaUtils.Function_Stop && result != LuaUtils.Function_StopHScript && result != LuaUtils.Function_StopAll) callOnHScript('opponentNoteHit', [note]);
 
@@ -3213,10 +3221,9 @@ class PlayState extends MusicBeatState
 
 		if(!note.hitCausesMiss) //Common notes
 		{
+			var animToPlay:String = singAnimations[Std.int(Math.abs(Math.min(singAnimations.length-1, note.noteData)))] + note.animSuffix;
 			if(!note.noAnimation)
 			{
-				var animToPlay:String = singAnimations[Std.int(Math.abs(Math.min(singAnimations.length-1, note.noteData)))] + note.animSuffix;
-
 				var char:Character = boyfriend;
 				var animCheck:String = 'hey';
 				if(note.gfNote)
@@ -3253,6 +3260,11 @@ class PlayState extends MusicBeatState
 							char.heyTimer = 0.6;
 						}
 					}
+				}
+			} else {
+				if(note.noteType == 'Echo')
+				{
+					createGhost("bf", animToPlay);
 				}
 			}
 
@@ -3293,7 +3305,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		stagesFunc(function(stage:BaseStage) stage.goodNoteHit(note));
+		stagesFunc(function(stage:FunkyObject) stage.goodNoteHit(note));
 		var result:Dynamic = callOnLuas('goodNoteHit', [notes.members.indexOf(note), leData, leType, isSus]);
 		if(result != LuaUtils.Function_Stop && result != LuaUtils.Function_StopHScript && result != LuaUtils.Function_StopAll) callOnHScript('goodNoteHit', [note]);
 		if(!note.isSustainNote) invalidateNote(note);
@@ -3346,7 +3358,7 @@ class PlayState extends MusicBeatState
 
 		hscriptArray = null;
 		#end
-		stagesFunc(function(stage:BaseStage) stage.destroy());
+		stagesFunc(function(stage:FunkyObject) stage.destroy());
 
 		#if VIDEOS_ALLOWED
 		if(videoCutscene != null)

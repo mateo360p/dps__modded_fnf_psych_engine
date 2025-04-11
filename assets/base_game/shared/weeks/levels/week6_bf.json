@@ -7,17 +7,18 @@
 				255,
 				120,
 				191
-			]
+			],
+			""
 		],
 		[
 			"Roses",
-			"senpai-pixel",
+			"senpai-angry-pixel",
 			[
 				255,
 				120,
 				191
 			],
-			"Night"
+			""
 		],
 		[
 			"Thorns",
@@ -26,8 +27,9 @@
 				255,
 				120,
 				191
-			]
+			],
+			""
 		]
 	],
-	"levelDifficulties": "Easy, Normal, Hard"
+	"levelDifficulties": "Easy, Normal, Hard, Night"
 }

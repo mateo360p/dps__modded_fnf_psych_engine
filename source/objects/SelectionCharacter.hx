@@ -29,13 +29,15 @@ class SelectionCharacter extends Character
 		return snd;
 	}
 
-    public function new(x:Float, y:Float, char:String)
+    public function new(x:Float, y:Float, char:String, ?inDebug:Bool = false)
     {
-        super(x, y, char);
+        super(x, y, char, false, inDebug);
     }
 
 	override public function changeCharacter(character:String)
     {
+        this.isFunkyObject = false;
+
         this.enableVisualizer = false;
         switch (character) {
             case "none":
@@ -131,7 +133,7 @@ class SelectionCharacter extends Character
     }
 
     
-    public function onFinishAnimationOnce(anim:String, aFunction:Void -> Void) {
+    public function onFinishAnimationOnce(anim:String, aFunction:Void -> Void) { // I just realized that this already exists, kinda
         if (!isAnimateAtlas) {
             this.animation.finishCallback = function(name:String) {
                 if (name != anim) return;

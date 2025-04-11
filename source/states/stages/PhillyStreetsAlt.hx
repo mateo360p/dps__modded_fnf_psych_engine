@@ -4,7 +4,7 @@ import shaders.AdjustColorShader;
 
 class PhillyStreetsAlt extends PhillyStreets {
     // I don't understand, the "erect" stages are also for pico, but, why-?
-    // I'm putting them just for pico, bf will have his old stages, sry bud
+    // Now, I'm gonna put some chit to select the stage, but only for the Nightmare Diff.
 
     var colorShader:AdjustColorShader;
 

@@ -18,9 +18,9 @@ class GameOverSubstate extends MusicBeatSubstate
 	var stagePostfix:String = "";
 
 	public static var characterName:String = 'bf-dead';
-	public static var deathSoundName:String = 'fnf_loss_sfx';
-	public static var loopSoundName:String = 'gameOver';
-	public static var endSoundName:String = 'gameOverEnd';
+	public static var deathSoundName:String = 'death/fnf_loss_sfx';
+	public static var loopSoundName:String = 'death/bf/gameOver';
+	public static var endSoundName:String = 'death/bf/gameOverEnd';
 	public static var deathDelay:Float = 0;
 
 	public static var instance:GameOverSubstate;
@@ -35,9 +35,9 @@ class GameOverSubstate extends MusicBeatSubstate
 
 	public static function resetVariables() {
 		characterName = 'bf-dead';
-		deathSoundName = 'fnf_loss_sfx';
-		loopSoundName = 'gameOver';
-		endSoundName = 'gameOverEnd';
+		deathSoundName = 'death/fnf_loss_sfx';
+		loopSoundName = 'death/bf/gameOver';
+		endSoundName = 'death/bf/gameOverEnd';
 		deathDelay = 0;
 
 		var _song = PlayState.SONG;
@@ -86,10 +86,10 @@ class GameOverSubstate extends MusicBeatSubstate
 		PlayState.instance.callOnScripts('onGameOverStart', []);
 		FlxG.sound.music.loadEmbedded(Paths.music(loopSoundName), true);
 
-		if(characterName == 'pico-dead')
+		if(Std.isOfType(PlayState.instance.boyfriend._baseChar, Pico)) // For all the playable Picos
 		{
 			overlay = new FlxSprite(boyfriend.x + 205, boyfriend.y - 80);
-			overlay.frames = Paths.getSparrowAtlas('Pico_Death_Retry');
+			overlay.frames = Paths.getSparrowAtlas('nene/Pico_Death_Retry');
 			overlay.animation.addByPrefix('deathLoop', 'Retry Text Loop', 24, true);
 			overlay.animation.addByPrefix('deathConfirm', 'Retry Text Confirm', 24, false);
 			overlay.antialiasing = ClientPrefs.data.antialiasing;
@@ -113,10 +113,10 @@ class GameOverSubstate extends MusicBeatSubstate
 				}
 			}
 
-			if(PlayState.instance.gf != null && PlayState.instance.gf.curCharacter == 'nene')
+			if(PlayState.instance.gf != null && Std.isOfType(PlayState.instance.gf._baseChar, Nene)) // For all the nenes
 			{
 				var neneKnife:FlxSprite = new FlxSprite(boyfriend.x - 450, boyfriend.y - 250);
-				neneKnife.frames = Paths.getSparrowAtlas('NeneKnifeToss');
+				neneKnife.frames = Paths.getSparrowAtlas(Pico.neneToss);
 				neneKnife.animation.addByPrefix('anim', 'knife toss', 24, false);
 				neneKnife.antialiasing = ClientPrefs.data.antialiasing;
 				neneKnife.animation.finishCallback = function(_)

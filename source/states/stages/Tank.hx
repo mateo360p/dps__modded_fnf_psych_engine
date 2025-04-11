@@ -5,7 +5,7 @@ import cutscenes.CutsceneHandler;
 import substates.GameOverSubstate;
 import objects.Character;
 
-class Tank extends BaseStage
+class Tank extends FunkyObject
 {
 	var tankWatchtower:BGSprite;
 	var tankGround:BackgroundTank;

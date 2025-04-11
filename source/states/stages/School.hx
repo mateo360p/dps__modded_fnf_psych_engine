@@ -6,7 +6,7 @@ import cutscenes.DialogueBox;
 
 import openfl.utils.Assets as OpenFlAssets;
 
-class School extends BaseStage
+class School extends FunkyObject
 {
 	var bgGirls:BackgroundGirls;
 	override function create()

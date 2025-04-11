@@ -10,7 +10,7 @@ import substates.GameOverSubstate;
 import states.stages.objects.*;
 import objects.Note;
 
-class PhillyBlazin extends BaseStage
+class PhillyBlazin extends FunkyObject
 {
 	var rainShader:RainShader;
 	var rainTimeScale:Float = 1;

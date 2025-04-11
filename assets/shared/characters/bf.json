@@ -74,62 +74,63 @@
 		},
 		{
 			"offsets": [-6, -11],
-			"indices": [],
+			"loop": false,
 			"fps": 24,
 			"anim": "dodge",
-			"loop": false,
+			"indices": [],
 			"name": "boyfriend dodge0"
 		},
 		{
 			"offsets": [-6, 1],
-			"indices": [],
+			"loop": true,
 			"fps": 24,
 			"anim": "scared",
-			"loop": true,
+			"indices": [],
 			"name": "BF idle shaking"
 		},
 		{
 			"offsets": [-40, -37],
-			"indices": [],
+			"loop": false,
 			"fps": 24,
 			"anim": "pre-attack",
-			"loop": false,
+			"indices": [],
 			"name": "bf pre attack"
 		},
 		{
 			"offsets": [290, 270],
-			"indices": [],
+			"loop": false,
 			"fps": 24,
 			"anim": "attack",
-			"loop": false,
+			"indices": [],
 			"name": "boyfriend attack"
 		},
 		{
 			"offsets": [13, 19],
-			"indices": [],
+			"loop": false,
 			"fps": 24,
 			"anim": "hurt",
-			"loop": false,
+			"indices": [],
 			"name": "BF hit"
 		},
 		{
 			"offsets": [-5, 0],
-			"indices": [],
+			"loop": false,
 			"fps": 24,
 			"anim": "idle",
-			"loop": false,
+			"indices": [],
 			"name": "BF idle dance"
 		}
 	],
-	"vocals_file": "",
 	"no_antialiasing": false,
 	"image": "characters/BOYFRIEND",
 	"position": [0, 350],
+	"hey_anim": "",
 	"healthicon": "bf",
 	"flip_x": true,
 	"healthbar_colors": [49, 176, 209],
 	"camera_position": [0, 0],
-	"sing_duration": 4,
+	"sing_duration": 6.5,
+	"hey_sound": "",
 	"scale": 1,
 	"_editor_isPlayer": true
 }

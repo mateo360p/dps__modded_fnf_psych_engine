@@ -5,7 +5,6 @@ import backend.animation.PsychAnimationController;
 import flixel.util.FlxSort;
 import flixel.util.FlxDestroyUtil;
 
-import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import haxe.Json;
 
@@ -41,23 +40,27 @@ typedef AnimArray = {
 
 class Character extends FlxSprite
 {
+	/**
+		If true, this will create a `BaseCharacter` object!.
 
+		PUT "FALSE" IN THE `changeCharacter()` if you'll use the function and don't want the base
+	 */
+	public var isFunkyObject:Bool = true;
 	public var folder:String = "characters";
-
-	public var mostRecentRow:Int = 0; //again, for the Ghost
 
 	/**
 	 * In case a character is missing, it will use this on its place
 	**/
 	public static final DEFAULT_CHARACTER:String = 'bf';
+	public var isPlayer:Bool = false;
+	public var curCharacter:String = DEFAULT_CHARACTER;
+	public var _baseChar:BaseCharacter;
 
 	public var animOffsets:Map<String, Array<Dynamic>>;
 	public var debugMode:Bool = false;
 	public var extraData:Map<String, Dynamic> = new Map<String, Dynamic>();
 
-	public var isPlayer:Bool = false;
-	public var curCharacter:String = DEFAULT_CHARACTER;
-
+	public var mostRecentRow:Int = 0;
 	public var holdTimer:Float = 0;
 	public var heyTimer:Float = 0;
 	public var specialAnim:Bool = false;
@@ -89,7 +92,7 @@ class Character extends FlxSprite
 	public var originalFlipX:Bool = false;
 	public var editorIsPlayer:Null<Bool> = null;
 
-	public function new(x:Float, y:Float, ?character:String = 'bf', ?isPlayer:Bool = false)
+	public function new(x:Float, y:Float, ?character:String = 'bf', ?isPlayer:Bool = false, ?inDebug:Bool = false)
 	{
 		super(x, y);
 
@@ -97,6 +100,7 @@ class Character extends FlxSprite
 
 		animOffsets = new Map<String, Array<Dynamic>>();
 		this.isPlayer = isPlayer;
+		this.debugMode = inDebug;
 		changeCharacter(character);
 		
 		switch(curCharacter)
@@ -249,15 +253,23 @@ class Character extends FlxSprite
 		if(isAnimateAtlas) copyAtlasValues();
 		#end
 
-		startChar("nene");
+		if (isFunkyObject == true && !debugMode) setBaseChar(curCharacter);
+		else _baseChar = FlxDestroyUtil.destroy(_baseChar);
 		//trace('Loaded file to character ' + curCharacter);
 	}
 
-	public function startChar(char:String) {
-		switch (char) {
-			case "nene":
-				
-		}
+	function setBaseChar(char:String) {
+		_baseChar = FlxDestroyUtil.destroy(_baseChar);
+		_baseChar = (
+			switch (char) {
+				case "nene":
+					new Nene(this);
+				case "pico-playable":
+					new Pico(this);
+				default:
+					new BaseCharacter(this);
+			}
+		);
 	}
 
 	override function update(elapsed:Float)
@@ -556,6 +568,7 @@ class Character extends FlxSprite
 
 	public override function destroy()
 	{
+		_baseChar = FlxDestroyUtil.destroy(_baseChar);
 		atlas = FlxDestroyUtil.destroy(atlas);
 		super.destroy();
 	}

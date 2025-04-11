@@ -48,7 +48,8 @@ class Note extends FlxSprite
 		'Hey!',
 		'Hurt Note',
 		'GF Sing',
-		'No Animation'
+		'No Animation',
+		'Echo'
 	];
 
 	public var row:Int = 0; //for Ghost Anims
@@ -229,7 +230,7 @@ class Note extends FlxSprite
 					hitsoundChartEditor = false;
 				case 'Alt Animation':
 					animSuffix = '-alt';
-				case 'No Animation':
+				case 'No Animation', "Echo":
 					noAnimation = true;
 					noMissAnimation = true;
 				case 'GF Sing':

@@ -14,7 +14,7 @@ enum MainMenuColumn {
 
 class MainMenuState extends MusicBeatState
 {
-	public static var ModdedEngineVersion:String = '0.0.2.3'; // Lol like 8 updates without updating this 
+	public static var ModdedEngineVersion:String = '0.0.2.4';
 	public static var psychEngineVersion:String = '1.0.2h (kinda)'; // This is also used for Discord RPC
 	public static var curSelected:Int = 0;
 	public static var curColumn:MainMenuColumn = CENTER;

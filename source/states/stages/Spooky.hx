@@ -1,6 +1,6 @@
 package states.stages;
 
-class Spooky extends BaseStage
+class Spooky extends FunkyObject
 {
 	var halloweenBG:BGSprite;
 	var halloweenWhite:BGSprite;

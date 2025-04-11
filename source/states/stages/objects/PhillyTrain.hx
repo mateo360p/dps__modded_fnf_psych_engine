@@ -64,7 +64,7 @@ class PhillyTrain extends BGSprite
 		if (!moving)
 			cooldown += 1;
 
-		if (curBeat % 8 == 4 && FlxG.random.bool(30) && !moving && cooldown > 8)
+		if (curBeat % 8 == 4 && FlxG.random.bool(30) && !moving && cooldown > 8 && !sound.playing)
 		{
 			cooldown = FlxG.random.int(-4, 0);
 			start();
@@ -74,8 +74,7 @@ class PhillyTrain extends BGSprite
 	public function start():Void
 	{
 		moving = true;
-		if (!sound.playing)
-			sound.play(true);
+		sound.play(true);
 	}
 
 	public function restart():Void

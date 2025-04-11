@@ -2,7 +2,7 @@ package states.stages;
 
 import states.stages.objects.*;
 
-class Mall extends BaseStage
+class Mall extends FunkyObject
 {
 	var upperBoppers:BGSprite;
 	var bottomBoppers:MallCrowd;

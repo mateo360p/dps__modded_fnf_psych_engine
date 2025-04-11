@@ -6,7 +6,7 @@ import substates.GameOverSubstate;
 import cutscenes.DialogueBox;
 import openfl.utils.Assets as OpenFlAssets;
 
-class SchoolEvil extends BaseStage
+class SchoolEvil extends FunkyObject
 {
 	override function create()
 	{

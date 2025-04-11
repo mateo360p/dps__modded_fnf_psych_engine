@@ -3,7 +3,7 @@ package states.stages;
 import objects.Note;
 import states.stages.objects.*;
 
-class Template extends BaseStage
+class Template extends FunkyObject
 {
 	// If you're moving your stage from PlayState to a stage file,
 	// you might have to rename some variables if they're missing, for example: camZooming -> game.camZooming

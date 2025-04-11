@@ -37,11 +37,11 @@ class ABotSpeaker extends FlxSpriteGroup
 
 		var antialias = ClientPrefs.data.antialiasing;
 
-		bg = new FlxSprite(90, 20).loadGraphic(Paths.image('abot/stereoBG'));
+		bg = new FlxSprite(90, 20).loadGraphic(Paths.image('nene/stereoBG'));
 		bg.antialiasing = antialias;
 		add(bg);
 
-		vizSprites = setVizSprites('abot/aBotViz', VIZ_POS_X, VIZ_POS_Y);
+		vizSprites = setVizSprites('nene/aBotViz', VIZ_POS_X, VIZ_POS_Y);
 		for (a in vizSprites) {
 			a.x += 140;
 			a.y += 74;
@@ -54,7 +54,7 @@ class ABotSpeaker extends FlxSpriteGroup
 		add(eyeBg);
 
 		eyes = new FlxAnimate(-10, 230);
-		Paths.loadAnimateAtlas(eyes, 'abot/systemEyes');
+		Paths.loadAnimateAtlas(eyes, 'nene/systemEyes');
 		eyes.anim.addBySymbolIndices('lookleft', 'a bot eyes lookin', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17], 24, false);
 		eyes.anim.addBySymbolIndices('lookright', 'a bot eyes lookin', [18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], 24, false);
 		eyes.anim.play('lookright', true);
@@ -62,7 +62,7 @@ class ABotSpeaker extends FlxSpriteGroup
 		add(eyes);
 
 		speaker = new FlxAnimate(-65, -10);
-		Paths.loadAnimateAtlas(speaker, 'abot/abotSystem');
+		Paths.loadAnimateAtlas(speaker, 'nene/abotSystem');
 		speaker.anim.addBySymbol('anim', 'Abot System', 24, false);
 		speaker.anim.play('anim', true);
 		speaker.anim.curFrame = speaker.anim.length - 1;

@@ -331,8 +331,7 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
             playerChill.destroy();
         }
 
-        playerChill = new SelectionPlayer(PlayerSelectionState.positionsArr[0], PlayerSelectionState.positionsArr[1], char);
-        playerChill.debugMode = true;
+        playerChill = new SelectionPlayer(PlayerSelectionState.positionsArr[0], PlayerSelectionState.positionsArr[1], char, true);
 
         curChar = char;
 

@@ -1,14 +1,14 @@
 {
 	"directory": "week4",
-	"defaultZoom": 0.9,
+	"defaultZoom": 0.875,
 	"stageUI": "",
 
-	"boyfriend": [1030, -120],
+	"boyfriend": [1120, -150],
 	"girlfriend": [400, 130],
-	"opponent": [100, 100],
+	"opponent": [200, 70],
 	"hide_girlfriend": false,
 
-	"camera_boyfriend": [-200, 0],
+	"camera_boyfriend": [-200, 100],
 	"camera_opponent": [0, 0],
 	"camera_girlfriend": [0, 0],
 	"camera_speed": 1,
