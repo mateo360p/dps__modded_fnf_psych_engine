@@ -1,5 +1,6 @@
 package states;
 
+import flixel.system.FlxAssets.FlxShader;
 import backend.Highscore;
 import backend.StageData;
 import backend.WeekData;
@@ -11,13 +12,8 @@ import flixel.FlxObject;
 import flixel.FlxSubState;
 import flixel.util.FlxSort;
 import flixel.util.FlxStringUtil;
-import flixel.util.FlxSave;
 import flixel.input.keyboard.FlxKey;
-import flixel.animation.FlxAnimationController;
-import lime.utils.Assets;
-import openfl.utils.Assets as OpenFlAssets;
 import openfl.events.KeyboardEvent;
-import haxe.Json;
 
 import cutscenes.DialogueBoxPsych;
 
@@ -359,6 +355,22 @@ class PlayState extends MusicBeatState
 
 		curStage = SONG.stage;
 
+		// Ok, I hadn't a better solution :'v
+		if(Song.selectedStage != null && Song.selectedStage.length > 0) {
+			var preDirectory:String = StageData.forceNextDirectory;
+			try {
+				var stageF:StageFile = StageData.getStageFile(Song.selectedStage);
+				StageData.forceNextDirectory = stageF.directory;
+				Paths.setCurrentLevel(stageF.directory);
+				curStage = Song.selectedStage;
+			} catch(e:haxe.Exception) {
+				trace("Selected Stage setting failed!!!");
+				curStage = SONG.stage; // Just in case-
+				StageData.forceNextDirectory = preDirectory;
+				Paths.setCurrentLevel(preDirectory);
+			}
+		}
+
 		var stageData:StageFile = StageData.getStageFile(curStage);
 		defaultCamZoom = stageData.defaultZoom;
 
@@ -399,12 +411,15 @@ class PlayState extends MusicBeatState
 			case 'stage': new StageWeek1(); 			//Week 1
 			case 'spooky': new Spooky();				//Week 2
 			case 'philly': new Philly();				//Week 3
+			case 'phillyAlt': new PhillyAlt();
 			case 'limo': new Limo();					//Week 4
 			case 'limoAlt': new LimoAlt();				//Week 4 (Erect)
 			case 'mall': new Mall();					//Week 5 - Cocoa, Eggnog
 			case 'mallEvil': new MallEvil();			//Week 5 - Winter Horrorland
 			case 'school': new School();				//Week 6 - Senpai, Roses
+			case 'schoolAlt': new SchoolAlt();			//Week 6 (Erect, Pico)
 			case 'schoolEvil': new SchoolEvil();		//Week 6 - Thorns
+			case 'schoolEvilAlt': new SchoolEvilAlt();	//Week 6 (Erect)
 			case 'tank': new Tank();					//Week 7
 			case 'phillyStreets': new PhillyStreets(); 	//Weekend 1 - Darnell, Lit Up, 2Hot
 			case 'phillyBlazin': new PhillyBlazin();	//Weekend 1 - Blazin
@@ -422,19 +437,25 @@ class PlayState extends MusicBeatState
 		{
 			if(SONG.gfVersion == null || SONG.gfVersion.length < 1) SONG.gfVersion = 'gf'; //Fix for the Chart Editor
 			gf = new Character(0, 0, SONG.gfVersion);
+			gf._baseChar.charType = GF;
 			startCharacterPos(gf);
 			gfGroup.scrollFactor.set(0.95, 0.95);
 			gfGroup.add(gf);
+			funkyFunc(function(fnk:FunkyObject) fnk.addCharacter(gf));
 		}
 
 		dad = new Character(0, 0, SONG.player2);
+		dad._baseChar.charType = DAD;
 		startCharacterPos(dad, true);
 		dadGroup.add(dad);
+		funkyFunc(function(fnk:FunkyObject) fnk.addCharacter(dad));
 
 		boyfriend = new Character(0, 0, SONG.player1, true);
+		boyfriend._baseChar.charType = BF;
 		startCharacterPos(boyfriend);
 		boyfriendGroup.add(boyfriend);
-		
+		funkyFunc(function(fnk:FunkyObject) fnk.addCharacter(boyfriend));
+
 		if(stageData.objects != null && stageData.objects.length > 0)
 		{
 			var list:Map<String, FlxSprite> = StageData.addObjectsToState(stageData.objects, !stageData.hide_girlfriend ? gfGroup : null, dadGroup, boyfriendGroup, this);
@@ -651,7 +672,7 @@ class PlayState extends MusicBeatState
 
 		resetRPC();
 
-		stagesFunc(function(stage:FunkyObject) stage.createPost());
+		funkyFunc(function(stage:FunkyObject) stage.createPost());
 		callOnScripts('onCreatePost');
 		
 		var splash:NoteSplash = new NoteSplash();
@@ -1072,7 +1093,7 @@ class PlayState extends MusicBeatState
 					});
 				}
 
-				stagesFunc(function(stage:FunkyObject) stage.countdownTick(tick, swagCounter));
+				funkyFunc(function(stage:FunkyObject) stage.countdownTick(tick, swagCounter));
 				callOnLuas('onCountdownTick', [swagCounter]);
 				callOnHScript('onCountdownTick', [tick, swagCounter]);
 
@@ -1277,7 +1298,7 @@ class PlayState extends MusicBeatState
 			opponentVocals.pause();
 		}
 
-		stagesFunc(function(stage:FunkyObject) stage.startSong());
+		funkyFunc(function(stage:FunkyObject) stage.startSong());
 
 		// Song duration in a float, useful for the time left feature
 		songLength = FlxG.sound.music.length;
@@ -1519,7 +1540,7 @@ class PlayState extends MusicBeatState
 			return;
 		}
 
-		stagesFunc(function(stage:FunkyObject) stage.eventPushed(event));
+		funkyFunc(function(stage:FunkyObject) stage.eventPushed(event));
 		eventsPushed.push(event.event);
 	}
 
@@ -1545,7 +1566,7 @@ class PlayState extends MusicBeatState
 			case 'Play Sound':
 				Paths.sound(event.value1); //Precache sound
 		}
-		stagesFunc(function(stage:FunkyObject) stage.eventPushedUnique(event));
+		funkyFunc(function(stage:FunkyObject) stage.eventPushedUnique(event));
 	}
 
 	function eventEarlyTrigger(event:EventNote):Float {
@@ -1623,7 +1644,7 @@ class PlayState extends MusicBeatState
 
 	override function openSubState(SubState:FlxSubState)
 	{
-		stagesFunc(function(stage:FunkyObject) stage.openSubState(SubState));
+		funkyFunc(function(stage:FunkyObject) stage.openSubState(SubState));
 		if (paused)
 		{
 			if (FlxG.sound.music != null)
@@ -1647,7 +1668,7 @@ class PlayState extends MusicBeatState
 	{
 		super.closeSubState();
 		
-		stagesFunc(function(stage:FunkyObject) stage.closeSubState());
+		funkyFunc(function(stage:FunkyObject) stage.closeSubState());
 		if (paused)
 		{
 			if (FlxG.sound.music != null && !startingSong && canResync)
@@ -2267,8 +2288,11 @@ class PlayState extends MusicBeatState
 							}
 
 							var lastAlpha:Float = boyfriend.alpha;
+							var lastShader:FlxShader = boyfriend.shader;
+							boyfriend.shader = null;
 							boyfriend.alpha = 0.00001;
 							boyfriend = boyfriendMap.get(value2);
+							boyfriend.shader = lastShader;
 							boyfriend.alpha = lastAlpha;
 							iconP1.changeIcon(boyfriend.healthIcon);
 						}
@@ -2282,6 +2306,8 @@ class PlayState extends MusicBeatState
 
 							var wasGf:Bool = dad.curCharacter.startsWith('gf-') || dad.curCharacter == 'gf';
 							var lastAlpha:Float = dad.alpha;
+							var lastShader:FlxShader = dad.shader;
+							dad.shader = null;
 							dad.alpha = 0.00001;
 							dad = dadMap.get(value2);
 							if(!dad.curCharacter.startsWith('gf-') && dad.curCharacter != 'gf') {
@@ -2291,6 +2317,7 @@ class PlayState extends MusicBeatState
 							} else if(gf != null) {
 								gf.visible = false;
 							}
+							dad.shader = lastShader;
 							dad.alpha = lastAlpha;
 							iconP2.changeIcon(dad.healthIcon);
 						}
@@ -2306,8 +2333,12 @@ class PlayState extends MusicBeatState
 								}
 
 								var lastAlpha:Float = gf.alpha;
+								var lastShader:FlxShader = gf.shader;
+								gf.shader = null;
 								gf.alpha = 0.00001;
 								gf = gfMap.get(value2);
+								gf._baseChar.charType = GF;
+								gf.shader = lastShader;
 								gf.alpha = lastAlpha;
 							}
 							setOnScripts('gfName', gf.curCharacter);
@@ -2364,7 +2395,7 @@ class PlayState extends MusicBeatState
 				FlxG.sound.play(Paths.sound(value1), flValue2);
 		}
 
-		stagesFunc(function(stage:FunkyObject) stage.eventCalled(eventName, value1, value2, flValue1, flValue2, strumTime));
+		funkyFunc(function(stage:FunkyObject) stage.eventCalled(eventName, value1, value2, flValue1, flValue2, strumTime));
 		callOnScripts('onEvent', [eventName, value1, value2, strumTime]);
 	}
 
@@ -3025,7 +3056,7 @@ class PlayState extends MusicBeatState
 		});
 
 		noteMissCommon(daNote.noteData, daNote);
-		stagesFunc(function(stage:FunkyObject) stage.noteMiss(daNote));
+		funkyFunc(function(stage:FunkyObject) stage.noteMiss(daNote));
 		var result:Dynamic = callOnLuas('noteMiss', [notes.members.indexOf(daNote), daNote.noteData, daNote.noteType, daNote.isSustainNote]);
 		if(result != LuaUtils.Function_Stop && result != LuaUtils.Function_StopHScript && result != LuaUtils.Function_StopAll) callOnHScript('noteMiss', [daNote]);
 	}
@@ -3036,7 +3067,7 @@ class PlayState extends MusicBeatState
 
 		noteMissCommon(direction);
 		FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
-		stagesFunc(function(stage:FunkyObject) stage.noteMissPress(direction));
+		funkyFunc(function(stage:FunkyObject) stage.noteMissPress(direction));
 		callOnScripts('noteMissPress', [direction]);
 	}
 
@@ -3189,7 +3220,7 @@ class PlayState extends MusicBeatState
 		strumPlayAnim(true, Std.int(Math.abs(note.noteData)), Conductor.stepCrochet * 1.25 / 1000 / playbackRate);
 		note.hitByOpponent = true;
 		
-		stagesFunc(function(stage:FunkyObject) stage.opponentNoteHit(note));
+		funkyFunc(function(stage:FunkyObject) stage.opponentNoteHit(note));
 		var result:Dynamic = callOnLuas('opponentNoteHit', [notes.members.indexOf(note), Math.abs(note.noteData), note.noteType, note.isSustainNote]);
 		if(result != LuaUtils.Function_Stop && result != LuaUtils.Function_StopHScript && result != LuaUtils.Function_StopAll) callOnHScript('opponentNoteHit', [note]);
 
@@ -3305,7 +3336,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		stagesFunc(function(stage:FunkyObject) stage.goodNoteHit(note));
+		funkyFunc(function(stage:FunkyObject) stage.goodNoteHit(note));
 		var result:Dynamic = callOnLuas('goodNoteHit', [notes.members.indexOf(note), leData, leType, isSus]);
 		if(result != LuaUtils.Function_Stop && result != LuaUtils.Function_StopHScript && result != LuaUtils.Function_StopAll) callOnHScript('goodNoteHit', [note]);
 		if(!note.isSustainNote) invalidateNote(note);
@@ -3357,8 +3388,10 @@ class PlayState extends MusicBeatState
 			}
 
 		hscriptArray = null;
+
+		Song.selectedStage = null;
 		#end
-		stagesFunc(function(stage:FunkyObject) stage.destroy());
+		funkyFunc(function(stage:FunkyObject) stage.destroy());
 
 		#if VIDEOS_ALLOWED
 		if(videoCutscene != null)

@@ -220,4 +220,28 @@
 	<SubTexture name="deathConfirm0070" x="137" y="688" width="136" height="85" frameX="0" frameY="0" frameWidth="136" frameHeight="85" />
 	<SubTexture name="deathConfirm0071" x="274" y="688" width="136" height="85" frameX="0" frameY="0" frameWidth="136" frameHeight="85" />
 	<SubTexture name="deathConfirm0072" x="274" y="688" width="136" height="85" frameX="0" frameY="0" frameWidth="136" frameHeight="85" />
+	<SubTexture name="middle finger0000" x="0" y="773" width="75" height="66" frameX="-2" frameY="-6" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0001" x="0" y="773" width="75" height="66" frameX="-2" frameY="-6" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0002" x="149" y="773" width="71" height="65" frameX="-2" frameY="-8" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0003" x="75" y="773" width="74" height="65" frameX="-2" frameY="-8" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0004" x="75" y="773" width="74" height="65" frameX="-2" frameY="-8" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0005" x="75" y="773" width="74" height="65" frameX="-2" frameY="-8" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0006" x="75" y="773" width="74" height="65" frameX="-2" frameY="-8" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0007" x="75" y="773" width="74" height="65" frameX="-2" frameY="-8" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0008" x="75" y="773" width="74" height="65" frameX="-2" frameY="-8" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0009" x="75" y="773" width="74" height="65" frameX="-2" frameY="-8" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0010" x="75" y="773" width="74" height="65" frameX="-2" frameY="-8" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0011" x="75" y="773" width="74" height="65" frameX="-2" frameY="-8" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0012" x="75" y="773" width="74" height="65" frameX="-2" frameY="-8" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0013" x="75" y="773" width="74" height="65" frameX="-2" frameY="-8" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0014" x="75" y="773" width="74" height="65" frameX="-2" frameY="-8" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0015" x="75" y="773" width="74" height="65" frameX="-2" frameY="-8" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0016" x="75" y="773" width="74" height="65" frameX="-2" frameY="-8" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0017" x="75" y="773" width="74" height="65" frameX="-2" frameY="-8" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0018" x="75" y="773" width="74" height="65" frameX="-2" frameY="-8" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0019" x="75" y="773" width="74" height="65" frameX="-2" frameY="-8" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0020" x="75" y="773" width="74" height="65" frameX="-2" frameY="-8" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0021" x="75" y="773" width="74" height="65" frameX="-2" frameY="-8" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0022" x="75" y="773" width="74" height="65" frameX="-2" frameY="-8" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="middle finger0023" x="75" y="773" width="74" height="65" frameX="-2" frameY="-8" frameWidth="80" frameHeight="80"/>
 </TextureAtlas>

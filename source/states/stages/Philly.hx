@@ -5,10 +5,16 @@ import objects.Character;
 
 class Philly extends FunkyObject
 {
+	/**
+	 * REMEMBER TO PUT THE "/" SHIT AT THE END!!!
+	 */
+	public var folder:String = "";
+	public var isAlt:Bool = false;
+
 	var phillyLightsColors:Array<FlxColor>;
 	var phillyWindow:BGSprite;
 	var phillyStreet:BGSprite;
-	var phillyTrain:PhillyTrain;
+	public var phillyTrain:PhillyTrain;
 	var curLight:Int = -1;
 
 	//For Philly Glow events
@@ -21,11 +27,11 @@ class Philly extends FunkyObject
 	override function create()
 	{
 		if(!ClientPrefs.data.lowQuality) {
-			var bg:BGSprite = new BGSprite('philly/sky', -100, 0, 0.1, 0.1);
+			var bg:BGSprite = new BGSprite('philly/' + folder + 'sky', -100, 0, 0.1, 0.1);
 			add(bg);
 		}
 
-		var city:BGSprite = new BGSprite('philly/city', -10, 0, 0.3, 0.3);
+		var city:BGSprite = new BGSprite('philly/' + folder + 'city', -10, 0, 0.3, 0.3);
 		city.setGraphicSize(Std.int(city.width * 0.85));
 		city.updateHitbox();
 		add(city);
@@ -38,16 +44,17 @@ class Philly extends FunkyObject
 		phillyWindow.alpha = 0;
 
 		if(!ClientPrefs.data.lowQuality) {
-			var streetBehind:BGSprite = new BGSprite('philly/behindTrain', -40, 50);
+			var streetBehind:BGSprite = new BGSprite('philly/' + folder + 'behindTrain', -40, 50);
 			add(streetBehind);
 		}
 
 		phillyTrain = new PhillyTrain(2000, 360);
 		add(phillyTrain);
 
-		phillyStreet = new BGSprite('philly/street', -40, 50);
+		phillyStreet = new BGSprite('philly/' + folder + 'street', -40, 50);
 		add(phillyStreet);
 	}
+
 	override function eventPushed(event:objects.Note.EventNote)
 	{
 		switch(event.event)
@@ -99,6 +106,7 @@ class Philly extends FunkyObject
 		}
 	}
 
+	public var preLightsShader:Dynamic;
 	override function eventCalled(eventName:String, value1:String, value2:String, flValue1:Null<Float>, flValue2:Null<Float>, strumTime:Float)
 	{
 		switch(eventName)
@@ -110,7 +118,7 @@ class Philly extends FunkyObject
 				var chars:Array<Character> = [boyfriend, gf, dad];
 				switch(lightId)
 				{
-					case 0:
+					case 0: // Off
 						if(phillyGlowGradient.visible)
 						{
 							doFlash();
@@ -129,6 +137,7 @@ class Philly extends FunkyObject
 							for (who in chars)
 							{
 								who.color = FlxColor.WHITE;
+								who.shader = preLightsShader;
 							}
 							phillyStreet.color = FlxColor.WHITE;
 						}
@@ -165,6 +174,7 @@ class Philly extends FunkyObject
 
 						for (who in chars)
 						{
+							who.shader = null;
 							who.color = charColor;
 						}
 						phillyGlowParticles.forEachAlive(function(particle:PhillyGlowParticle)

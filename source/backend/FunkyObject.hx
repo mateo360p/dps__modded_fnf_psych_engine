@@ -1,5 +1,6 @@
 package backend;
 
+import objects.characters.BaseCharacter.CharType;
 import flixel.FlxBasic;
 import flixel.FlxObject;
 import flixel.FlxSubState;
@@ -25,6 +26,8 @@ enum BasicType
 
 class FunkyObject extends FlxBasic
 {
+
+	public var funkyType:BasicType;
 	private var game(get, never):Dynamic;
 	public var onPlayState(get, never):Bool;
 
@@ -62,6 +65,7 @@ class FunkyObject extends FlxBasic
 		}
 		else 
 		{
+			this.funkyType = type;
 			game.funkyObj.push(this);
 			super();
 			create();
@@ -74,6 +78,7 @@ class FunkyObject extends FlxBasic
 	//public function update(elapsed:Float) {}
 	public function countdownTick(count:Countdown, num:Int) {}
 	public function startSong() {}
+	public function addCharacter(char:Character) {}
 
 	// FNF steps, beats and sections
 	public var curBeat:Int = 0;

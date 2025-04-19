@@ -142,9 +142,11 @@ class Note extends FlxSprite
 	public var hitCausesMiss:Bool = false;
 	public var distance:Float = 2000; //plan on doing scroll directions soon -bb
 
-	//for noteSplash, [0] -> Normal UI; [1] -> Pixel
+	/**
+	 * for noteSplash, [0] -> Normal UI; [1] -> Pixel
+	**/
 	public static var dark_sets:Array<FlxColor> = [
-		0xFF000000, 0xFF00FF22,
+		0xFF000000, 0xFF121212,
 	];
 
 	public var hitsoundDisabled:Bool = false;

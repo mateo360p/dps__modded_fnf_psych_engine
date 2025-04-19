@@ -6,7 +6,9 @@ limoAlt
 mall
 mallEvil
 school
+schoolAlt
 schoolEvil
+schoolEvilAlt
 tank
 phillyStreets
 phillyStreetsAlt

@@ -50,6 +50,7 @@ typedef SwagSection =
 
 class Song
 {
+	public static var selectedStage:String = null;
 	public var audiosNames:Array<String> = ['', '', ''];
 	public var eventsFile:String = '';
 	public var song:String;

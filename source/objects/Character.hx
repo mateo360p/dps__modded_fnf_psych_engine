@@ -262,6 +262,8 @@ class Character extends FlxSprite
 		_baseChar = FlxDestroyUtil.destroy(_baseChar);
 		_baseChar = (
 			switch (char) {
+				case "bf", "boyfriend":
+					new Boyfriend(this);
 				case "nene":
 					new Nene(this);
 				case "pico-playable":

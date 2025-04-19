@@ -13,8 +13,11 @@ import states.FreeplayState;
 class GameOverSubstate extends MusicBeatSubstate
 {
 	public var boyfriend:Character;
-	var camFollow:FlxObject;
+	public var inFakeOut:Bool = false;
+	var noFakeOut:Bool;
+	var psBoyfriend:Character = null;
 
+	var camFollow:FlxObject;
 	var stagePostfix:String = "";
 
 	public static var characterName:String = 'bf-dead';
@@ -24,8 +27,10 @@ class GameOverSubstate extends MusicBeatSubstate
 	public static var deathDelay:Float = 0;
 
 	public static var instance:GameOverSubstate;
-	public function new(?playStateBoyfriend:Character = null)
+	public function new(?playStateBoyfriend:Character = null, ?noFakeOut:Bool = false)
 	{
+		this.noFakeOut = noFakeOut;
+		if (!noFakeOut) psBoyfriend = playStateBoyfriend;
 		if(playStateBoyfriend != null && playStateBoyfriend.curCharacter == characterName) //Avoids spawning a second boyfriend cuz animate atlas is laggy
 		{
 			this.boyfriend = playStateBoyfriend;
@@ -61,27 +66,47 @@ class GameOverSubstate extends MusicBeatSubstate
 
 		Conductor.songPosition = 0;
 
-		if(boyfriend == null)
-		{
-			boyfriend = new Character(PlayState.instance.boyfriend.getScreenPosition().x, PlayState.instance.boyfriend.getScreenPosition().y, characterName, true);
-			boyfriend.x += boyfriend.positionArray[0] - PlayState.instance.boyfriend.positionArray[0];
-			boyfriend.y += boyfriend.positionArray[1] - PlayState.instance.boyfriend.positionArray[1];
-		}
-		boyfriend.skipDance = true;
-		add(boyfriend);
+		if (!noFakeOut) {
+			var fakeProb:Int = PlayState.instance.boyfriend._baseChar.fakeOutProb;
+			if (fakeProb != 0 && PlayState.instance.boyfriend._baseChar.fakeOutAssets != null) 
+				if (FlxG.random.bool((1 / fakeProb) * 100)) {FlxG.sound.play(Paths.sound((PlayState.DEF_HEY_SOUND))); inFakeOut = true;} // Just for testing
 
-		FlxG.sound.play(Paths.sound(deathSoundName));
+			if (inFakeOut) {
+				boyfriend = new Character(PlayState.instance.boyfriend.getScreenPosition().x, PlayState.instance.boyfriend.getScreenPosition().y, PlayState.instance.boyfriend._baseChar.fakeOutAssets.char, true);
+				boyfriend.x += boyfriend.positionArray[0] - PlayState.instance.boyfriend.positionArray[0];
+				boyfriend.y += boyfriend.positionArray[1] - PlayState.instance.boyfriend.positionArray[1];
+				boyfriend.skipDance = true;
+				add(boyfriend);
+
+				FlxG.sound.play(Paths.sound(PlayState.instance.boyfriend._baseChar.fakeOutAssets.sound));
+				boyfriend.playAnim("fakeout", true);
+			}
+		} else inFakeOut = false;
+
+		if (!inFakeOut) {
+			if(boyfriend == null)
+			{
+				boyfriend = new Character(PlayState.instance.boyfriend.getScreenPosition().x, PlayState.instance.boyfriend.getScreenPosition().y, characterName, true);
+				boyfriend.x += boyfriend.positionArray[0] - PlayState.instance.boyfriend.positionArray[0];
+				boyfriend.y += boyfriend.positionArray[1] - PlayState.instance.boyfriend.positionArray[1];
+			}
+			boyfriend.skipDance = true;
+			add(boyfriend);
+
+			FlxG.sound.play(Paths.sound(deathSoundName));
+
+			boyfriend.playAnim('firstDeath');
+		}
+
 		FlxG.camera.scroll.set();
 		FlxG.camera.target = null;
-
-		boyfriend.playAnim('firstDeath');
 
 		camFollow = new FlxObject(0, 0, 1, 1);
 		camFollow.setPosition(boyfriend.getGraphicMidpoint().x + boyfriend.cameraPosition[0], boyfriend.getGraphicMidpoint().y + boyfriend.cameraPosition[1]);
 		FlxG.camera.focusOn(new FlxPoint(FlxG.camera.scroll.x + (FlxG.camera.width / 2), FlxG.camera.scroll.y + (FlxG.camera.height / 2)));
 		FlxG.camera.follow(camFollow, LOCKON, 0.01);
 		add(camFollow);
-		
+
 		PlayState.instance.setOnScripts('inGameOver', true);
 		PlayState.instance.callOnScripts('onGameOverStart', []);
 		FlxG.sound.music.loadEmbedded(Paths.music(loopSoundName), true);
@@ -137,6 +162,13 @@ class GameOverSubstate extends MusicBeatSubstate
 		super.update(elapsed);
 
 		PlayState.instance.callOnScripts('onUpdate', [elapsed]);
+
+		if (inFakeOut) {
+			if (!boyfriend.isAnimationNull() && boyfriend.getAnimationName() == 'fakeout' && boyfriend.isAnimationFinished()) {
+				PlayState.instance.openSubState(new GameOverSubstate(psBoyfriend, true));
+			}
+			return;
+		}
 
 		var justPlayedLoop:Bool = false;
 		if (!boyfriend.isAnimationNull() && boyfriend.getAnimationName() == 'firstDeath' && boyfriend.isAnimationFinished())

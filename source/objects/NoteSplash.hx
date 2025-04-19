@@ -273,15 +273,13 @@ class NoteSplash extends FlxSprite
 				else tempShader.copyValues(Note.globalRgbShaders[noteData % Note.colArray.length]);
 			}
 		}
+
+		if (ClientPrefs.data.noteSkin.toLowerCase().trim() == 'dark' && (inEditor || note.noteSplashData.darkSet) && tempShader != null)
+			tempShader.g = (PlayState.isPixelStage) ? Note.dark_sets[1] : Note.dark_sets[0]; // Setting the dark in splashes
+
 		rgbShader.copyValues(tempShader, inEditor || note.noteSplashData.darkSet, PlayState.isPixelStage && config.allowPixel);
 		if (!config.allowPixel) rgbShader.pixelAmount = 1;
 		else if (PlayState.isPixelStage) rgbShader.pixelAmount = 6;
-
-		for (i in 0...3){
-			if (ClientPrefs.data.noteSkin.toLowerCase().trim() == 'dark' && (inEditor || note.noteSplashData.darkSet)) {
-				rgbShader.shader.g.value[i] = (!PlayState.isPixelStage) ? Note.dark_sets[1] : Note.dark_sets[0];
-			};
-		}
 
 		offset.set(10, 10);
 		var conf:NoteSplashAnim = config.animations.get(anim);
@@ -444,9 +442,6 @@ class PixelSplashShaderRef
 			{
 				shader.r.value[i] = tempShader.shader.r.value[i];
 				shader.g.value[i] = tempShader.shader.g.value[i];
-				if (ClientPrefs.data.noteSkin.toLowerCase().trim() == 'dark' && dark) {
-					shader.g.value[i] = pixel ? Note.dark_sets[1] : Note.dark_sets[0]; //i dont understand this
-				};
 				shader.b.value[i] = tempShader.shader.b.value[i];
 			}
 			shader.mult.value[0] = tempShader.shader.mult.value[0];

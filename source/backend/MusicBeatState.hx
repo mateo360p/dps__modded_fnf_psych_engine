@@ -76,7 +76,7 @@ class MusicBeatState extends FlxState
 
 		if(FlxG.save.data != null) FlxG.save.data.fullscreen = FlxG.fullscreen;
 		
-		stagesFunc(function(funky:FunkyObject) {
+		funkyFunc(function(funky:FunkyObject) {
 			funky.update(elapsed);
 		});
 
@@ -169,7 +169,7 @@ class MusicBeatState extends FlxState
 
 	public function stepHit():Void
 	{
-		stagesFunc(function(funky:FunkyObject) {
+		funkyFunc(function(funky:FunkyObject) {
 			funky.curStep = curStep;
 			funky.curDecStep = curDecStep;
 			funky.stepHit();
@@ -183,7 +183,7 @@ class MusicBeatState extends FlxState
 	public function beatHit():Void
 	{
 		//trace('Beat: ' + curBeat);
-		stagesFunc(function(funky:FunkyObject) {
+		funkyFunc(function(funky:FunkyObject) {
 			funky.curBeat = curBeat;
 			funky.curDecBeat = curDecBeat;
 			funky.beatHit();
@@ -193,17 +193,19 @@ class MusicBeatState extends FlxState
 	public function sectionHit():Void
 	{
 		//trace('Section: ' + curSection + ', Beat: ' + curBeat + ', Step: ' + curStep);
-		stagesFunc(function(funky:FunkyObject) {
+		funkyFunc(function(funky:FunkyObject) {
 			funky.curSection = curSection;
 			funky.sectionHit();
 		});
 	}
 
-	public function stagesFunc(func:FunkyObject->Void)
+	public function funkyFunc(func:FunkyObject->Void, ?types:Array<BasicType> = null)
 	{
-		for (funky in funkyObj)
-			if(funky != null && funky.exists && funky.active)
-				func(funky);
+		if (types == null) types = BasicType.createAll(); // Uh
+		for (funky in funkyObj){
+			if (types.contains(funky.funkyType)) // If its type isn't in the array, it doesn't do anything :D
+				if(funky != null && funky.exists && funky.active)
+					func(funky);}
 	}
 
 	function getBeatsOnSection()

@@ -1,5 +1,6 @@
 package states.stages;
 
+import objects.Character;
 import shaders.AdjustColorShader;
 
 class LimoAlt extends Limo {
@@ -21,13 +22,15 @@ class LimoAlt extends Limo {
         super.create();
     }
 
+    override function addCharacter(char:Character) {
+        super.addCharacter(char);
+
+        char.shader = colorShader;
+    }
+
     override function createPost()
     {
         super.createPost();
-
-        boyfriend.shader = colorShader;
-        gf.shader = colorShader;
-        dad.shader = colorShader;
 
         _shaderHelper(limoMetalPole);
         _shaderHelper(limoLight);

@@ -82,7 +82,7 @@
 		}
 	],
 	"no_antialiasing": true,
-	"image": "characters/pico/pixel/picoPixel, characters/pico/pixel/pico_middleFinger",
+	"image": "characters/pico/picoPixel",
 	"position": [35, 330],
 	"hey_anim": "yeah",
 	"healthicon": "pico-pixel",

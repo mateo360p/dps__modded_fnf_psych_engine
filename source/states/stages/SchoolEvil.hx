@@ -1,5 +1,7 @@
 package states.stages;
 
+import flixel.addons.display.FlxRuntimeShader;
+import shaders.WiggleEffectRuntime;
 import flixel.addons.effects.FlxTrail;
 import states.stages.objects.*;
 import substates.GameOverSubstate;
@@ -8,6 +10,9 @@ import openfl.utils.Assets as OpenFlAssets;
 
 class SchoolEvil extends FunkyObject
 {
+	public var isAlt:Bool = false;
+
+	var wiggle:WiggleEffectRuntime = null;
 	override function create()
 	{
 		var _song = PlayState.SONG;
@@ -16,18 +21,28 @@ class SchoolEvil extends FunkyObject
 		if(_song.gameOverEnd == null || _song.gameOverEnd.trim().length < 1) GameOverSubstate.endSoundName = 'gameOverEnd-pixel';
 		if(_song.gameOverChar == null || _song.gameOverChar.trim().length < 1) GameOverSubstate.characterName = 'bf-pixel-dead';
 		
-		var posX = 400;
-		var posY = 200;
+		var posX = 500;
+		var posY = 384;
 
 		var bg:BGSprite;
-		if(!ClientPrefs.data.lowQuality)
-			bg = new BGSprite('weeb/animatedEvilSchool', posX, posY, 0.8, 0.9, ['background 2'], true);
-		else
-			bg = new BGSprite('weeb/animatedEvilSchool_low', posX, posY, 0.8, 0.9);
+		if (isAlt) bg = new BGSprite('weeb/erect/evilSchoolBG', posX, posY, 1, 0.9);
+		else bg = new BGSprite('weeb/evilSchoolBG', posX, posY, 0.6, 0.9);
+
+		wiggle = new WiggleEffectRuntime(2, 4, 0.017, WiggleEffectType.DREAMY);
 
 		bg.scale.set(PlayState.daPixelZoom, PlayState.daPixelZoom);
 		bg.antialiasing = false;
+		bg.shader = wiggle;
 		add(bg);
+
+		if (!isAlt) {
+			var fg = new BGSprite('weeb/evilSchoolFG', posX, posY, 0.95, 0.95);
+			fg.scale.set(PlayState.daPixelZoom, PlayState.daPixelZoom);
+			fg.antialiasing = false;
+			fg.shader = wiggle;
+			add(fg);
+		}
+
 		setDefaultGF('gf-pixel');
 
 		FlxG.sound.playMusic(Paths.music('LunchboxScary'), 0);
@@ -38,10 +53,18 @@ class SchoolEvil extends FunkyObject
 			setStartCallback(schoolIntro);
 		}
 	}
+
 	override function createPost()
 	{
 		var trail:FlxTrail = new FlxTrail(dad, null, 4, 24, 0.3, 0.069);
 		addBehindDad(trail);
+	}
+
+	override function update(elapsed:Float)
+	{
+		if (wiggle != null) {
+			wiggle.update(elapsed);
+		}
 	}
 
 	// Ghouls event

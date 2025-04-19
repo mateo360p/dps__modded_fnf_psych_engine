@@ -1,5 +1,7 @@
 package states;
 
+import substates.FreeplayErrorSubState;
+import substates.SelectStageSubState;
 import objects.Character;
 import backend.LevelData;
 import backend.WeekData;
@@ -49,8 +51,8 @@ class FreeplayState extends MusicBeatState
 	var bg:FlxSprite;
 	var intendedColor:Int;
 
-	var missingTextBG:FlxSprite;
-	var missingText:FlxText;
+	//var missingTextBG:FlxSprite;
+	//var missingText:FlxText;
 
 	var bottomString:String;
 	var bottomText:FlxText;
@@ -58,6 +60,7 @@ class FreeplayState extends MusicBeatState
 
 	var musicPlayer:MusicPlayer;
 	var tabPlayerSine:Float = 0;
+	var onError:Bool = false;
 
 	override function create()
 	{
@@ -172,18 +175,6 @@ class FreeplayState extends MusicBeatState
 		tabToChangeTxt.borderSize = 2;
 		add(tabToChangeTxt);
 
-
-		missingTextBG = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-		missingTextBG.alpha = 0.6;
-		missingTextBG.visible = false;
-		add(missingTextBG);
-		
-		missingText = new FlxText(50, 0, FlxG.width - 100, '', 24);
-		missingText.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		missingText.scrollFactor.set();
-		missingText.visible = false;
-		add(missingText);
-
 		if(curSelected >= songs.length) curSelected = 0;
 		bg.color = songs[curSelected].color;
 		intendedColor = bg.color;
@@ -264,7 +255,7 @@ class FreeplayState extends MusicBeatState
 		var shiftMult:Int = 1;
 		if(FlxG.keys.pressed.SHIFT) shiftMult = 3;
 
-		if (!musicPlayer.playingMusic)
+		if (!musicPlayer.playingMusic && !onError)
 		{
 			scoreText.text = Language.getPhrase('personal_best', 'PERSONAL BEST: {1} ({2}%)', [lerpScore, ratingSplit.join('.')]);
 			positionHighscore();
@@ -443,49 +434,52 @@ class FreeplayState extends MusicBeatState
 			persistentUpdate = false;
 			var songLowercase:String = Paths.formatToSongPath(getPlayerSongName());
 			var poop:String = Highscore.formatSong(songLowercase, curDifficulty);
+			var stageArr = getStagesArray();
 
-			try
-			{
-				Song.loadFromJson(poop, Paths.formatToSongPath(songs[curSelected].songName.toLowerCase()));
-				PlayState.isStoryMode = false;
-				PlayState.storyDifficulty = curDifficulty;
+			function gameChit() {
+				try
+				{
+					Song.loadFromJson(poop, Paths.formatToSongPath(songs[curSelected].songName.toLowerCase()));
+					PlayState.isStoryMode = false;
+					PlayState.storyDifficulty = curDifficulty;
 
-				trace('CURRENT WEEK: ' + WeekData.getWeekFileName());
+					trace('CURRENT WEEK: ' + WeekData.getWeekFileName());
+
+					@:privateAccess
+					if(PlayState._lastLoadedModDirectory != Mods.currentModDirectory)
+					{
+						trace('CHANGED MOD DIRECTORY, RELOADING STUFF');
+						Paths.freeGraphicsFromMemory();
+					}
+					LoadingState.prepareToSong();
+					LoadingState.loadAndSwitchState(new PlayState());
+					#if !SHOW_LOADING_SCREEN FlxG.sound.music.stop(); #end
+					stopMusicPlay = true;
+
+					destroyFreeplayVocals();
+					#if (MODS_ALLOWED && DISCORD_ALLOWED)
+					DiscordClient.loadModRPC();
+					#end
+				}
+				catch(e:haxe.Exception)
+				{
+					trace('ERROR! ${e.message}');
+	
+					var errorSubstate:FreeplayErrorSubState = new FreeplayErrorSubState(songLowercase, e);
+					errorSubstate.onClose = () -> (onError = false);
+					openSubState(errorSubstate);
+
+					onError = true;
+					updateTexts(elapsed);
+				}
 			}
-			catch(e:haxe.Exception)
-			{
-				trace('ERROR! ${e.message}');
-
-				var errorStr:String = e.message;
-				if(errorStr.contains('There is no TEXT asset with an ID of')) errorStr = 'Missing file: ' + errorStr.substring(errorStr.indexOf(songLowercase), errorStr.length-1); //Missing chart
-				else errorStr += '\n\n' + e.stack;
-
-				missingText.text = 'ERROR WHILE LOADING CHART:\n$errorStr';
-				missingText.screenCenter(Y);
-				missingText.visible = true;
-				missingTextBG.visible = true;
-				FlxG.sound.play(Paths.sound('cancelMenu'));
-
-				updateTexts(elapsed);
-				super.update(elapsed);
-				return;
+			try {
+				var selectionState:SelectStageSubState = new SelectStageSubState(stageArr);
+				selectionState.onClose = () -> {gameChit(); Song.selectedStage = selectionState.finalStage;};
+				openSubState(selectionState);
+			} catch(e:haxe.Exception) {
+				gameChit();
 			}
-
-			@:privateAccess
-			if(PlayState._lastLoadedModDirectory != Mods.currentModDirectory)
-			{
-				trace('CHANGED MOD DIRECTORY, RELOADING STUFF');
-				Paths.freeGraphicsFromMemory();
-			}
-			LoadingState.prepareToSong();
-			LoadingState.loadAndSwitchState(new PlayState());
-			#if !SHOW_LOADING_SCREEN FlxG.sound.music.stop(); #end
-			stopMusicPlay = true;
-
-			destroyFreeplayVocals();
-			#if (MODS_ALLOWED && DISCORD_ALLOWED)
-			DiscordClient.loadModRPC();
-			#end
 		}
 		else if(controls.RESET && !musicPlayer.playingMusic)
 		{
@@ -540,8 +534,6 @@ class FreeplayState extends MusicBeatState
 		}
 
 		positionHighscore();
-		missingText.visible = false;
-		missingTextBG.visible = false;
 	}
 
 	function changeSelection(change:Int = 0, playSound:Bool = true)
@@ -645,6 +637,28 @@ class FreeplayState extends MusicBeatState
 
 	public function getPlayerSongName():String {
 		return player + '_' + songs[curSelected].songName.toLowerCase();
+	}
+
+	function getStagesArray():Array<Array<String>> {
+		try {
+			#if MODS_ALLOWED
+			var path = Paths.formatToSongPath(songs[curSelected].songName.toLowerCase());
+			var thing = path + '/$player-'  + Difficulty.getString(curDifficulty).toLowerCase() + '_stages.txt';
+			var firstArray:Array<String> = Mods.mergeAllTextsNamed("data/" + thing);
+			#else
+			var fullText:String = Assets.getText(Paths.txt(thing));
+			var firstArray:Array<String> = fullText.split('\n');
+			#end
+			var swagGoodArray:Array<Array<String>> = [];
+
+			for (i in firstArray) swagGoodArray.push(i.split('--'));
+
+			return swagGoodArray;
+		} 
+		catch(e:haxe.Exception) {
+			trace("null stages!");
+			return null;
+		}
 	}
 
 	override function beatHit()

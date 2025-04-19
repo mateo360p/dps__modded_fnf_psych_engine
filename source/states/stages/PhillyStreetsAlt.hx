@@ -1,5 +1,6 @@
 package states.stages;
 
+import objects.Character;
 import shaders.AdjustColorShader;
 
 class PhillyStreetsAlt extends PhillyStreets {
@@ -21,12 +22,9 @@ class PhillyStreetsAlt extends PhillyStreets {
         super.create();
     }
 
-    override function createPost()
-    {
-        super.createPost();
-        boyfriend.shader = colorShader;
-        gf.shader = colorShader;
-        dad.shader = colorShader;
+    override function addCharacter(char:Character) {
+        super.addCharacter(char);
+        char.shader = colorShader;
     }
 
     override function setupRainShader() {
