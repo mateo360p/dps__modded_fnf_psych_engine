@@ -29,18 +29,11 @@ class DialogueEditorState extends MusicBeatState implements PsychUIEventHandler.
 		persistentUpdate = persistentDraw = true;
 		FlxG.camera.bgColor = FlxColor.fromHSL(0, 0, 0.5);
 
-		defaultLine = {
-			portrait: DialogueCharacter.DEFAULT_CHARACTER,
-			expression: 'talk',
-			text: DEFAULT_TEXT,
-			boxState: DEFAULT_BUBBLETYPE,
-			speed: 0.05,
-			sound: ''
-		};
+		defaultLine = FileTemplates.dialogueLine();
 
 		dialogueFile = {
 			dialogue: [
-				copyDefaultLine()
+				FileTemplates.dialogueLine()
 			]
 		};
 		
@@ -79,7 +72,7 @@ class DialogueEditorState extends MusicBeatState implements PsychUIEventHandler.
 		animText.scrollFactor.set();
 		add(animText);
 		
-		daText = new TypedAlphabet(DialogueBoxPsych.DEFAULT_TEXT_X, DialogueBoxPsych.DEFAULT_TEXT_Y, DEFAULT_TEXT);
+		daText = new TypedAlphabet(DialogueBoxPsych.DEFAULT_TEXT_X, DialogueBoxPsych.DEFAULT_TEXT_Y, DefaultValues.dialogueText);
 		daText.setScale(0.7);
 		add(daText);
 		changeText();
@@ -103,7 +96,7 @@ class DialogueEditorState extends MusicBeatState implements PsychUIEventHandler.
 	function addDialogueLineUI() {
 		var tab_group = UI_box.getTab('Dialogue Line').menu;
 
-		characterInputText = new PsychUIInputText(10, 20, 80, DialogueCharacter.DEFAULT_CHARACTER, 8);
+		characterInputText = new PsychUIInputText(10, 20, 80, DefaultValues.character, 8);
 		speedStepper = new PsychUINumericStepper(10, characterInputText.y + 40, 0.005, 0.05, 0, 0.5, 3);
 
 		angryCheckbox = new PsychUICheckBox(speedStepper.x + 120, speedStepper.y, "Angry Textbox", 200);
@@ -114,7 +107,7 @@ class DialogueEditorState extends MusicBeatState implements PsychUIEventHandler.
 		};
 
 		soundInputText = new PsychUIInputText(10, speedStepper.y + 40, 150, '', 8);
-		lineInputText = new PsychUIInputText(10, soundInputText.y + 35, 200, DEFAULT_TEXT, 8);
+		lineInputText = new PsychUIInputText(10, soundInputText.y + 35, 200, DefaultValues.dialogueText, 8);
 		lineInputText.onPressEnter = function(e)
 		{
 			if(e.shiftKey)
@@ -143,18 +136,6 @@ class DialogueEditorState extends MusicBeatState implements PsychUIEventHandler.
 		tab_group.add(lineInputText);
 		tab_group.add(loadButton);
 		tab_group.add(saveButton);
-	}
-
-	function copyDefaultLine():DialogueLine {
-		var copyLine:DialogueLine = {
-			portrait: defaultLine.portrait,
-			expression: defaultLine.expression,
-			text: defaultLine.text,
-			boxState: defaultLine.boxState,
-			speed: defaultLine.speed,
-			sound: ''
-		};
-		return copyLine;
 	}
 
 	function updateTextBox() {
@@ -205,9 +186,6 @@ class DialogueEditorState extends MusicBeatState implements PsychUIEventHandler.
 		}
 	}
 
-	private static var DEFAULT_TEXT:String = "coolswag";
-	private static var DEFAULT_SPEED:Float = 0.05;
-	private static var DEFAULT_BUBBLETYPE:String = "normal";
 	function reloadText(skipDialogue:Bool) {
 		var textToType:String = lineInputText.text;
 		if(textToType == null || textToType.length < 1) textToType = ' ';
@@ -347,12 +325,12 @@ class DialogueEditorState extends MusicBeatState implements PsychUIEventHandler.
 				if(dialogueFile.dialogue.length < 1) //You deleted everything, dumbo!
 				{
 					dialogueFile.dialogue = [
-						copyDefaultLine()
+						FileTemplates.dialogueLine()
 					];
 				}
 				changeText();
 			} else if(FlxG.keys.justPressed.P) {
-				dialogueFile.dialogue.insert(curSelected + 1, copyDefaultLine());
+				dialogueFile.dialogue.insert(curSelected + 1, FileTemplates.dialogueLine());
 				changeText(1);
 			}
 		}

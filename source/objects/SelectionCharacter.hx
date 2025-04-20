@@ -20,8 +20,7 @@ class SelectionCharacter extends Character
     public var speakerBG:FlxSprite;
     public var snd(default, set):FlxSound;
 
-	function set_snd(changed:FlxSound)
-	{
+	function set_snd(changed:FlxSound) {
 		snd = changed;
 		#if funkin.vis
 		initAnalyzer();
@@ -29,8 +28,22 @@ class SelectionCharacter extends Character
 		return snd;
 	}
 
-    public function new(x:Float, y:Float, char:String, ?inDebug:Bool = false)
-    {
+    function set_enableVisualizer(value:Bool):Bool {
+        if (value) {
+            if (!speakerAnalyzerExists()) {
+                speakerBG = new FlxSprite(0, 0).loadGraphic(Paths.image('charSelect/playerAssets/pico/stereoBG'));
+                speakerBG.antialiasing = ClientPrefs.data.antialiasing;
+            }
+            vizSprites = ABotSpeaker.setVizSprites('charSelect/playerAssets/pico/aBotViz', VIZ_POS_X, VIZ_POS_Y);
+            //setObjectsPos();
+        } else {
+            speakerBG = null;
+            vizSprites = null;
+        }
+        return (enableVisualizer = value);
+    }
+
+    public function new(x:Float, y:Float, char:String, ?inDebug:Bool = false) {
         super(x, y, char, false, inDebug);
     }
 
@@ -51,7 +64,6 @@ class SelectionCharacter extends Character
         }
 
         this.alpha = 1; // Since alpha isn't used here...
-        folder = "players";
 
         super.changeCharacter(character);
 
@@ -101,11 +113,8 @@ class SelectionCharacter extends Character
 			levelMax = Std.int(Math.max(levelMax, 5 - animFrame));
 		}
     }
-    #end
 
-	#if funkin.vis
-	public function initAnalyzer()
-	{
+	public function initAnalyzer() {
 		@:privateAccess
 		analyzer = new SpectralAnalyzer(snd._channel.__audioSource, 7, 0.1, 40);
 	
@@ -117,22 +126,7 @@ class SelectionCharacter extends Character
 	}
 	#end
 
-    function set_enableVisualizer(value:Bool):Bool {
-        if (value) {
-            if (!speakerAnalyzerExists()) {
-                speakerBG = new FlxSprite(0, 0).loadGraphic(Paths.image('charSelect/playerAssets/pico/stereoBG'));
-                speakerBG.antialiasing = ClientPrefs.data.antialiasing;
-            }
-            vizSprites = ABotSpeaker.setVizSprites('charSelect/playerAssets/pico/aBotViz', VIZ_POS_X, VIZ_POS_Y);
-            //setObjectsPos();
-        } else {
-            speakerBG = null;
-            vizSprites = null;
-        }
-        return (enableVisualizer = value);
-    }
-
-    
+    //-------------------------------------- Funny funcs --------------------------------------
     public function onFinishAnimationOnce(anim:String, aFunction:Void -> Void) { // I just realized that this already exists, kinda
         if (!isAnimateAtlas) {
             this.animation.finishCallback = function(name:String) {
@@ -148,4 +142,15 @@ class SelectionCharacter extends Character
             });
         }
     }
+
+    /**
+	 * Returns the display group name of the player
+	 */
+	override public function groupName():String {
+		return "player characters";
+	}
+
+    override public function pathFunc(?fileName:String = null, ?postfix:String = null):String {
+		return PathsUtil.getPlayerPath(fileName, postfix);
+	}
 }

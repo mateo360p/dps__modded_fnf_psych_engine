@@ -36,7 +36,7 @@ class WeekEditorState extends MusicBeatState implements PsychUIEventHandler.Psyc
 	public function new(weekFile:WeekFile = null)
 	{
 		super();
-		this.weekFile = WeekData.createWeekFile();
+		this.weekFile = FileTemplates.weekFile();
 		if(weekFile != null) this.weekFile = weekFile;
 		else weekFileName = 'week1';
 	}
@@ -393,7 +393,6 @@ class WeekEditorState extends MusicBeatState implements PsychUIEventHandler.Psyc
 
 					// If the player isn't written, it will be the default char
 					songsPlayers.push(nully ? null : song.substr(0, pos)); // Get the player
-					//trace("Player added:" + (nully ? null : song.substr(0, pos)));
 					nully = (songsPlayers[i] == null);
 					splittedText[i] = song.substr(nully ? 0 : pos + 1); // Set the song
 				}
@@ -407,7 +406,7 @@ class WeekEditorState extends MusicBeatState implements PsychUIEventHandler.Psyc
 						weekFile.levels.push([splittedText[i], songsPlayers[i].toLowerCase()]);
 					} else { // Edit level
 						weekFile.levels[i][0] = splittedText[i];
-						weekFile.levels[i][1] = (songsPlayers[i] == null || songsPlayers[i] == "") ? Character.DEFAULT_CHARACTER : songsPlayers[i].toLowerCase(); // Set the player
+						weekFile.levels[i][1] = (songsPlayers[i] == null || songsPlayers[i] == "") ? DefaultValues.character : songsPlayers[i].toLowerCase(); // Set the player
 					}
 				}
 				updateText();
@@ -503,16 +502,16 @@ class WeekEditorState extends MusicBeatState implements PsychUIEventHandler.Psyc
 				// Hell, again
 				if(weeklySuffering.weekCharacters != null && weeklySuffering.weekName != null) // Make sure it's really a week
 				{
-					var weeklyHappiness:WeekFile = WeekData.createWeekFile();
+					var weeklyHappiness:WeekFile = FileTemplates.weekFile();
 					if (weeklySuffering.levels == null){
 						weeklyHappiness.levels = [];
 						var songsPrev:Array<Dynamic> = weeklySuffering.songs ?? [[""]];
-						for (i in songsPrev) weeklyHappiness.levels.push([i[0], Character.DEFAULT_CHARACTER]);
+						for (i in songsPrev) weeklyHappiness.levels.push([i[0], DefaultValues.character]);
 					} else weeklyHappiness.levels = weeklySuffering.levels;
 
 					// Compatibility with the Original Psych Engine!
-					weeklyHappiness.weekColor = weeklySuffering.weekColor ?? WeekData.defWeekColor;
-					weeklyHappiness.tweenTime = weeklySuffering.tweenTime ?? WeekData.defTweenTime;
+					weeklyHappiness.weekColor = weeklySuffering.weekColor ?? DefaultValues.weekColor;
+					weeklyHappiness.tweenTime = weeklySuffering.tweenTime ?? DefaultValues.weekTweenColorTime;
 					// Anddd the other stuff...
 					weeklyHappiness.hiddenUntilUnlocked = weeklySuffering.hiddenUntilUnlocked;
 					weeklyHappiness.hideFreeplay = weeklySuffering.hideFreeplay;
@@ -526,6 +525,8 @@ class WeekEditorState extends MusicBeatState implements PsychUIEventHandler.Psyc
 					weeklyHappiness.startUnlocked = weeklySuffering.startUnlocked;
 
 					loadedWeek = weeklyHappiness; // All that chit to avoid the "songs" value in old weeks
+
+					//Yeah, I think there might be another way, but heh, i'm too lazy for that
 
 					var cutName:String = _file.name.substr(0, _file.name.length - 5);
 					trace("Successfully loaded file: " + cutName);

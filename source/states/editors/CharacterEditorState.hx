@@ -60,7 +60,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 	{
 		this._char = char;
 		this._goToPlayState = goToPlayState;
-		if(this._char == null) this._char = Character.DEFAULT_CHARACTER;
+		if(this._char == null) this._char = DefaultValues.character;
 
 		super();
 	}
@@ -395,29 +395,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 
 		var templateCharacter:PsychUIButton = new PsychUIButton(140, 50, "Load Template", function()
 		{
-			final _template:CharacterFile =
-			{
-				animations: [
-					newAnim('idle', 'BF idle dance'),
-					newAnim('singLEFT', 'BF NOTE LEFT0'),
-					newAnim('singDOWN', 'BF NOTE DOWN0'),
-					newAnim('singUP', 'BF NOTE UP0'),
-					newAnim('singRIGHT', 'BF NOTE RIGHT0')
-				],
-				no_antialiasing: false,
-				flip_x: false,
-				healthicon: 'face',
-				image: 'characters/BOYFRIEND',
-				sing_duration: 4,
-				scale: 1,
-				healthbar_colors: [161, 161, 161],
-				camera_position: [0, 0],
-				position: [0, 0],
-				hey_sound: null,
-				hey_anim: null
-			};
-
-			character.loadCharacterFile(_template);
+			character.loadCharacterFile(FileTemplates.charFile());
 			character.missingCharacter = false;
 			character.color = FlxColor.WHITE;
 			character.alpha = 1;
@@ -436,7 +414,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		{
 			if(intended == null || intended.length < 1) return;
 
-			var characterPath:String = 'characters/$intended.json';
+			var characterPath:String = 'data/characters/$intended.json';
 			var path:String = Paths.getPath(characterPath, TEXT, null, true);
 			#if MODS_ALLOWED
 			if (FileSystem.exists(path))
@@ -539,7 +517,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 					character.animationsArray.remove(anim);
 				}
 
-			var addedAnim:AnimArray = newAnim(animationInputText.text, animationNameInputText.text);
+			var addedAnim:AnimArray = FileTemplates.charNewAnim(animationInputText.text, animationNameInputText.text);
 			addedAnim.fps = Math.round(animationFramerate.value);
 			addedAnim.loop = animationLoopCheckBox.checked;
 			addedAnim.indices = indices;
@@ -1214,18 +1192,6 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 
 		if(!character.hasAnimation(anim))
 			character.addOffset(anim, 0, 0);
-	}
-
-	inline function newAnim(anim:String, name:String):AnimArray
-	{
-		return {
-			offsets: [0, 0],
-			loop: false,
-			fps: 24,
-			anim: anim,
-			indices: [],
-			name: name
-		};
 	}
 
 	var characterList:Array<String> = [];

@@ -45,7 +45,7 @@ class BaseCharacter extends FunkyObject {
     }
 
     override public function create() {
-        //FlxG.sound.play(Paths.sound((PlayState.DEF_HEY_SOUND)), PlayState.heyVolume); // Just for testing
+        //FlxG.sound.play(Paths.sound((DefaultValues.heheSound)), PlayState.heyVolume); // Just for testing
     }
 
     function set_fakeOutProb(value:Null<Int>):Int {

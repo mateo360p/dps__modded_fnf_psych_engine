@@ -23,7 +23,6 @@ import js.html.*;
 
 import backend.Paths;
 import backend.Controls;
-import backend.CoolUtil;
 import backend.MusicBeatState;
 import backend.MusicBeatSubstate;
 import backend.CustomFadeTransition;
@@ -35,6 +34,9 @@ import backend.Mods;
 import backend.Language;
 
 import backend.ui.*; //Psych-UI
+
+import util.*;
+import util.PathsUtil.ObjectsPath;
 
 import objects.Alphabet;
 import objects.BGSprite;

@@ -73,8 +73,6 @@ class PlayState extends MusicBeatState
 
 	public static var songAllowedHey:Bool = true;
 	public static var heyVolume:Float = 1;
-	public static var DEF_HEY_SOUND:String = 'hehe/eh';
-	public static var DEF_HEY_ANIM:String = 'hey';
 
 	public static var STRUM_X = 42;
 	public static var STRUM_X_MIDDLESCROLL = -278;
@@ -502,8 +500,8 @@ class PlayState extends MusicBeatState
 		
 		#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
 		// STAGE SCRIPTS
-		#if LUA_ALLOWED startLuasNamed('stages/' + curStage + '.lua'); #end
-		#if HSCRIPT_ALLOWED startHScriptsNamed('stages/' + curStage + '.hx'); #end
+		#if LUA_ALLOWED startLuasNamed(PathsUtil.getStagePath(curStage, ".lua")); #end
+		#if HSCRIPT_ALLOWED startHScriptsNamed(PathsUtil.getStagePath(curStage, ".hx")); #end
 
 		// CHARACTER SCRIPTS
 		if(gf != null) startCharacterScripts(gf.curCharacter);
@@ -543,10 +541,6 @@ class PlayState extends MusicBeatState
 		{
 			timeTxt.size = 24;
 			timeTxt.y += 3;
-		}
-
-		if (SONG.audiosNames == null) {
-			SONG.audiosNames = ['Inst', 'Voices-Player', 'Voices-Opponent'];
 		}
 
 		generateSong();
@@ -639,7 +633,7 @@ class PlayState extends MusicBeatState
 
 		// SONG SPECIFIC SCRIPTS
 		#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
-		for (folder in Mods.directoriesWithFile(Paths.getSharedPath(), 'data/$songName/'))
+		for (folder in Mods.directoriesWithFile(Paths.getSharedPath(), PathsUtil.getSongPath("", "", songName)))
 			for (file in FileSystem.readDirectory(folder))
 			{
 				#if LUA_ALLOWED
@@ -797,7 +791,7 @@ class PlayState extends MusicBeatState
 		// Lua
 		#if LUA_ALLOWED
 		var doPush:Bool = false;
-		var luaFile:String = 'characters/$name.lua';
+		var luaFile:String = PathsUtil.getCharacterPath(name, ".lua");
 		#if MODS_ALLOWED
 		var replacePath:String = Paths.modFolders(luaFile);
 		if(FileSystem.exists(replacePath))
@@ -833,7 +827,7 @@ class PlayState extends MusicBeatState
 		// HScript
 		#if HSCRIPT_ALLOWED
 		var doPush:Bool = false;
-		var scriptFile:String = 'characters/' + name + '.hx';
+		var scriptFile:String = PathsUtil.getCharacterPath(name, ".hx");
 		#if MODS_ALLOWED
 		var replacePath:String = Paths.modFolders(scriptFile);
 		if(FileSystem.exists(replacePath))
@@ -1319,6 +1313,8 @@ class PlayState extends MusicBeatState
 
 	private function generateSong():Void
 	{
+		DefaultValues.prepareSongAudios(SONG.audiosNames);
+
 		// FlxG.log.add(ChartParser.parse());
 		songSpeed = PlayState.SONG.speed;
 		songSpeedType = ClientPrefs.getGameplaySetting('scrolltype');
@@ -1337,27 +1333,27 @@ class PlayState extends MusicBeatState
 
 		vocals = new FlxSound();
 		opponentVocals = new FlxSound();
-		
+
 		try
 		{
-			if (songData.needsVoices)
-			{
+			if (songData.needsVoices) {
+				PathsUtil.setUpSongVoices(false, true, vocals);
+				PathsUtil.setUpSongVoices(false, false, opponentVocals);
+				/*
 				if (SONG.audiosNames[1].toLowerCase().trim() != 'none'){
 					var playerVocals = Paths.voices(songData.song, SONG.audiosNames[1]);
-					trace('PLAYER VOICES---1:' + playerVocals);
-					vocals.loadEmbedded(playerVocals != null ? playerVocals : Paths.voices(songData.song));
-					trace('PLAYER VOICES---2!!!:' + SONG.audiosNames[1]);
+					vocals.loadEmbedded(playerVocals ?? Paths.voices(songData.song));
 				}
 				if (SONG.audiosNames[2].toLowerCase().trim() != 'none'){
 					var oppVocals = Paths.voices(songData.song, SONG.audiosNames[2]);
-					trace('OPPONENT VOICES---1:' + oppVocals);
-					opponentVocals.loadEmbedded(oppVocals != null ? oppVocals : Paths.voices(songData.song));
-					trace('OPPONENT VOICES---2!!!:' + SONG.audiosNames[2]);
-				}
+					opponentVocals.loadEmbedded(oppVocals ?? Paths.voices(songData.song));
+				}*/
 			}
 			
 		}
-		catch (e:Dynamic) {}
+		catch (e:Dynamic) {
+			trace("Error while, loading song voices-?"); // Just in case
+		}
 
 		#if FLX_PITCH
 		vocals.pitch = playbackRate;
@@ -1377,28 +1373,20 @@ class PlayState extends MusicBeatState
 		notes = new FlxTypedGroup<Note>();
 		noteGroup.add(notes);
 
-		try
-		{
+		// The custom events Files
+		try {
 			var multiEvents = Paths.getMultiEvents(SONG.eventsFile.split(','));
 			for (i in multiEvents) {
 				if(i != null && i != '') {
-					trace('EVENTS:' + i);
 					var eventsChart:SwagSong = Song.getChart(i, songName);
-					if(eventsChart != null) {
-						trace('Loaded events from file: ' + '$i.json');
-						for (event in eventsChart.events){ //Event Notes
-							for (a in 0...event[1].length)
-								makeEvent(event, a);
-						}
-					} else {
-						trace('Failed to load events:' + i);
-					}
-				} else {
-					//trace('null events file founded!');
+					if(eventsChart != null) for (event in eventsChart.events) for (a in 0...event[1].length) makeEvent(event, a); //Event Notes
+					else trace('Failed to load events:' + i);
 				}
 			}
 		}
-		catch(e:Dynamic) {}
+		catch(e:Dynamic) {
+			trace("Error while loading song custom events!");
+		}
 
 		var oldNote:Note = null;
 		var sectionsData:Array<SwagSection> = PlayState.SONG.notes;
@@ -2782,11 +2770,12 @@ class PlayState extends MusicBeatState
 	function doCustomHey() {
 		//Animation
 		if (boyfriend.hey_anim != 'none') {
-			boyfriend.playAnim((boyfriend.hey_anim != null && boyfriend.hey_anim.length > 0) ? boyfriend.hey_anim : DEF_HEY_ANIM, true);
+			boyfriend.playAnim((boyfriend.hey_anim != null && boyfriend.hey_anim.length > 0) ? boyfriend.hey_anim : DefaultValues.heheAnim, true);
 			boyfriend.specialAnim = true;
 		}
 		//Sound
-		if (boyfriend.hey_sound != 'none') FlxG.sound.play(Paths.sound(((boyfriend.hey_sound != null && boyfriend.hey_sound.length > 0) ? 'hehe/' + boyfriend.hey_sound : DEF_HEY_SOUND)), heyVolume);
+		if (boyfriend.hey_sound != 'none') 
+			FlxG.sound.play(Paths.sound(((boyfriend.hey_sound != null && boyfriend.hey_sound.length > 0) ? 'hehe/' + boyfriend.hey_sound : DefaultValues.heheSound)), heyVolume);
 	}
 
 	public var strumsBlocked:Array<Bool> = [];

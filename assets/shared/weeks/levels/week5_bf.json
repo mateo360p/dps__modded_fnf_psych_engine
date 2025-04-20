@@ -1,0 +1,33 @@
+{
+	"songs": [
+		[
+			"Cocoa",
+			"parents",
+			[
+				160,
+				209,
+				255
+			],
+			"Night"
+		],
+		[
+			"Eggnog",
+			"parents",
+			[
+				160,
+				209,
+				255
+			]
+		],
+		[
+			"Winter Horrorland",
+			"monster",
+			[
+				160,
+				209,
+				255
+			]
+		]
+	],
+	"levelDifficulties": "Easy, Normal, Hard"
+}

@@ -1,0 +1,45 @@
+{
+	"animations": [
+		{
+			"loop": false,
+			"offsets": [0, 0],
+			"anim": "idle",
+			"fps": 24,
+			"name": "Partner GF idle",
+			"indices": []
+		},
+		{
+			"loop": true,
+			"offsets": [0, 0],
+			"anim": "confirm",
+			"fps": 24,
+			"name": "Partner GF confirm",
+			"indices": []
+		},
+		{
+			"loop": true,
+			"offsets": [0, 0],
+			"anim": "deselect",
+			"fps": 24,
+			"name": "Partner GF deselect",
+			"indices": []
+		}
+	],
+	"no_antialiasing": false,
+	"icon_position": [
+		0,
+		0
+	],
+	"image": "charSelect/playerAssets/bf/gfChill",
+	"position": [40, -40],
+	"speaker": "none",
+	"hey_anim": "",
+	"healthicon": "face",
+	"flip_x": false,
+	"healthbar_colors": [0, 0, 0],
+	"camera_position": [0, 0],
+	"sing_duration": 1,
+	"hey_sound": "",
+	"scale": 1,
+	"_editor_isPlayer": false
+}

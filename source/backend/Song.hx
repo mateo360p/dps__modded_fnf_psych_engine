@@ -51,7 +51,7 @@ typedef SwagSection =
 class Song
 {
 	public static var selectedStage:String = null;
-	public var audiosNames:Array<String> = ['', '', ''];
+	public var audiosNames:Array<String> = DefaultValues.songAudiosNames;
 	public var eventsFile:String = '';
 	public var song:String;
 	public var notes:Array<SwagSection>;
@@ -67,9 +67,9 @@ class Song
 	public var disableNoteRGB:Bool = false;
 	public var speed:Float = 1;
 	public var stage:String;
-	public var player1:String = 'bf';
-	public var player2:String = 'dad';
-	public var gfVersion:String = 'gf';
+	public var player2:String = DefaultValues.defaultCharacters[0];
+	public var player1:String = DefaultValues.defaultCharacters[1];
+	public var gfVersion:String = DefaultValues.defaultCharacters[2];
 	public var format:String = 'psych_v1';
 
 	public static function convert(songJson:Dynamic) // Convert old charts to psych_v1 format
@@ -147,7 +147,8 @@ class Song
 		
 		var formattedFolder:String = Paths.formatToSongPath(folder);
 		var formattedSong:String = Paths.formatToSongPath(jsonInput);
-		_lastPath = Paths.json('$formattedFolder/$formattedSong');
+
+		_lastPath = Paths.getPath(PathsUtil.getSongPath(formattedSong, ".json", formattedFolder), TEXT); /*'$formattedFolder/$formattedSong');*/
 
 		#if MODS_ALLOWED
 		if(FileSystem.exists(_lastPath))

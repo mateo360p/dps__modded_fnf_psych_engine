@@ -1,10 +1,5 @@
 package backend;
 
-import backend.LevelData.LevelFile;
-import lime.utils.Assets;
-import openfl.utils.Assets as OpenFlAssets;
-import haxe.Json;
-
 typedef WeekFile =
 {
 	// JSON variables
@@ -25,10 +20,6 @@ typedef WeekFile =
 }
 
 class WeekData {
-	// Default values
-	public static var defWeekColor:Array<Int> = [249, 207, 81]; //0xFFF9CF51
-	public static var defTweenTime:Float = 0.5;
-
 	public static var weeksLoaded:Map<String, WeekData> = new Map<String, WeekData>();
 	public static var weeksList:Array<String> = [];
 	public var folder:String = '';
@@ -51,36 +42,7 @@ class WeekData {
 	public var difficulties:String;
 	public var weekColor:Array<Int>;
 	public var tweenTime:Float;
-
 	public var fileName:String;
-
-	public static function createWeekFile():WeekFile {
-		var weekFile:WeekFile = {
-			levels: [
-				["Bopeebo", "bf"],
-				["Fresh", "bf"],
-				["Dad Battle", "bf"]
-			],
-			player: "bf",
-			#if BASE_GAME_FILES
-			weekCharacters: ['dad', 'bf', 'gf'],
-			#else
-			weekCharacters: ['bf', 'bf', 'gf'],
-			#end
-			weekBackground: 'stage',
-			weekBefore: 'tutorial',
-			storyName: 'Your New Week',
-			weekName: 'Custom Week',
-			startUnlocked: true,
-			hiddenUntilUnlocked: false,
-			hideStoryMode: false,
-			hideFreeplay: false,
-			difficulties: '',
-			weekColor: defWeekColor,
-			tweenTime: defTweenTime
-		};
-		return weekFile;
-	}
 
 	// HELP: Is there any way to convert a WeekFile to WeekData without having to put all variables there manually? I'm kind of a noob in haxe lmao
 	public function new(weekFile:WeekFile, fileName:String) {
@@ -107,10 +69,10 @@ class WeekData {
 		var originalLength:Int = directories.length;
 		#end
 
-		var sexList:Array<String> = CoolUtil.coolTextFile(Paths.getSharedPath('weeks/weekList.txt'));
+		var sexList:Array<String> = CoolUtil.coolTextFile(Paths.getSharedPath(PathsUtil.getWeekPath("weekList", ".txt")));
 		for (i in 0...sexList.length) {
 			for (j in 0...directories.length) {
-				var fileToCheck:String = directories[j] + 'weeks/' + sexList[i] + '.json';
+				var fileToCheck:String = directories[j] + PathsUtil.getWeekPath(sexList[i], ".json");
 				if(!weeksLoaded.exists(sexList[i])) {
 					var week:WeekFile = getWeekFile(fileToCheck);
 					if(week != null) {
@@ -133,7 +95,7 @@ class WeekData {
 
 		#if MODS_ALLOWED
 		for (i in 0...directories.length) {
-			var directory:String = directories[i] + 'weeks/';
+			var directory:String = directories[i] + PathsUtil.getWeekPath();
 			if(FileSystem.exists(directory)) {
 				var listOfWeeks:Array<String> = CoolUtil.coolTextFile(directory + 'weekList.txt');
 				for (daWeek in listOfWeeks)
@@ -217,7 +179,7 @@ class WeekData {
 
 		var week:WeekFile = null;
 		for (j in 0...directories.length) {
-			var fileToCheck:String = directories[j] + 'weeks/$txt.json';
+			var fileToCheck:String = directories[j] + PathsUtil.getWeekPath(txt, ".json");
 			week = getWeekFile(fileToCheck);
 		}
 		return new WeekData(week, txt);

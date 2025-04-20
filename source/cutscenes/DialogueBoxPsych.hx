@@ -393,14 +393,9 @@ class DialogueBoxPsych extends FlxSpriteGroup
 
 	inline public static function dummy():DialogueFile
 	{
-		return { dialogue: [
-			{
-				expression: "talk",
-				text: "DIALOGUE NOT FOUND",
-				boxState: "normal",
-				speed: 0.05,
-				portrait: "bf"
-			}
+		return { 
+			dialogue: [
+				FileTemplates.dialogueLine(true)
 		]};
 	}
 

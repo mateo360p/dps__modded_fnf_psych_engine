@@ -2,7 +2,6 @@ package states;
 
 import substates.FreeplayErrorSubState;
 import substates.SelectStageSubState;
-import objects.Character;
 import backend.LevelData;
 import backend.WeekData;
 import backend.Highscore;
@@ -17,15 +16,11 @@ import substates.ResetScoreSubState;
 import flixel.math.FlxMath;
 import flixel.util.FlxDestroyUtil;
 
-import openfl.utils.Assets;
-
-import haxe.Json;
-
 using StringTools;
 
 class FreeplayState extends MusicBeatState
 {
-	public static var player:String;
+	public static var player:String = DefaultValues.character;
 	var songs:Array<SongMetadata> = [];
 
 	var selector:FlxText;
@@ -51,9 +46,6 @@ class FreeplayState extends MusicBeatState
 	var bg:FlxSprite;
 	var intendedColor:Int;
 
-	//var missingTextBG:FlxSprite;
-	//var missingText:FlxText;
-
 	var bottomString:String;
 	var bottomText:FlxText;
 	var bottomBG:FlxSprite;
@@ -64,6 +56,9 @@ class FreeplayState extends MusicBeatState
 
 	override function create()
 	{
+		Paths.clearStoredMemory();
+		Paths.clearUnusedMemory();
+
 		Conductor.bpm = TitleState.musicBPM; // Return to normal BPM & music
 
 		persistentUpdate = true;
@@ -79,7 +74,7 @@ class FreeplayState extends MusicBeatState
 		var plArray:Array<String> = [];
 		for (i in LevelData.playersList) plArray.push(i[0]); // Verifies if the character exist in the list [0]
 
-		if (!plArray.contains(player)) player = Character.DEFAULT_CHARACTER;
+		if (!plArray.contains(player)) player = DefaultValues.character;
 		trace("CUR PLAYER:" + FreeplayState.player);
 		LevelData.reloadLevels(false, player); // Loads level songs from the current player
 
@@ -353,66 +348,13 @@ class FreeplayState extends MusicBeatState
 				var songLowercase:String = Paths.formatToSongPath(getPlayerSongName());
 				var poop:String = Highscore.formatSong(songLowercase, curDifficulty);
 				Song.loadFromJson(poop, Paths.formatToSongPath(songs[curSelected].songName.toLowerCase()));
-				if (PlayState.SONG.audiosNames != null) {
-					for (i in 0...PlayState.SONG.audiosNames.length) {
-						if (PlayState.SONG.audiosNames[i] == null || PlayState.SONG.audiosNames[i].length < 0) {
-							switch (i) {
-								case 0: PlayState.SONG.audiosNames[i] = 'Inst';
-								case 1: PlayState.SONG.audiosNames[i] = 'Voices-Player';
-								case 2: PlayState.SONG.audiosNames[i] = 'Voices-Opponent';
-							}
-						}
-					}
-				} else {
-					PlayState.SONG.audiosNames[0] = 'Inst';
-					PlayState.SONG.audiosNames[1] = 'Voices-Player';
-					PlayState.SONG.audiosNames[2] = 'Voices-Opponent';
-				}
-				if (PlayState.SONG.needsVoices)
-				{
+				DefaultValues.prepareSongAudios(PlayState.SONG.audiosNames);
+
+				if (PlayState.SONG.needsVoices) {
 					vocals = new FlxSound();
-					try
-					{
-						var loadedVocals = Paths.voices(PlayState.SONG.song, PlayState.SONG.audiosNames[1]);
-						if (PlayState.SONG.audiosNames[1] == 'none') loadedVocals == null;
-						if(loadedVocals != null && loadedVocals.length > 0)
-						{
-							vocals.loadEmbedded(loadedVocals);
-							FlxG.sound.list.add(vocals);
-							vocals.persist = vocals.looped = true;
-							vocals.volume = 0.8;
-							vocals.play();
-							vocals.pause();
-						}
-						else vocals = FlxDestroyUtil.destroy(vocals);
-					}
-					catch(e:Dynamic)
-					{
-						vocals = FlxDestroyUtil.destroy(vocals);
-					}
-					
 					opponentVocals = new FlxSound();
-					try
-					{
-						var loadedVocals = Paths.voices(PlayState.SONG.song, PlayState.SONG.audiosNames[2]);
-						if (PlayState.SONG.audiosNames[2] == 'none') loadedVocals == null;
-						if(loadedVocals != null && loadedVocals.length > 0)
-						{
-							opponentVocals.loadEmbedded(loadedVocals);
-							FlxG.sound.list.add(opponentVocals);
-							opponentVocals.persist = opponentVocals.looped = true;
-							opponentVocals.volume = 0.8;
-							opponentVocals.play();
-							opponentVocals.pause();
-							//trace('yaaay!!');
-						}
-						else opponentVocals = FlxDestroyUtil.destroy(opponentVocals);
-					}
-					catch(e:Dynamic)
-					{
-						//trace('FUUUCK');
-						opponentVocals = FlxDestroyUtil.destroy(opponentVocals);
-					}
+					PathsUtil.setUpSongVoices(true, true, vocals);
+					PathsUtil.setUpSongVoices(true, false, opponentVocals);
 				}
 
 				FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song, PlayState.SONG.audiosNames[0]), 0.8);
@@ -641,10 +583,10 @@ class FreeplayState extends MusicBeatState
 
 	function getStagesArray():Array<Array<String>> {
 		try {
+			var file = '$player-'  + Difficulty.getString(curDifficulty).toLowerCase() + '_stages';
+			var thing = PathsUtil.getSongPath(file, ".txt", songs[curSelected].songName);
 			#if MODS_ALLOWED
-			var path = Paths.formatToSongPath(songs[curSelected].songName.toLowerCase());
-			var thing = path + '/$player-'  + Difficulty.getString(curDifficulty).toLowerCase() + '_stages.txt';
-			var firstArray:Array<String> = Mods.mergeAllTextsNamed("data/" + thing);
+			var firstArray:Array<String> = Mods.mergeAllTextsNamed(thing);
 			#else
 			var fullText:String = Assets.getText(Paths.txt(thing));
 			var firstArray:Array<String> = fullText.split('\n');

@@ -307,7 +307,6 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		timeLine.scrollFactor.set();
 		add(timeLine);
 
-		//MODIFIERS START---------------------------------
 		eventsInputText = new PsychUIInputText(10, FlxG.height - 25, 200, '', 8);
 		eventsInputText.onChange = function(old:String, cur:String)
 		{
@@ -323,7 +322,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		instSuffInputText.onChange = function(old:String, cur:String)
 		{
 			PlayState.SONG.audiosNames[0] = cur;
-			if (cur.toLowerCase().trim() == 'none') //Inst shouldn't be none
+			if (cur.toLowerCase().trim() == DefaultValues.audioDisable) //Inst shouldn't be none
 				instSuffInputText.behindText.color = FlxColor.RED;
 			else
 				instSuffInputText.behindText.color = FlxColor.WHITE;
@@ -338,7 +337,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		playerSuffInputText.onChange = function(old:String, cur:String)
 		{
 			PlayState.SONG.audiosNames[1] = cur;
-			if (cur.toLowerCase().trim() == 'none') playerSuffInputText.alpha = 0.5;
+			if (cur.toLowerCase().trim() == DefaultValues.audioDisable) playerSuffInputText.alpha = 0.5;
 			else playerSuffInputText.alpha = 1;
 		}
 		playerSuffInputText.cameras = [camUI];
@@ -351,7 +350,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		oppntSuffInputText.onChange = function(old:String, cur:String)
 		{
 			PlayState.SONG.audiosNames[2] = cur;
-			if (cur.toLowerCase().trim() == 'none') oppntSuffInputText.alpha = 0.5;
+			if (cur.toLowerCase().trim() == DefaultValues.audioDisable) oppntSuffInputText.alpha = 0.5;
 			else playerSuffInputText.alpha = 1;
 		}
 		oppntSuffInputText.cameras = [camUI];
@@ -359,7 +358,6 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		texti0 = new FlxText(eventsInputText.x, oppntSuffInputText.y - 15, 200, 'Opponent Vocals:');
 		texti0.cameras = [camUI];
 		add(texti0);
-		//MODIFIERS END------------------
 
 		var startX:Float = gridBg.x;
 		var startY:Float = FlxG.height/2;
@@ -488,7 +486,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		}
 
 		updateJsonData();
-		
+
 		// TABS
 		////// for main box
 		addChartingTab();
@@ -519,7 +517,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		updateGridVisibility();
 
 		// CHARACTERS FOR THE DROP DOWNS
-		var gameOverCharacters:Array<String> = loadFileList('characters/', 'data/characterList.txt');
+		var gameOverCharacters:Array<String> = loadFileList(PathsUtil.getCharacterPath("", ""), 'data/characterList.txt');
 		var characterList:Array<String> = gameOverCharacters.filter((name:String) -> (!name.endsWith('-dead') && !name.endsWith('-death')));
 		playerDropDown.list = characterList;
 		opponentDropDown.list = characterList;
@@ -533,7 +531,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		});
 		gameOverCharDropDown.list = gameOverCharacters;
 
-		stageDropDown.list = loadFileList('stages/', 'data/stageList.txt');
+		stageDropDown.list = loadFileList(PathsUtil.getStagePath(), 'data/stageList.txt');
 		onChartLoaded();
 
 		var tipText:FlxText = new FlxText(FlxG.width - 210, FlxG.height - 30, 200, 'Press F1 for Help', 20);
@@ -653,23 +651,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 
 	function openNewChart()
 	{
-		var song:SwagSong = {
-			song: 'Test',
-			notes: [],
-			events: [],
-			bpm: 150,
-			needsVoices: true,
-			speed: 1,
-			offset: 0,
-			eventsFile: '',
-			audiosNames: ['Inst', 'Voices-Player', 'Voices-Opponent'],
-
-			player1: 'bf',
-			player2: 'dad',
-			gfVersion: 'gf',
-			stage: 'stage',
-			format: 'psych_v1'
-		};
+		var song:SwagSong = FileTemplates.song();
 		Song.chartPath = null;
 		loadChart(song);
 	}
@@ -709,29 +691,12 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		stageDropDown.selectedLabel = PlayState.SONG.stage;
 		eventsInputText.text = PlayState.SONG.eventsFile;
 
-		//There must be another way to make this-, Idk if this is better than before, sooo
-		if (PlayState.SONG.audiosNames != null) {
-			for (i in 0...PlayState.SONG.audiosNames.length) {
-				if (PlayState.SONG.audiosNames[i] != null && PlayState.SONG.audiosNames[i].length > 0) {
-					switch (i) {
-						case 0: instSuffInputText.text = PlayState.SONG.audiosNames[i];
-						case 1: playerSuffInputText.text = PlayState.SONG.audiosNames[i];
-						case 2: oppntSuffInputText.text = PlayState.SONG.audiosNames[i];
-						//default: instSuffInputText.text = PlayState.SONG.audiosNames[i]; uhhh
-					}
-				} else {
-					switch (i) {
-						case 0: instSuffInputText.text = PlayState.SONG.audiosNames[i] = 'Inst';
-						case 1: playerSuffInputText.text = PlayState.SONG.audiosNames[i] = 'Voices-Player';
-						case 2: oppntSuffInputText.text = PlayState.SONG.audiosNames[i] = 'Voices-Opponent';
-					}
-				}
-			}
-		} else {
-			instSuffInputText.text = PlayState.SONG.audiosNames[0] = 'Inst';
-			playerSuffInputText.text = PlayState.SONG.audiosNames[1] = 'Voices-Player';
-			oppntSuffInputText.text = PlayState.SONG.audiosNames[2] = 'Voices-Opponent';
-		}
+		// Done!
+		DefaultValues.prepareSongAudios(PlayState.SONG.audiosNames);
+		instSuffInputText.text = PlayState.SONG.audiosNames[0];
+		playerSuffInputText.text = PlayState.SONG.audiosNames[1];
+		oppntSuffInputText.text = PlayState.SONG.audiosNames[2];
+
 		StageData.loadDirectory(PlayState.SONG);
 
 		// DATA TAB
@@ -4951,13 +4916,11 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		return fileList;
 	}
 	
-	function loadCharacterFile(char:String):CharacterFile
-	{
-		if(char != null)
-		{
+	function loadCharacterFile(char:String):CharacterFile {
+		if(char != null) {
 			try
 			{
-				var path:String = Paths.getPath('characters/' + char + '.json', TEXT);
+				var path:String = Paths.getPath(PathsUtil.getCharacterPath(char), TEXT);
 				#if MODS_ALLOWED
 				var unparsedJson = File.getContent(path);
 				#else

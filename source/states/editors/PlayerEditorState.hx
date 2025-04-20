@@ -220,7 +220,7 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
         dipshitBacking.scrollFactor.set();
         dipshitBlur.scrollFactor.set();
 
-        nametag = new PlayerNameTag(Character.DEFAULT_CHARACTER);
+        nametag = new PlayerNameTag(DefaultValues.character);
         add(nametag);
         nametag.scrollFactor.set();
 
@@ -322,7 +322,7 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
     function addCharacter(?reload:Bool = false, ?name:String = null)
     {
         var pos:Int = -1;
-        var char:String = (name == null) ? Character.DEFAULT_CHARACTER : name;
+        var char:String = (name == null) ? DefaultValues.character : name;
         if(playerChill != null)
         {
             pos = members.indexOf(playerChill);
@@ -695,7 +695,7 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
         {
             if(intended == null || intended.length < 1) return;
 
-            var characterPath:String = 'players/$intended.json';
+            var characterPath:String = PathsUtil.getPlayerPath(intended, ".json");
             var path:String = Paths.getPath(characterPath, TEXT);
             #if MODS_ALLOWED
             if (FileSystem.exists(path))
@@ -989,7 +989,7 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
 
         for (player in gridPlayersList) {
             var char = player[0];
-            var temp:PlayerIcon = new PlayerIcon(0, 0, (char == "locked") ? Character.DEFAULT_CHARACTER : char, player[1], (char == "locked"));
+            var temp:PlayerIcon = new PlayerIcon(0, 0, (char == "locked") ? DefaultValues.character : char, player[1], (char == "locked"));
             temp.ID = 0;
             temp._lock.ID = 0;
             grpIcons.add(temp);
@@ -1235,7 +1235,7 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
 
     var characterList:Array<String> = [];
 	function reloadCharacterDropDown() {
-		var foldersToCheck:Array<String> = Mods.directoriesWithFile(Paths.getSharedPath(), 'players/');
+		var foldersToCheck:Array<String> = Mods.directoriesWithFile(Paths.getSharedPath(), PathsUtil.getPlayerPath("", ""));
 		for (folder in foldersToCheck)
 			for (file in FileSystem.readDirectory(folder))
 				if(file.toLowerCase().endsWith('.json'))

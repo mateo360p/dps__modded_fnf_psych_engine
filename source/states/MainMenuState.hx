@@ -14,7 +14,7 @@ enum MainMenuColumn {
 
 class MainMenuState extends MusicBeatState
 {
-	public static var ModdedEngineVersion:String = '0.0.2.5';
+	public static var ModdedEngineVersion:String = '0.0.2.6';
 	public static var psychEngineVersion:String = '1.0.2h (kinda)'; // This is also used for Discord RPC
 	public static var curSelected:Int = 0;
 	public static var curColumn:MainMenuColumn = CENTER;
@@ -93,7 +93,7 @@ class MainMenuState extends MusicBeatState
 		}
 
 		var moddedPsychVer:FlxText = new FlxText(12, FlxG.height - 64, 0, "DP's Modded Psych Engine v" + ModdedEngineVersion, 12);
-		moddedPsychVer.scrollFactor.set();
+		moddedPsychVer.scrollFactor.set(); // I'm thinking in changing the name to "Dark Engine" or something like that
 		moddedPsychVer.setFormat(Paths.font("vcr.ttf"), 16, 0xFF612B75, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(moddedPsychVer);
 		var psychVer:FlxText = new FlxText(12, FlxG.height - 44, 0, "Psych Engine v" + psychEngineVersion, 12);
@@ -122,8 +122,7 @@ class MainMenuState extends MusicBeatState
 		FlxG.camera.follow(camFollow, null, 0.15);
 	}
 
-	function createMenuItem(name:String, x:Float, y:Float):FlxSprite
-	{
+	function createMenuItem(name:String, x:Float, y:Float):FlxSprite {
 		var menuItem:FlxSprite = new FlxSprite(x, y);
 		menuItem.frames = Paths.getSparrowAtlas('mainmenu/menu_$name');
 		menuItem.animation.addByPrefix('idle', '$name idle', 24, true);

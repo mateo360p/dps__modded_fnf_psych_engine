@@ -1,0 +1,61 @@
+{
+	"animations": [
+		{
+			"offsets": [0, 0],
+			"loop": false,
+			"fps": 24,
+			"anim": "idle",
+			"indices": [],
+			"name": "pico cs idle"
+		},
+		{
+			"offsets": [-1, -3],
+			"loop": false,
+			"fps": 24,
+			"anim": "confirm",
+			"indices": [],
+			"name": "pico cs confirm"
+		},
+		{
+			"offsets": [-2, -12],
+			"loop": false,
+			"fps": 24,
+			"anim": "deselect",
+			"indices": [],
+			"name": "pico cs deselect"
+		},
+		{
+			"offsets": [42, 3],
+			"loop": false,
+			"fps": 24,
+			"anim": "slide in",
+			"indices": [],
+			"name": "pico slide in"
+		},
+		{
+			"offsets": [150, -1],
+			"loop": false,
+			"fps": 24,
+			"anim": "slide out",
+			"indices": [],
+			"name": "pico slide out"
+		}
+	],
+	"no_antialiasing": false,
+	"icon_position": [
+		-46,
+		-49
+	],
+	"image": "charSelect/playerAssets/pico/picoChill",
+	"position": [220, -156],
+	"speaker": "nene",
+	"hey_anim": "",
+	"healthicon": "face",
+	"flip_x": true,
+	"healthbar_colors": [0, 0, 0],
+	"camera_position": [0, 0],
+	"sing_duration": 1,
+	"hey_sound": "",
+	"scale": 1,
+	"_editor_isPlayer": false
+}

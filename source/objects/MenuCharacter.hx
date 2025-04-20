@@ -19,7 +19,6 @@ class MenuCharacter extends Character
 	public var character:String;
 	public var hasConfirmAnimation:Bool = false;
 	public var confirmOffsets:Array<Int> = null;
-	private static var DEFAULT_CHARACTER:String = 'bf';
 
 	public function new(x:Float, y:Float, character:String = 'bf', type:Int)
 	{
@@ -53,16 +52,14 @@ class MenuCharacter extends Character
 				visible = false;
 				dontPlayAnim = true;
 			default:
-				var characterPath:String = 'images/menucharacters/data/' + character + '.json';
-
-				var path:String = Paths.getPath(characterPath, TEXT);
+				var path:String = Paths.getPath(PathsUtil.getMenuCharacterPath(character), TEXT);
 				#if MODS_ALLOWED
 				if (!FileSystem.exists(path))
 				#else
 				if (!Assets.exists(path))
 				#end
 				{
-					path = Paths.getSharedPath('characters/' + DEFAULT_CHARACTER + '.json'); //If a character couldn't be found, change him to BF just to prevent a crash
+					path = Paths.getSharedPath(PathsUtil.getCharacterPath()); //If a character couldn't be found, change him to BF just to prevent a crash
 					color = FlxColor.BLACK;
 					alpha = 0.6;
 				}
@@ -106,5 +103,12 @@ class MenuCharacter extends Character
 
 				antialiasing = (charFile.antialiasing != false && ClientPrefs.data.antialiasing);
 		}
+	}
+
+	/**
+	 * Returns the display group name of the character
+	 */
+	override public function groupName():String {
+		return "menu characters";
 	}
 }

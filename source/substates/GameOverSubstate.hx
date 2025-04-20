@@ -69,7 +69,7 @@ class GameOverSubstate extends MusicBeatSubstate
 		if (!noFakeOut) {
 			var fakeProb:Int = PlayState.instance.boyfriend._baseChar.fakeOutProb;
 			if (fakeProb != 0 && PlayState.instance.boyfriend._baseChar.fakeOutAssets != null) 
-				if (FlxG.random.bool((1 / fakeProb) * 100)) {FlxG.sound.play(Paths.sound((PlayState.DEF_HEY_SOUND))); inFakeOut = true;} // Just for testing
+				if (FlxG.random.bool((1 / fakeProb) * 100)) {FlxG.sound.play(Paths.sound((DefaultValues.heheSound))); inFakeOut = true;} // Just for testing
 
 			if (inFakeOut) {
 				boyfriend = new Character(PlayState.instance.boyfriend.getScreenPosition().x, PlayState.instance.boyfriend.getScreenPosition().y, PlayState.instance.boyfriend._baseChar.fakeOutAssets.char, true);

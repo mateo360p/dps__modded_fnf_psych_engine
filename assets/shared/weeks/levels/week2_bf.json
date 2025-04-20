@@ -1,0 +1,34 @@
+{
+	"levelDifficulties": "Easy, Normal, Hard",
+	"songs": [
+		[
+			"Spookeez",
+			"spooky",
+			[
+				34,
+				51,
+				68
+			],
+			"Night"
+		],
+		[
+			"South",
+			"spooky",
+			[
+				34,
+				51,
+				68
+			],
+			"Night"
+		],
+		[
+			"Monster",
+			"monster",
+			[
+				34,
+				51,
+				68
+			]
+		]
+	]
+}

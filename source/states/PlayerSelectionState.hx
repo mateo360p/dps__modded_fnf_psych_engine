@@ -129,7 +129,7 @@ class PlayerSelectionState extends MusicBeatState {
         charLightGF.antialiasing = (ClientPrefs.data.antialiasing);
         add(charLightGF);
 
-        playerChill = new SelectionPlayer(positionsArr[0], positionsArr[1], Character.DEFAULT_CHARACTER);
+        playerChill = new SelectionPlayer(positionsArr[0], positionsArr[1], DefaultValues.character);
         add(playerChill);
 
         gfChill = new SelectionCharacter(positionsArr[0], positionsArr[1], playerChill.speaker);
@@ -137,7 +137,7 @@ class PlayerSelectionState extends MusicBeatState {
         if (gfChill.vizSprites != null) for (i in gfChill.vizSprites) add(i);
         add(gfChill);
 
-        playerChillOut = new SelectionPlayer(playerChill.x, playerChill.y, Character.DEFAULT_CHARACTER);
+        playerChillOut = new SelectionPlayer(playerChill.x, playerChill.y, DefaultValues.character);
         playerChillOut.visible = false;
         add(playerChillOut);
 
@@ -185,10 +185,10 @@ class PlayerSelectionState extends MusicBeatState {
         dipshitBacking.scrollFactor.set();
         dipshitBlur.scrollFactor.set();
 
-        nametag = new PlayerNameTag(Character.DEFAULT_CHARACTER);
+        nametag = new PlayerNameTag(DefaultValues.character);
         add(nametag);
         nametag.scrollFactor.set();
-        curChar = Character.DEFAULT_CHARACTER;
+        curChar = DefaultValues.character;
 
         grpCursors = new FlxTypedGroup<FlxSprite>();
         add(grpCursors);
@@ -541,7 +541,7 @@ class PlayerSelectionState extends MusicBeatState {
         for (player in gridPlayersList) {
             var char = player[0];
             var _player:SelectionPlayer = new SelectionPlayer(0, 0 , char);
-            var temp:PlayerIcon = new PlayerIcon(0, 0, (char == "locked") ? Character.DEFAULT_CHARACTER : char, player[1], (char == "locked"));
+            var temp:PlayerIcon = new PlayerIcon(0, 0, (char == "locked") ? DefaultValues.character : char, player[1], (char == "locked"));
             if (_player != null) if(_player.iconPositionArray != null) temp.offset.set(_player.iconPositionArray[0], _player.iconPositionArray[1]);
             temp.ID = 0;
             temp._lock.ID = 0;

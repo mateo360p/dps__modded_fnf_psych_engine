@@ -89,6 +89,9 @@ class LoadingState extends MusicBeatState
 	#end
 	override function create()
 	{
+		Paths.clearStoredMemory();
+		Paths.clearUnusedMemory();
+
 		persistentUpdate = true;
 		barGroup = new FlxSpriteGroup();
 		add(barGroup);
@@ -554,15 +557,12 @@ class LoadingState extends MusicBeatState
 
 			preloadCharacter(player1);
 
-			trace("presonging...");
-			// There's no time to organize!
-			for (i in 0...2) {
-				var defs:Array<String> = ['Inst', 'Voices-Player', 'Voices-Opponent'];
-				if (audios == null) audios = defs.copy();
-				if (audios[i] == null || audios[i] == '') audios[i] = defs[i];
-				if(Paths.fileExists('$folder/' + audios[i] + '.${Paths.SOUND_EXT}', SOUND, false, 'songs')) {
-					songsToPrepare.push('$folder/' + audios[i]);
-					trace('$folder/' + audios[i]);
+			trace("Presonging...");
+			DefaultValues.prepareSongAudios(audios);
+			for (i in audios) {
+				if(Paths.fileExists('$folder/' + i + '.${Paths.SOUND_EXT}', SOUND, false, 'songs')) {
+					songsToPrepare.push('$folder/' + i);
+					trace('$folder/' + i);
 				}
 			}
 
@@ -704,7 +704,7 @@ class LoadingState extends MusicBeatState
 	{
 		try
 		{
-			var path:String = Paths.getPath('characters/$char.json', TEXT);
+			var path:String = Paths.getPath('data/characters/$char.json', TEXT);
 			#if MODS_ALLOWED
 			var character:Dynamic = Json.parse(File.getContent(path));
 			#else

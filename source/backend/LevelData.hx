@@ -1,5 +1,6 @@
 package backend;
 
+import objects.SelectionCharacter;
 import flixel.util.FlxSort;
 
 typedef LevelFile =
@@ -33,18 +34,6 @@ class LevelData {
     public var fileName:String;
     public var levelWeek:String;
 
-	public static function createLevelFile():LevelFile {
-		var weekFile:LevelFile = {
-            levelDifficulties: '',
-			songs: [
-				["Bopeebo", "face", [146, 113, 253], ""],
-				["Fresh", "face", [146, 113, 253], ""],
-				["Dad Battle", "face", [146, 113, 253], ""]
-			]
-		};
-		return weekFile;
-	}
-
     public function new(levelFile:LevelFile, fileName:String) {
 		for (field in Reflect.fields(levelFile))
 			if(Reflect.fields(this).contains(field))
@@ -69,7 +58,7 @@ class LevelData {
         if (isStoryMode) player = '';   //Loads every level, unless Freeplay
         // Coding war crimes #21
         for (i in 0...directories.length) {
-            var directory:String = directories[i] + 'weeks/levels/';
+            var directory:String = directories[i] + PathsUtil.getLevelPath();
             if(FileSystem.exists(directory)) {
                 for (file in FileSystem.readDirectory(directory))
                 {
@@ -84,7 +73,6 @@ class LevelData {
         }
     }
 
-    
 	private static function addLevel(weekToCheck:String, path:String, directory:String, i:Int, originalLength:Int)
     {
         if(!levelsLoaded.exists(weekToCheck))
@@ -126,7 +114,7 @@ class LevelData {
         playersList = [];
         var added:Array<String> = [];
         try {
-            for (num => player in CoolUtil.coolTextFile(Paths.getSharedPath('players/playersList.txt')))
+            for (num => player in CoolUtil.coolTextFile(Paths.getSharedPath(PathsUtil.getPlayerPath("", "") + 'playersList.txt')))
             {
                 if (player == "-" || player == null || player == "" || player == "\n") continue;
                 if(player.trim().length > 0 && !added.contains(player))

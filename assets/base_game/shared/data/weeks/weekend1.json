@@ -1,0 +1,41 @@
+{
+	"tweenTime": 0.5,
+	"levels": [
+		[
+			"Darnell",
+			"pico"
+		],
+		[
+			"Lit Up",
+			"pico"
+		],
+		[
+			"2Hot",
+			"pico"
+		],
+		[
+			"Blazin",
+			"pico"
+		]
+	],
+	"weekColor": [
+		75,
+		61,
+		170
+	],
+	"hiddenUntilUnlocked": false,
+	"hideFreeplay": false,
+	"weekBackground": "phillystreets",
+	"difficulties": null,
+	"weekCharacters": [
+		"darnell",
+		"pico-player",
+		"nene"
+	],
+	"storyName": "Due Debts",
+	"weekName": "Weekend 1",
+	"player": "bf",
+	"hideStoryMode": false,
+	"weekBefore": "week3",
+	"startUnlocked": false
+}

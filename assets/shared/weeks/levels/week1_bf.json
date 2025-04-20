@@ -1,0 +1,33 @@
+{
+	"songs": [
+		[
+			"Bopeebo",
+			"dad",
+			[
+				146,
+				113,
+				253
+			]
+		],
+		[
+			"Fresh",
+			"dad",
+			[
+				146,
+				113,
+				253
+			],
+			"Remix"
+		],
+		[
+			"Dad Battle",
+			"dad",
+			[
+				146,
+				113,
+				253
+			]
+		]
+	],
+	"levelDifficulties": "Easy, Normal, Hard, Night"
+}

@@ -18,7 +18,7 @@ class PlayerNameTag extends FlxSprite
         mosaicShader = new MosaicEffect();
         shader = mosaicShader;
 
-        if(player == "" || player == null) player = Character.DEFAULT_CHARACTER;
+        if(player == "" || player == null) player = DefaultValues.character;
         switchChar(player);
         this.antialiasing = (ClientPrefs.data.antialiasing);
     }

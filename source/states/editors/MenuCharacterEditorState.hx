@@ -21,22 +21,11 @@ class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHan
 	var grpWeekCharacters:FlxTypedGroup<MenuCharacter>;
 	var characterFile:MenuCharacterFile = null;
 	var txtOffsets:FlxText;
-	var defaultCharacters:Array<String> = ['dad', 'bf', 'gf'];
 	var unsavedProgress:Bool = false;
 
 	override function create() {
-		characterFile =
-		{
-			image: 'Menu_Dad',
-			scale: 1,
-			position: [0, 0],
-			idle_anim: 'M Dad Idle',
-			confirm_anim: 'M Dad Idle',
-			confirm_offsets: [0, 0],
-			flipX: false,
-			antialiasing: true
-		};
-		
+		characterFile = FileTemplates.menuCharFile();
+
 		#if DISCORD_ALLOWED
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("Menu Character Editor", "Editting: " + characterFile.image);
@@ -45,7 +34,7 @@ class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHan
 		grpWeekCharacters = new FlxTypedGroup<MenuCharacter>();
 		for (i in 0...3)
 		{
-			var weekCharacterThing:MenuCharacter = new MenuCharacter(0, 0, defaultCharacters[i], i);
+			var weekCharacterThing:MenuCharacter = new MenuCharacter(0, 0, DefaultValues.defaultCharacters[i], i);
 			//weekCharacterThing.y += 70;
 			weekCharacterThing.alpha = 0.2;
 			grpWeekCharacters.add(weekCharacterThing);
@@ -54,10 +43,10 @@ class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHan
 		add(new FlxSprite(0, 56).makeGraphic(FlxG.width, 386, FlxColor.WHITE)); //White chit 
 		add(grpWeekCharacters);
 
-		var c = WeekData.defWeekColor; //initialization is overrated
-		var hielo = new FlxSprite(0, 56).makeGraphic(FlxG.width, 386, FlxColor.fromRGB(c[0], c[1], c[2]));
-		hielo.blend = MULTIPLY;
-		add(hielo); //the color
+		var c = DefaultValues.weekColor; //initialization is overrated
+		var colorBG = new FlxSprite(0, 56).makeGraphic(FlxG.width, 386, FlxColor.fromRGB(c[0], c[1], c[2]));
+		colorBG.blend = MULTIPLY;
+		add(colorBG); //the color
 
 		txtPosition = new FlxText(20, 10, 0, "Pos: [0, 0]", 32);
 		txtPosition.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER);
@@ -177,7 +166,7 @@ class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHan
 			char = grpWeekCharacters.members[i];
 			char.alpha = 0.2;
 			char.character = '';
-			char.changeMenuCharacter(defaultCharacters[i], i);
+			char.changeMenuCharacter(DefaultValues.defaultCharacters[i], i);
 		}
 		reloadSelectedCharacter();
 	}

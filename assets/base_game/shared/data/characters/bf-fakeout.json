@@ -1,0 +1,24 @@
+{
+	"animations": [
+		{
+			"loop": false,
+			"offsets": [-468, -307],
+			"anim": "fakeout",
+			"fps": 24,
+			"name": "fake out death BF",
+			"indices": []
+		}
+	],
+	"no_antialiasing": false,
+	"image": "characters/bf/bfFakeOut",
+	"position": [0, 350],
+	"hey_anim": "",
+	"healthicon": "face",
+	"flip_x": true,
+	"healthbar_colors": [161, 161, 161],
+	"camera_position": [0, 0],
+	"sing_duration": 4,
+	"hey_sound": "",
+	"scale": 1,
+	"_editor_isPlayer": true
+}

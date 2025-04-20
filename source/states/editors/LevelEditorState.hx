@@ -29,7 +29,7 @@ class LevelEditorState extends MusicBeatState implements PsychUIEventHandler.Psy
 		super();
         this._player = player;
         this._week = week;
-		this.levelFile = LevelData.createLevelFile();
+		this.levelFile = FileTemplates.levelFile();
         this.unsavedProgress = isReload;
 		if(levelFile != null) this.levelFile = levelFile;
 	}
@@ -310,7 +310,7 @@ class LevelEditorState extends MusicBeatState implements PsychUIEventHandler.Psy
 					var cutName:String = _file.name.substr(0, _file.name.length - 5);
 					trace("Successfully loaded file: " + cutName);
 
-					var simpleLevel:LevelFile = LevelData.createLevelFile(); // This is to evoid all the shit that an old week has
+					var simpleLevel:LevelFile = FileTemplates.levelFile(); // This is to avoid all the shit that an old week has
 					simpleLevel.songs = loadedLevel.songs;
 					if (loadedLevel.levelDifficulties != null) simpleLevel.levelDifficulties = loadedLevel.levelDifficulties;
                     MusicBeatState.switchState(new LevelEditorState(simpleLevel, cutName.substring(cutName.lastIndexOf("_") + 1), false, cutName.substring(0, cutName.lastIndexOf("_"))));
@@ -337,29 +337,28 @@ class LevelEditorState extends MusicBeatState implements PsychUIEventHandler.Psy
 		var fullPath:String = null;
 		@:privateAccess
 		if(_file.__path != null) fullPath = _file.__path;
+		if(fullPath == null) return;
 
-		if(fullPath != null) {
-			var rawJson:String = File.getContent(fullPath);
-            if(rawJson != null) {
-				var loadedWeek:WeekFile = cast Json.parse(rawJson);
-				if(loadedWeek.levels != null) // If there are at least levels in that chit
-				{
-					var cutName:String = _file.name.substr(0, _file.name.length - 5);
-					trace("Successfully loaded file: " + cutName);
+		var rawJson:String = File.getContent(fullPath);
+		if(rawJson != null) {
+			var loadedWeek:WeekFile = cast Json.parse(rawJson);
+			if(loadedWeek.levels != null) // If there are at least levels in that chit
+			{
+				var cutName:String = _file.name.substr(0, _file.name.length - 5);
+				trace("Successfully loaded file: " + cutName);
 
-					levelFile.levelDifficulties = loadedWeek.difficulties ?? ""; // WHAT, THIS EXISTS!?
-                    levelFile.songs = []; // Yeah, "null" songs
-                    for (i in loadedWeek.levels) {
-                        levelFile.songs.push([i[0], 'face', [146, 113, 253]]);
-                    }
-                    MusicBeatState.switchState(new LevelEditorState(levelFile, Character.DEFAULT_CHARACTER, true, cutName));
-					return;
-				} else {
-                    FlxG.sound.play(Paths.sound('cancelMenu')); // Dumbass
-                    trace("This isn't a Week File, is it?");
-                }
+				levelFile.levelDifficulties = loadedWeek.difficulties ?? ""; // WHAT, THIS EXISTS!?
+				levelFile.songs = []; // Yeah, "null" songs
+				for (i in loadedWeek.levels) {
+					levelFile.songs.push([i[0], 'face', [146, 113, 253]]);
+				}
+				MusicBeatState.switchState(new LevelEditorState(levelFile, DefaultValues.character, true, cutName));
+				return;
+			} else {
+				FlxG.sound.play(Paths.sound('cancelMenu')); // Dumbass
+				trace("This isn't a Week File, is it?");
 			}
-        }
+		}
     }
 
 	/**
