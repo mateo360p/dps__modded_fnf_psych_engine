@@ -161,7 +161,6 @@ class WeekData {
 		return null;
 	}
 
-	// Huh, I hate Strings functions (I dont know how to use them :c)
 	public static function getWeekFromLevel(level:LevelData):WeekData {
 		#if MODS_ALLOWED
 		var directories:Array<String> = [Paths.mods(), Paths.getSharedPath()];

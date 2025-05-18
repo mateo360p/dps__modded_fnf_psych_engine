@@ -69,7 +69,7 @@ class GameOverSubstate extends MusicBeatSubstate
 		if (!noFakeOut) {
 			var fakeProb:Int = PlayState.instance.boyfriend._baseChar.fakeOutProb;
 			if (fakeProb != 0 && PlayState.instance.boyfriend._baseChar.fakeOutAssets != null) 
-				if (FlxG.random.bool((1 / fakeProb) * 100)) {FlxG.sound.play(Paths.sound((DefaultValues.heheSound))); inFakeOut = true;} // Just for testing
+				if (FlxG.random.bool((1 / fakeProb) * 100)) {/*FlxG.sound.play(Paths.sound((DefaultValues.heheSound)));*/ inFakeOut = true;} // Just for testing
 
 			if (inFakeOut) {
 				boyfriend = new Character(PlayState.instance.boyfriend.getScreenPosition().x, PlayState.instance.boyfriend.getScreenPosition().y, PlayState.instance.boyfriend._baseChar.fakeOutAssets.char, true);
@@ -110,7 +110,7 @@ class GameOverSubstate extends MusicBeatSubstate
 		PlayState.instance.setOnScripts('inGameOver', true);
 		PlayState.instance.callOnScripts('onGameOverStart', []);
 		FlxG.sound.music.loadEmbedded(Paths.music(loopSoundName), true);
-
+/*
 		if(Std.isOfType(PlayState.instance.boyfriend._baseChar, Pico)) // For all the playable Picos
 		{
 			overlay = new FlxSprite(boyfriend.x + 205, boyfriend.y - 80);
@@ -153,7 +153,7 @@ class GameOverSubstate extends MusicBeatSubstate
 				neneKnife.animation.play('anim', true);
 			}
 		}
-
+*/
 		super.create();
 	}
 

@@ -1,5 +1,6 @@
 package backend;
 
+import util.polymod.PolymodHelper;
 import flixel.FlxState;
 import backend.PsychCamera;
 
@@ -79,6 +80,12 @@ class MusicBeatState extends FlxState
 		funkyFunc(function(funky:FunkyObject) {
 			funky.update(elapsed);
 		});
+
+		if(FlxG.keys.justPressed.F9) {
+			FlxG.sound.play(Paths.sound('scrollMenu'), 0.2);
+			PolymodHelper.initialize();
+			trace("Reloaded hxc Scripts!!!");
+		}
 
 		super.update(elapsed);
 	}

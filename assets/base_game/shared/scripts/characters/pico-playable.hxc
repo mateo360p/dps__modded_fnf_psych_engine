@@ -1,0 +1,25 @@
+package characters;
+
+import objects.BaseCharacter;
+import objects.Character;
+import flixel.sound.FlxSound;
+import flixel.FlxG;
+import backend.Paths;
+
+class pico-playable extends BaseCharacter {
+    public function new(_char:Character) {
+        super(_char);
+        this.fakeOutAssets = {char: "bf-fakeout", sound: "death/fakeout_death"};
+        this.fakeOutProb = 4096; // huh
+    }
+
+    override function create() {
+        //FlxG.sound.play(Paths.sound("scrollMenu"), 1); // Just for testing
+        super.create();
+    }
+
+    override public function destroy() {
+        //FlxG.sound.play(Paths.sound("scrollMenu"), 1); // Just for testing
+        super.destroy();
+    }
+}

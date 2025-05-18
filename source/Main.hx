@@ -1,5 +1,8 @@
 package;
 
+import util.polymod.PolymodHelper;
+import polymod.Polymod;
+import polymod.Polymod.PolymodParams;
 #if android
 import android.content.Context;
 #end
@@ -57,11 +60,22 @@ class Main extends Sprite
 	public static var fpsVar:FPSCounter;
 
 	// You can pretty much ignore everything from here on - your code should go in your states.
-
 	public static function main():Void
 	{
 		Lib.current.addChild(new Main());
 	}
+
+	/*public static function polymodSetup() {
+		var config:PolymodParams = {
+			modRoot: "assets/mods",
+		};
+		config.modRoot = "assets/mods";
+		config.dirs = ["dummy"];
+
+		Polymod.init(config);
+
+		Polymod.registerAllScriptClasses();
+	}*/
 
 	public function new()
 	{
@@ -73,6 +87,8 @@ class Main extends Sprite
 		#elseif ios
 		Sys.setCwd(lime.system.System.applicationStorageDirectory);
 		#end
+
+		PolymodHelper.initialize();
 
 		if (stage != null)
 		{

@@ -1,0 +1,294 @@
+package characters;
+
+import objects.BaseCharacter;
+import states.stages.objects.ABotSpeaker;
+
+class nene extends BaseCharacter {
+    var MIN_BLINK_DELAY:Int = 3;
+	var MAX_BLINK_DELAY:Int = 7;
+
+	var VULTURE_THRESHOLD:Float = 0.4;
+
+	/**
+	 * Nene is in her default state. 'danceLeft' or 'danceRight' may be playing right now,
+	 * or maybe her 'combo' or 'drop' animations are active.
+	 *
+	 * Transitions:
+	 * If player health <= VULTURE_THRESHOLD, transition to STATE_PRE_RAISE.
+	 * If trainPassing is set to true, transition to STATE_HAIR_BLOWING.
+	 */
+	var STATE_DEFAULT = 0;
+
+	/**
+	 * Nene has recognized the player is at low health,
+	 * but has to wait for the appropriate point in the animation to move on.
+	 *
+	 * Transitions:
+	 * If player health > VULTURE_THRESHOLD, transition back to STATE_DEFAULT without changing animation.
+	 * If current animation is combo or drop, transition when animation completes.
+	 * If current animation is danceLeft, wait until frame 14 to transition to STATE_RAISE.
+	 * If current animation is danceRight, wait until danceLeft starts.
+	 * If trainPassing is set to true, transition to STATE_HAIR_BLOWING.
+	 */
+	var STATE_PRE_RAISE = 1;
+
+	/**
+	 * Nene is raising her knife.
+	 * When moving to this state, immediately play the 'raiseKnife' animation.
+	 *
+	 * Transitions:
+	 * Once 'raiseKnife' animation completes, transition to STATE_READY.
+	 * If trainPassing is set to true, transition to STATE_HAIR_BLOWING_RAISE.
+	 */
+	var STATE_RAISE = 2;
+
+	/**
+	 * Nene is holding her knife ready to strike.
+	 * During this state, hold the animation on the first frame, and play it at random intervals.
+	 * This makes the blink look less periodic.
+	 *
+	 * Transitions:
+	 * If the player runs out of health, move to the GameOverSubState. No transition needed.
+	 * If player health > VULTURE_THRESHOLD, transition to STATE_LOWER.
+	 * If trainPassing is set to true, transition to STATE_HAIR_BLOWING_RAISE.
+	 */
+	var STATE_READY = 3;
+
+	/**
+	 * Nene is about to lower her knife.
+	 * When moving to this state, play the 'lowerKnife' animation on the next beat.
+	 *
+	 * Transitions:
+	 * Once 'lowerKnife' animation completes, transition to STATE_DEFAULT.
+	 * If trainPassing is set to true, transition to STATE_HAIR_BLOWING.
+	 */
+	var STATE_LOWER = 4;
+
+	/**
+	 * Nene's hair is blowing to the side.
+	 * When moving to this state, immediately play the 'hairBlowNormal' animation.
+	 * If still in this state when the animation completes, loop the animation.
+	 *
+	 * Transitions:
+	 * If trainPassing is set to false, transition to STATE_HAIR_FALLING.
+	 */
+	var STATE_HAIR_BLOWING = 5;
+
+	/**
+	 * Nene's hair is returning to normal.
+	 * When moving to this state, immediately play the 'hairFallNormal' animation.
+	 *
+	 * Transitions:
+	 * Once 'hairFallNormal' animation completes, transition to STATE_DEFAULT.
+	 */
+	var STATE_HAIR_FALLING = 6;
+
+	/**
+	 * Nene's hair is blowing to the side, with her knife raised in the air.
+	 * When moving to this state, immediately play the 'hairBlowKnife' animation.
+	 * If still in this state when the animation completes, loop the animation.
+	 *
+	 * Transitions:
+	 * If trainPassing is set to false, transition to STATE_HAIR_FALLING_RAISE.
+	 */
+	var STATE_HAIR_BLOWING_RAISE = 7;
+
+	/**
+	 * Nene's hair is returning to normal, while her knife is raised in the air.
+	 * When moving to this state, immediately play the 'hairFallKnife' animation.
+	 *
+	 * Transitions:
+	 * Once 'hairFallKnife' animation completes, transition to STATE_READY.
+	 */
+	var STATE_HAIR_FALLING_RAISE = 8;
+
+	/**
+	 * Nene's animations are tracked in a simple state machine.
+	 * Given the current state and an incoming event, the state changes.
+	 */
+	var currentNeneState:Int = STATE_DEFAULT;
+	var blinkCountdown:Int = 3;
+	var animationFinished:Bool = false;
+
+    public var abot:ABotSpeaker;
+
+    public function new(_char:Character) {
+        super(_char);
+    }
+
+    //------------------------- OVERRIDES ------------------------------------
+
+    override function create()
+    {
+        abot = new ABotSpeaker(0, 0);
+		updateABotEye(true);
+		gfGroup.add(abot);
+    }
+
+    override function createPost()
+    {
+        if (char != null) {
+            char.animation.callback = function(name:String, frameNumber:Int, frameIndex:Int) {
+                switch(currentNeneState) {
+                    case STATE_PRE_RAISE:
+                        if (name == 'danceLeft' && frameNumber >= 14)
+                        {
+                            animationFinished = true;
+                            transitionState();
+                        }
+                    default:
+                        // Ignore.
+                }
+            }
+            if (abot != null) copyToAbot();
+        }
+    }
+
+    override function startSong()
+    {
+        abot.snd = FlxG.sound.music;
+        char.animation.finishCallback = onNeneAnimationFinished;
+    }
+
+    override function update(elapsed:Float) {
+        if(char == null || !game.startedCountdown) return;
+
+        if (abot != null) copyToAbot();
+        animationFinished = char.isAnimationFinished();
+		transitionState();
+    }
+
+    override function goodNoteHit(note:Note)
+    {
+        // 10% chance of playing combo50/combo100 animations for Nene
+        if(FlxG.random.bool(10))
+        {
+            switch(game.combo)
+            {
+                case 50, 100:
+                    var animToPlay:String = 'combo${game.combo}';
+                    if(char.animation.exists(animToPlay))
+                    {
+                        char.playAnim(animToPlay);
+                        char.specialAnim = true;
+                    }
+            }
+        }
+    }
+
+    override function sectionHit()
+    {
+        updateABotEye();
+    }
+
+    override function beatHit()
+    {
+        if(abot != null && curBeat % 2 == 0) abot.beatHit();
+
+        switch(currentNeneState) {
+            case STATE_READY:
+                if (blinkCountdown == 0)
+                {
+                    char.playAnim('idleKnife', false);
+                    blinkCountdown = FlxG.random.int(MIN_BLINK_DELAY, MAX_BLINK_DELAY);
+                }
+                else blinkCountdown--;
+
+            default:
+                // In other states, don't interrupt the existing animation.
+        }
+    }
+
+    //------------------------- NENE'S FUNC ------------------------------------
+	function transitionState() {
+        switch (currentNeneState)
+        {
+            case STATE_DEFAULT:
+                if (game.health <= VULTURE_THRESHOLD)
+                {
+                    currentNeneState = STATE_PRE_RAISE;
+                    char.skipDance = true;
+                }
+
+            case STATE_PRE_RAISE:
+                if (game.health > VULTURE_THRESHOLD)
+                {
+                    currentNeneState = STATE_DEFAULT;
+                    char.skipDance = false;
+                }
+                else if (animationFinished)
+                {
+                    currentNeneState = STATE_RAISE;
+                    char.playAnim('raiseKnife');
+                    char.skipDance = true;
+                    char.danced = true;
+                    animationFinished = false;
+                }
+
+            case STATE_RAISE:
+                if (animationFinished)
+                {
+                    currentNeneState = STATE_READY;
+                    animationFinished = false;
+                }
+
+            case STATE_READY:
+                if (game.health > VULTURE_THRESHOLD)
+                {
+                    currentNeneState = STATE_LOWER;
+                    char.playAnim('lowerKnife');
+                }
+
+            case STATE_LOWER:
+                if (animationFinished)
+                {
+                    currentNeneState = STATE_DEFAULT;
+                    animationFinished = false;
+                    char.skipDance = false;
+                }
+        }
+    }
+
+	function updateABotEye(finishInstantly:Bool = false)
+    {
+        if(PlayState.SONG.notes[Std.int(FlxMath.bound(curSection, 0, PlayState.SONG.notes.length - 1))].mustHitSection == true) abot.lookRight();
+        else abot.lookLeft();
+
+        if(finishInstantly) abot.eyes.anim.curFrame = abot.eyes.anim.length - 1;
+    }
+
+    function onNeneAnimationFinished(name:String)
+    {
+        if(!game.startedCountdown) return;
+
+        switch(currentNeneState)
+        {
+            case STATE_RAISE, STATE_LOWER:
+                if (name == 'raiseKnife' || name == 'lowerKnife')
+                {
+                    animationFinished = true;
+                    transitionState();
+                }
+
+            default:
+                // Ignore.
+        }
+    }
+
+	public function copyToAbot()
+    {
+        @:privateAccess
+        {
+            abot.cameras = char.cameras;
+            abot.setPosition(char.x - 60, char.y + 325);
+            abot.alpha = char.alpha;
+            abot.visible = char.visible;
+            abot.flipX = char.flipX;
+            abot.flipY = char.flipY;
+            abot.shader = char.shader;
+            abot.antialiasing = char.antialiasing;
+            abot.colorTransform = char.colorTransform;
+            abot.color = char.color;
+        }
+    }
+}

@@ -5,6 +5,7 @@ import objects.Character;
 
 class StageWeek1 extends FunkyObject
 {
+	/*
 	var dadbattleBlack:BGSprite;
 	var dadbattleLight:BGSprite;
 	var dadbattleFog:DadBattleFog;
@@ -94,4 +95,5 @@ class StageWeek1 extends FunkyObject
 				}
 		}
 	}
+	*/
 }

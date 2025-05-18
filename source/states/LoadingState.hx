@@ -89,8 +89,8 @@ class LoadingState extends MusicBeatState
 	#end
 	override function create()
 	{
-		Paths.clearStoredMemory();
-		Paths.clearUnusedMemory();
+		/*Paths.clearStoredMemory();
+		Paths.clearUnusedMemory();*/
 
 		persistentUpdate = true;
 		barGroup = new FlxSpriteGroup();

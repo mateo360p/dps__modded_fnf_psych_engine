@@ -525,7 +525,7 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
 					playerChill.animationsArray.remove(anim);
 				}
 
-			var addedAnim:AnimArray = newAnim(animationInputText.text, animationNameInputText.text);
+			var addedAnim:AnimArray = FileTemplates.charNewAnim(animationInputText.text, animationNameInputText.text);
 			addedAnim.fps = Math.round(animationFramerate.value);
 			addedAnim.loop = animationLoopCheckBox.checked;
 			addedAnim.indices = indices;
@@ -651,29 +651,7 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
         {
             var func:Void->Void = function()
             {
-                final _template:CharacterFile =
-                {
-                    animations: [
-                        newAnim('idle', 'bf cs idle'),
-                        newAnim('confirm', 'bf cs confirm'),
-                        newAnim('deselect', 'bf cs deselect'),
-                        newAnim('slide out', 'bf slide out'),
-                        newAnim('slide in', 'bf slide in')
-                    ],
-                    no_antialiasing: false,
-                    flip_x: false,
-                    healthicon: 'face',
-                    image: 'charSelect/playerAssets/bf/bfChill',
-                    sing_duration: 1,
-                    scale: 1,
-                    healthbar_colors: [0, 0, 0],
-                    camera_position: [0, 0],
-                    position: [0, 0],
-                    hey_sound: "",
-                    hey_anim: ""
-                };
-
-                playerChill.loadCharacterFile(_template);
+                playerChill.loadCharacterFile(FileTemplates.playerCharFile());
                 playerChill.missingCharacter = false;
                 playerChill.color = FlxColor.WHITE;
                 playerChill.alpha = 1;
@@ -1180,18 +1158,6 @@ class PlayerEditorState extends MusicBeatState implements PsychUIEventHandler.Ps
 
         if(!playerChill.hasAnimation(anim))
             playerChill.addOffset(anim, 0, 0);
-    }
-
-    inline function newAnim(anim:String, name:String):AnimArray
-    {
-        return {
-            offsets: [0, 0],
-            loop: false,
-            fps: 24,
-            anim: anim,
-            indices: [],
-            name: name
-        };
     }
 
     inline function reloadAnimList()

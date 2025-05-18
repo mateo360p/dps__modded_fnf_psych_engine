@@ -211,8 +211,13 @@ class FreeplayState extends MusicBeatState
 
 	function weekIsLocked(name:String):Bool
 	{
-		var leWeek:WeekData = WeekData.weeksLoaded.get(name);
-		return (!leWeek.startUnlocked && leWeek.weekBefore.length > 0 && (!StoryMenuState.weekCompleted.exists(leWeek.weekBefore) || !StoryMenuState.weekCompleted.get(leWeek.weekBefore)));
+		try {
+			var leWeek:WeekData = WeekData.weeksLoaded.get(name);
+			return (!leWeek.startUnlocked && leWeek.weekBefore.length > 0 && (!StoryMenuState.weekCompleted.exists(leWeek.weekBefore) || !StoryMenuState.weekCompleted.get(leWeek.weekBefore)));
+		} catch(e:haxe.Exception) {
+			trace('LEVEL $name, Independent level? or an error?: $e');
+			return false;
+		}
 	}
 
 	var instPlaying:Int = -1;
