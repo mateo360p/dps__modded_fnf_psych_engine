@@ -41,6 +41,11 @@ import util.PathsUtil.ObjectsPath;
 import objects.Alphabet;
 import objects.BGSprite;
 import objects.characters.*;
+import objects.Note;
+import objects.NoteSplash;
+import objects.VideoSprite;
+
+import shaders.*;
 
 import states.PlayState;
 import states.LoadingState;

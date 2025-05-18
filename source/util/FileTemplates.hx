@@ -1,5 +1,6 @@
 package util;
 
+import crowplexus.hscript.Types.ShortUInt;
 import backend.WeekData;
 import backend.WeekData.WeekFile;
 import cutscenes.DialogueBoxPsych.DialogueLine;
@@ -10,8 +11,24 @@ import objects.Character.AnimArray;
 import objects.Character.CharacterFile;
 
 class FileTemplates {
+	public static function playerCharFile():CharacterFile {
+		var dummy = charFile();
+		dummy.animations = [
+			charNewAnim('idle', 'bf cs idle'),
+			charNewAnim('confirm', 'bf cs confirm'),
+			charNewAnim('deselect', 'bf cs deselect'),
+			charNewAnim('slide out', 'bf slide out'),
+			charNewAnim('slide in', 'bf slide in')
+		];
+		dummy.hey_sound = "";
+		dummy.hey_anim = "";
+		dummy.image = 'charSelect/playerAssets/bf/bfChill';
+        return dummy;
+    }
+
     public static function charFile():CharacterFile {
         return {
+			script_hxc: null,
             animations: [
                 charNewAnim('idle', 'BF idle dance'),
                 charNewAnim('singLEFT', 'BF NOTE LEFT0'),

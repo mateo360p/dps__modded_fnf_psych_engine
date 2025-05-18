@@ -1,10 +1,8 @@
 package backend;
 
-import objects.characters.BaseCharacter.CharType;
 import flixel.FlxBasic;
 import flixel.FlxObject;
 import flixel.FlxSubState;
-import flixel.group.FlxGroup;
 
 import objects.Note;
 import objects.Character;
@@ -60,16 +58,19 @@ class FunkyObject extends FlxBasic
 	{
 		if(game == null)
 		{
-			FlxG.log.error('Invalid state for the basic added!');
+			var msg = 'Invalid state for the basic added!';
+			FlxG.log.error(msg);
+			trace(msg);
 			destroy();
+			return;
 		}
 		else 
 		{
 			this.funkyType = type;
 			game.funkyObj.push(this);
 			super();
-			create();
 		}
+		create();
 	}
 
 	//main callbacks

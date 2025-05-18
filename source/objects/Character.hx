@@ -1,6 +1,6 @@
 package objects;
 
-import openfl.display.Preloader.DefaultPreloader;
+import objects.scriptables.ScriptableCharacter;
 import backend.animation.PsychAnimationController;
 
 import flixel.util.FlxSort;
@@ -27,6 +27,7 @@ typedef CharacterFile = {
 	var healthbar_colors:Array<Int>;
 	var hey_sound:String;
 	var hey_anim:String;
+	var script_hxc:String;
 	@:optional var _editor_isPlayer:Null<Bool>;
 }
 
@@ -47,6 +48,7 @@ class Character extends FlxSprite
 		PUT "FALSE" IN THE `changeCharacter()` if you'll use the function and don't want the base
 	 */
 	public var isFunkyObject:Bool = true;
+	public var scriptHXC:String = null;
 
 	public var isPlayer:Bool = false;
 	public var isAnimateAtlas:Bool = false;
@@ -247,6 +249,7 @@ class Character extends FlxSprite
 		if(isAnimateAtlas) copyAtlasValues();
 		#end
 
+		if (json.script_hxc != null && json.script_hxc.length > 0) scriptHXC = json.script_hxc;
 		if (isFunkyObject == true && !debugMode) setBaseChar(curCharacter);
 		else _baseChar = FlxDestroyUtil.destroy(_baseChar);
 		//trace('Loaded file to character ' + curCharacter);
@@ -254,7 +257,35 @@ class Character extends FlxSprite
 
 	function setBaseChar(char:String) {
 		_baseChar = FlxDestroyUtil.destroy(_baseChar);
-		_baseChar = (
+
+		if (scriptHXC != null && scriptHXC.length > 0) {
+			var charClass = 'characters.$scriptHXC';
+			if (ScriptableCharacter.listScriptClasses().contains(charClass)) {
+				_baseChar = ScriptableCharacter.init(charClass, this);
+				_baseChar.create(); // Idk why the scripted chars doesn't call their create()
+				trace(char + " done!!!");
+				return;
+			}
+		}
+		_baseChar = new BaseCharacter(this);
+		trace('Base character for $char');
+
+		/*
+		if (char == null) char = "";
+		/*
+		char = char.trim();
+		// This method exists somewhere???
+		if (char.length == 1) char = char.toUpperCase(); // xd
+		else if (char.length > 0) char = char.charAt(0).toUpperCase() + char.substr(1);
+		
+		if(char.length < 1 || !ScriptableCharacter.listScriptClasses().contains(charClass)) {
+			
+			trace("Classes: " + ScriptableCharacter.listScriptClasses());
+			trace('Madafakin Shit: Char $char wasnt founded!');
+			return;
+		}*/
+
+		/*_baseChar = (
 			switch (char) {
 				case "bf", "boyfriend":
 					new Boyfriend(this);
@@ -265,7 +296,7 @@ class Character extends FlxSprite
 				default:
 					new BaseCharacter(this);
 			}
-		);
+		);*/
 	}
 
 	override function update(elapsed:Float)

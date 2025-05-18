@@ -325,19 +325,9 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 					var otherSpr:FlxSprite = (spr == animateGhost) ? ghost : animateGhost;
 					if(otherSpr != null) otherSpr.visible = false;
 				}
-				/*hideGhostButton.active = true;
-				hideGhostButton.alpha = 1;*/
 				trace('created ghost image');
 			}
 		});
-
-		/*hideGhostButton = new PsychUIButton(20 + makeGhostButton.width, makeGhostButton.y, "Hide Ghost", function() {
-			ghost.visible = false;
-			hideGhostButton.active = false;
-			hideGhostButton.alpha = 0.6;
-		});
-		hideGhostButton.active = false;
-		hideGhostButton.alpha = 0.6;*/
 
 		var highlightGhost:PsychUICheckBox = new PsychUICheckBox(20 + makeGhostButton.x + makeGhostButton.width, makeGhostButton.y, "Highlight Ghost", 100);
 		highlightGhost.onClick = function()
@@ -414,7 +404,8 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		{
 			if(intended == null || intended.length < 1) return;
 
-			var characterPath:String = 'data/characters/$intended.json';
+			//var characterPath:String = 'data/characters/$intended.json';
+			var characterPath:String = PathsUtil.getCharacterPath(intended);
 			var path:String = Paths.getPath(characterPath, TEXT, null, true);
 			#if MODS_ALLOWED
 			if (FileSystem.exists(path))
@@ -577,6 +568,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 	var healthIconInputText:PsychUIInputText;
 	var heyInputText:PsychUIInputText;
 	var heyAnimInputText:PsychUIInputText;
+	var hxcInputText:PsychUIInputText;
 
 	var singDurationStepper:PsychUINumericStepper;
 	var scaleStepper:PsychUINumericStepper;
@@ -621,6 +613,8 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 
 		heyAnimInputText = new PsychUIInputText(heyInputText.x + 90, heyInputText.y, 75, character.hey_anim != null ? character.hey_anim : '', 8);
 
+		hxcInputText = new PsychUIInputText(heyAnimInputText.x + 90, heyAnimInputText.y, 75, character.scriptHXC != null ? character.scriptHXC : '', 8);
+
 		singDurationStepper = new PsychUINumericStepper(15, heyInputText.y + 45, 0.1, 4, 0, 999, 1);
 
 		scaleStepper = new PsychUINumericStepper(15, singDurationStepper.y + 40, 0.1, 1, 0.05, 10, 2);
@@ -661,6 +655,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		tab_group.add(new FlxText(15, healthIconInputText.y - 18, 100, 'Health icon name:'));
 		tab_group.add(new FlxText(15, heyInputText.y - 18, 100, 'Hey! Sound:'));
 		tab_group.add(new FlxText(heyAnimInputText.x, heyAnimInputText.y - 18, 100, 'Hey! Animation:'));
+		tab_group.add(new FlxText(hxcInputText.x, hxcInputText.y - 18, 100, 'Scripted HXC File:'));
 		tab_group.add(new FlxText(15, singDurationStepper.y - 18, 120, 'Sing Animation length:'));
 		tab_group.add(new FlxText(15, scaleStepper.y - 18, 100, 'Scale:'));
 		tab_group.add(new FlxText(positionXStepper.x, positionXStepper.y - 18, 100, 'Character X/Y:'));
@@ -672,6 +667,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		tab_group.add(healthIconInputText);
 		tab_group.add(heyInputText);
 		tab_group.add(heyAnimInputText);
+		tab_group.add(hxcInputText);
 		tab_group.add(singDurationStepper);
 		tab_group.add(scaleStepper);
 		tab_group.add(flipXCheckBox);
@@ -713,6 +709,17 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 			else if(sender == imageInputText)
 			{
 				character.imageFile = imageInputText.text;
+				unsavedProgress = true;
+			}
+			else if(sender == hxcInputText)
+			{
+				if(PathsUtil.searchInvalidCharsHXC(hxcInputText.text)) {
+					character.scriptHXC = "";
+					hxcInputText.behindText.color = FlxColor.RED;
+				} else {
+					character.scriptHXC = hxcInputText.text;
+					hxcInputText.behindText.color = FlxColor.WHITE;
+				}
 				unsavedProgress = true;
 			}
 		}
@@ -830,6 +837,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		healthIconInputText.text = character.healthIcon;
 		heyInputText.text = character.hey_sound != null ? character.hey_sound : '';
 		heyAnimInputText.text = character.hey_anim != null ? character.hey_anim : '';
+		hxcInputText.text = character.scriptHXC != null ? character.scriptHXC : '';
 		singDurationStepper.value = character.singDuration;
 		scaleStepper.value = character.jsonScale;
 		flipXCheckBox.checked = character.originalFlipX;
@@ -1197,7 +1205,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 	var characterList:Array<String> = [];
 	function reloadCharacterDropDown() {
 		characterList = Mods.mergeAllTextsNamed('data/characterList.txt');
-		var foldersToCheck:Array<String> = Mods.directoriesWithFile(Paths.getSharedPath(), 'characters/');
+		var foldersToCheck:Array<String> = Mods.directoriesWithFile(Paths.getSharedPath(), PathsUtil.getCharacterPath("", ""));
 		for (folder in foldersToCheck)
 			for (file in FileSystem.readDirectory(folder))
 				if(file.toLowerCase().endsWith('.json'))
@@ -1261,6 +1269,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		if(_file != null) return;
 
 		var json:Dynamic = {
+			"script_hxc": character.scriptHXC,
 			"animations": character.animationsArray,
 			"image": character.imageFile,
 			"scale": character.jsonScale,
@@ -1288,5 +1297,6 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 			_file.addEventListener(IOErrorEvent.IO_ERROR, onSaveError);
 			_file.save(data, '$_char.json');
 		}
+		unsavedProgress = false;
 	}
 }

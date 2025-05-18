@@ -19,6 +19,7 @@ enum abstract ObjectsPath(String) from String to String {
     var weeks = "data/weeks/";
     var levels = weeks + "levels/";
 	var songs = "data/songs/";
+	var scripts = "scripts/"; //.hxc
 }
 
 /**
@@ -40,6 +41,17 @@ class PathsUtil {
     }
 
     //-------------------------------------- Funcs --------------------------------------
+
+	/**
+	 * @return If there's an invalid "letter" or character in the `str` string
+	 */
+	inline static public function searchInvalidCharsHXC(str:String):Bool { // This should work
+		final invalidChars = ~/[~&;:<>#\s]/g;
+		final hideChars = ~/[.,'"%?!]/g;
+
+		return (hideChars.match(str) || invalidChars.match(str));
+	}
+
     public static function setUpSongVoices(forMusicPlayer:Bool, isPlayer:Bool, vocals:FlxSound) {
 		try {
 			var num:Int = (isPlayer) ? 1 : 2;
